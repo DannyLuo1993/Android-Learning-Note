@@ -439,3 +439,94 @@ entries.add(entry);
 //发送广播的方法是sendBroadcast
 ```
 
+### 16. Webview常见的坑
+
+a. Android API level 16及之前的版本存在远程代码执行安全漏洞。因WebView.addJavascriptInterface方法没有被正确限制使用，远程攻击者可以通过使用Java Reflection API利用该漏洞执行任意Java对象的方法。
+
+b. webview在布局文件中的使用： webview写在其他容器中时，先remove LinearLayout里的webview，然后再调用webview.removeallviews 和 webview.destroy才能真正地销毁整个webview，不会导致内存泄露
+
+c. jsbridge 让本地native 可以调用远端web和js的代码。反过来也行
+
+d. webviewClient.onPageFinished ->WebChromeClient.onProgressChanged.
+
+e. 后台耗电 - > 直接调用system.axxx 直接关闭虚拟机
+
+f. Webview页面渲染问题（白块，闪烁） -> 暂时关闭硬件加速解决
+
+
+
+### 17. Webview的内部泄露问题
+
+原因：webview肯定要关联activity，但是webview内部操作又是在新的线程中执行，时间activity是没有办法确定的（activity的生命周期跟webview新线程的生命周期不一样），导致webview会一直持有activity引用，不能回收。应用内部类持有外部类的引用，导致外部类无法被回收。
+
+
+
+### 18. Binder - Linux内核的基础知识
+
+* 进程隔离 & 虚拟地址空间
+
+  进程隔离：避免进程A可以操作进程B的数据；
+
+  进程隔离的实现用到了虚拟地址空间
+
+  如果A进程需要跟B进程进行通信，需要借助进程间的通信机制。在Android里是Binder
+
+  
+
+* 系统调用
+
+  
+
+* Binder驱动
+
+
+
+### 19. Binder 通信机制介绍
+
+* 为什么使用binder
+
+  a. Anroid使用的Linux内核拥有着非常多的跨进程通信机制
+
+  b. 性能
+
+  c. 安全
+
+* binder通信模型 《用到时再翻视频理解》
+
+  a. 通信录（Service Manager表）： binder驱动 （中间商）
+
+  b. 
+
+* 什么是Binder
+
+  a. Binder指的是一种跨进程的通讯机制
+
+  b. 对于Server进程来说，Binder指的是Binder本地对象。对于Client进程来说，Binder指的是Binder代理对象。
+
+  c. 都传输进程而言，Binder是可以进行跨进程传递的对象
+
+### 20. Aidl
+
+
+
+### 21. 如何使用Fragment
+
+* 什么是Fragment
+
+  Fragment是activity的界面中的一部分（相当于模块化的一段Activity）
+
+  多个Fragment组合到一个activity中&多个activity中可重用一个Fragment
+
+  Fragment具有自己的生命周期，接收自己的事件
+
+  在Activity运行时被添加或删除
+
+* 创建操作
+
+
+
+* 添加操作
+
+  a. 在Manifest中注册Fragment Activity
+
+  b. 
