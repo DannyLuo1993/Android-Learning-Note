@@ -509,24 +509,132 @@ f. Webview页面渲染问题（白块，闪烁） -> 暂时关闭硬件加速解
 
 
 
-### 21. 如何使用Fragment
+### 21. 什么是Fragment
 
-* 什么是Fragment
-
-  Fragment是activity的界面中的一部分（相当于模块化的一段Activity）
-
-  多个Fragment组合到一个activity中&多个activity中可重用一个Fragment
-
-  Fragment具有自己的生命周期，接收自己的事件
-
-  在Activity运行时被添加或删除
-
-* 创建操作
+* Fragment相当于模块化的一段activity
+* 具有自己的生命周期，接收自己的事件
+* 在activity运行时被添加或删除
 
 
 
-* 添加操作
+### 22. 怎样创建&添加Fragment
 
-  a. 在Manifest中注册Fragment Activity
+在.java文件中，例如TestFragment中的onCreateView方法创建布局 （模块化activity）
 
-  b. 
+创建方法：
+
+```java
+TestFragment.java
+//View view = inflater.inflater(int resource, ViewGroup root, )
+//传入的是需要重复利用的xml
+@Nullable
+@Override
+public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+    Log.i(TAG, "onCreateView");
+    View view = inflater.inflater(R.layout.xxx, container);
+    TextView nameTextView = (TextView) view.findViewById(R.id.name_text_view);
+    nameTextView.setText("fragment");
+    return view;
+```
+
+
+
+在.xml文件中，引用对应的.java Fragment布局。
+
+如何重复利用？
+
+```java
+//在xml文件中创建fragment控件引用
+<fragment
+	android:id="@+id/fragment_test"
+	//在本行引用TestFragment.java中创建好的模块化布局
+	android:name="com.geekband.Test01.TestFragment"
+	android:layout_width="match+parent"
+	android:layout_height="60dpi"
+    />
+        
+//重复引用
+<fragment
+	android:id="@+id/fragment_test_copy"
+	android:name="com.geekband.Test01.TestFragment"
+	android:layout_width="match+parent"
+	android:layout_height="60dpi"
+        
+    
+```
+
+
+
+### 23. 如何管理Fragment
+
+* 查找Fragment
+
+  findFragmentById()
+
+  findFragmentByTag()
+
+  ```java
+  Fragment fragment = fragmentManager.findFragmentById(R.id.fragment_test);
+  
+  //判断找到的fragment是否为目标
+  //The java instanceof operator is used to test whether the object is an instance of the specified type (class or subclass or interface).
+  if（fragment instanceof TestFragment）{
+  	//TODO: 待实现
+  } else {
+      //否则抛异常
+      throw new IllegalStateException("is not testFragment");
+  }
+  
+  ```
+
+  
+
+  
+
+* Fragment的后退
+
+  Fragment Stack
+
+  popBackStack()
+
+  addOnBackStackChangedListener()
+
+  ```java
+  
+  ```
+
+  
+
+  
+
+* 总结Fragment 的操作
+
+  ```java
+  //找到管理器
+  FragmentManager fragmentManager = getFragmentManager();
+  
+  //向管理器请求开始交易 
+  FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+  
+  //交易员开始操作
+  //@param viewgroup (本例传了linear layout)
+  //@param Fragment （本例传了testFragment.java）
+  //创建一个fragment对象实例
+  TestFragment testFragment = new TestFragment();
+  //将其添加到VIewGroup
+  fragmentTransaction.add(R.id.fragment_view, testFragment);
+  
+  //交易员完成最后一笔操作，点提交
+  //移除testFragment中已经由上面代码添加的view group
+  fragmentTransaction.remove(testFragment).commit();
+  ```
+
+  
+
+### 24. Fragment的生命周期
+
+* onAttach() -> onCreate() -> onCreateView() -> onActivityCreated() -> onStart() ->onResume()  -> onPause() -> onStop() -> onDestroyView() -> onDestroy() -> onDetach()
+
+  了解其生命周期，可以Override生命周期方法，在运行到例如onCreateView()阶段时，加入自定义的代码。
+
+* 生命周期可以概括为三种状态：Resumed、Paused、Stoped
