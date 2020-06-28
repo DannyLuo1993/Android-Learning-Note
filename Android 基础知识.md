@@ -762,7 +762,7 @@ public void onCreate(Bundle savedInstancestate){
   //Class 名 对象名
   MyViewModel myViewModel;
   
-  myViewModel = ViewModelProviders.of(this).getMyViewModel.class;
+  myViewModel = ViewModelProviders.of(this).get(MyViewModel.class);
   ```
 
 * Fragment间数据共享
