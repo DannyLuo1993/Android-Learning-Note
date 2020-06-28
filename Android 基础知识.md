@@ -1,5 +1,17 @@
 ## Android 基础知识
 
+分析源码时，首先是看数据结构，其次是看算法。
+
+Android四大组件： Activity、BroadcastReceiver、Service、Content Provider
+
+Controller(Activity, Fragment 业务逻辑) ->  ViewModel(LiveData) [双向]
+
+ Controller(Activity, Fragment 业务逻辑) -> DataBinding -> View Group (View)
+
+ViewModel(LiveData)  -> View Group (View)
+
+
+
 ### 1. Activity的4种状态
 
 什么是activity
@@ -535,6 +547,28 @@ public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle sa
     TextView nameTextView = (TextView) view.findViewById(R.id.name_text_view);
     nameTextView.setText("fragment");
     return view;
+    }
+    
+public static TestFragment newInstance(String namestring, int number){
+    TestFragment testFragment = new TestFragment();
+    Bundle bundle = new Bundle();
+    bundle.putString("name", nameString);
+    bundle.putInt("number", number);
+    testFragment.setArguments(bundle);
+    return testFragment;
+}
+    
+@Override
+public void onCreate(Bundle savedInstancestate){
+    super.onCreate(savedInstanceState);
+    Log.i(TAG, "onCreate");
+    Bundle bundle = getArguments();
+    
+    if(bundle != null){
+        String name = bundle.getString("name");
+        String number = bundle.getInt("number");
+    }
+}
 ```
 
 
@@ -620,7 +654,7 @@ public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle sa
   //@param viewgroup (本例传了linear layout)
   //@param Fragment （本例传了testFragment.java）
   //创建一个fragment对象实例
-  TestFragment testFragment = new TestFragment();
+  TestFragment testFragment = TestFragment.newInstance("名字", 15);
   //将其添加到VIewGroup
   fragmentTransaction.add(R.id.fragment_view, testFragment);
   
@@ -638,3 +672,230 @@ public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle sa
   了解其生命周期，可以Override生命周期方法，在运行到例如onCreateView()阶段时，加入自定义的代码。
 
 * 生命周期可以概括为三种状态：Resumed、Paused、Stoped
+
+
+
+### 25. 什么是Bundle
+
+
+
+### 26. 什么是Handler
+
+定义：A Handler allows you to send and process Message and Runnable objects associated with a thread's MessageQueue. 
+
+作用：    延时执行Message和Runnable 【怎样做到】
+
+​			（主）线程 与 （子）线程间的通信 【怎样做到】
+
+
+
+* Message
+
+  两个整形数值：轻量级存储int类型的数据
+
+  一个Object：任意对象
+
+  replyTo：线程通信的时候使用
+
+  What：用户自定义的消息码让接受者识别消息码 【消息的内容或类型】
+
+  **核心数据结构：**When（long）、target（Handler）、what（int）、callback（runnable）
+
+* MessageQueue
+
+  Message的队列
+
+  每一个线程最多只可以拥有一个
+
+  Thread -》 Looper -》 MessageQueue
+
+* Looper
+
+  
+
+* Hanlder
+
+  核心数据结构：mLooper（Looper）、mQueue（MessageQueue）
+
+### 实例： 用Handler写倒计时页面；
+
+
+
+### 27. Screen Orientation
+
+* 可以在ManiFest中设置Activity的screenOrientation属性；
+
+* 在Xml中可以Creat Landscape variation，既创建一个横版与竖版不同的布局
+
+  
+
+### 28. ViewModel
+
+* 属于Android Jetpack里的一个类（Androidx的一个库）
+
+* 使用步骤
+
+  a. 新建class文件，继承于ViewModel类
+
+  b. 在class文件里，通过private定义参数，并提供Set()和Get()方法访问; 不写Set方法的，可以写其他访问方法去改变data的值。
+
+  ```java
+  private MutableLiveData<Integer> LikedNumber;
+  public MutableLiveData<Integer> getLikeNumber(){
+      if(LikeNumber == null) {
+          LikeNumber = new MutableLiveData<>();
+          LikeNumber.setValue(0);
+      }
+      return LikeNumber;
+  }
+  ```
+
+  
+
+  c. 回到对应的控制器（Activity或Fragment）中，创建ViewModel对象
+
+  ```java
+  //Class 名 对象名
+  MyViewModel myViewModel;
+  
+  myViewModel = ViewModelProviders.of(this).getMyViewModel.class;
+  ```
+
+* Fragment间数据共享
+
+  ```java
+  public class SharedViewModel extends ViewModel {
+      private final MutableLiveData<Item> selected = new MutableLiveData<Item>();
+  
+      public void select(Item item) {
+          selected.setValue(item);
+      }
+  
+      public LiveData<Item> getSelected() {
+          return selected;
+      }
+  }
+  
+  
+  public class MasterFragment extends Fragment {
+      private SharedViewModel model;
+      public void onCreate(Bundle savedInstanceState) {
+          super.onCreate(savedInstanceState);
+          model = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
+          itemSelector.setOnClickListener(item -> {
+              model.select(item);
+          });
+      }
+  }
+  
+  public class DetailFragment extends Fragment {
+      public void onCreate(Bundle savedInstanceState) {
+          super.onCreate(savedInstanceState);
+          SharedViewModel model = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
+          model.getSelected().observe(this, { item ->
+             // Update the UI.
+          });
+      }
+  }
+  ```
+
+  
+
+### 29.LiveData
+
+LiveDataLiveData是一种类,持有可被观察的数据。
+
+https://blog.csdn.net/feather_wch/article/details/88648559
+
+* 使用步骤
+
+  a. 创建LiveData对象，`LiveData`通常存储在`ViewModel`之中, 并通过`get方法`来获取
+
+  ```java
+  public class UserViewModel extends ViewModel {
+      private MutableLiveData<String> mName;
+      private MutableLiveData<Integer> mAge;
+  
+      public MutableLiveData<String> getName() {
+          if(mName == null){
+              mName = new MutableLiveData<>();
+          }
+          return mName;
+      }
+  
+      public MutableLiveData<Integer> getAge() {
+          if(mAge == null){
+              mAge = new MutableLiveData<>();
+          }
+          return mAge;
+      }
+  }
+  ```
+
+  b. 观察LiveData对象
+  	在App组件的哪个生命周期适合观察LiveData对象？为什么？
+
+  ​	app组件的onCreate()方法
+
+  ​	不适合在onResume()等方法中，可能会调用多次
+  ​	能确保组件能尽可能快的展示出数据。只要app组件处于启动状态(STARTED)就会立即接收到LiveData对象	中的数据
+
+  ```java
+  public class DataBindingActivity extends AppCompatActivity {
+  
+      ActivityDatabindingLayoutBinding mBinding;
+      User mUser;
+      private UserViewModel mUserViewModel;
+  
+      @Override
+      protected void onCreate(Bundle savedInstanceState) {
+          super.onCreate(savedInstanceState);
+          // DataBinding
+          // xxx
+  
+          //  1. 创建用户信息的ViewModel
+          mUserViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
+          //  2. 创建更新UI的观察者
+          Observer<String> nameObserver = new Observer<String>() {
+              @Override
+              public void onChanged(@Nullable String s) {
+                  // 利用DataBinding更新: 用户账号
+                  mUser.setAccount(s);
+                  mBinding.setUser(mUser);
+              }
+          };
+          //  3. 注册观察者
+          mUserViewModel.getAccount().observe(this, nameObserver);
+      }
+  }
+  ```
+
+  ```java
+  viewModelWithLiveData.getLikeNumber().observe(this, new Observer<Integer>(){
+      @Override
+      public void onChanged(Integer integer){
+          textView.setText(String.valueOf(integer));
+      }
+  });
+  ```
+
+  
+
+  
+
+  c. 更新LiveData对象
+
+  ```java
+  //调用setValue()或者postValue()都会调用所有观察者的onChanged()方法
+  button.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+          String anotherName = "John Doe";
+          model.getCurrentName().setValue(anotherName);
+      }
+  });
+  
+  ```
+
+  
+
