@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">记分器</string>
+    <string name="teamA_name">A队</string>
+    <string name="teamB_name">B队</string>
+    <string name="Button_add1">+1</string>
+    <string name="Button_add2">+2</string>
+    <string name="Button_add3">+3</string>
+    <string name="Text_score">0</string>
+</resources>

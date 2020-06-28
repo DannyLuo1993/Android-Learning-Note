@@ -6,9 +6,13 @@ Android四大组件： Activity、BroadcastReceiver、Service、Content Provider
 
 Controller(Activity, Fragment 业务逻辑) ->  ViewModel(LiveData) [双向]
 
- Controller(Activity, Fragment 业务逻辑) -> DataBinding -> View Group (View)
+Controller(Activity, Fragment 业务逻辑) -> DataBinding -> View Group (View)
 
 ViewModel(LiveData)  -> View Group (View)
+
+类名 对象名 = new 构造方法;//创建对象
+
+如： Student st = new Student();//创建对象  
 
 
 
@@ -881,12 +885,10 @@ https://blog.csdn.net/feather_wch/article/details/88648559
 
   
 
-  
-
   c. 更新LiveData对象
 
   ```java
-  //调用setValue()或者postValue()都会调用所有观察者的onChanged()方法
+//调用setValue()或者postValue()都会调用所有观察者的onChanged()方法
   button.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {
@@ -896,6 +898,56 @@ https://blog.csdn.net/feather_wch/article/details/88648559
   });
   
   ```
+  
+  
+
+### 30. Data Binding
+
+* 什么是Data Binding
 
   
 
+* Data Binding的使用步骤
+
+  a. 在build.gradle里的android区域声明：dataBinding {
+
+  ​	eanbled true
+
+  } 
+
+  b. 将对应的xml文件convert to databinding layout
+
+  c. 在对应的activity文件中初始化并设置相应的View；
+
+  ```java
+  ActivityMainBinding binding;
+  binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+  ```
+
+  d. 将数据回绑到控件上
+
+  ```java
+  //在xml的data标签组内新建variable
+  <variable
+      name ="data"
+      type ="com.example.databinding.MyViewModel" />
+      
+  //将数据传给想要的控件
+  <TextView
+      android：text="@{String.valueOf(data.number)}"/>
+  
+  <Button
+      android:onClick="@{()->data.add()}"/>
+  ```
+
+  e. 在Activity中简化
+
+  ```
+  //设置数据
+  binding.setData(myViewModel);
+  //实现Live Data的自我监听
+  binding.setLifecycleOwner(this);
+  
+  ```
+
+  
