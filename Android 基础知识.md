@@ -951,3 +951,44 @@ https://blog.csdn.net/feather_wch/article/details/88648559
   ```
 
   
+
+### 31. SharedPreferences
+
+* 什么是sharedpreferences
+
+
+
+* 如何使用
+
+  a. 初始化
+
+  ```java
+  //这样创建shp可以被内部的其他activity访问
+  SharedPreference shp = getShardPreferences("MY_DATA", Context.MODE_PRIVATE)
+  
+  //只允许本类访问
+  SharedPreference shp = getPreferences(Context.MODE_PRIVATE);
+  
+  ```
+
+  b. 创建Editor
+
+  ```java
+  SharedPreference.Editor editor = shp.edit();
+  editor.putInt("NUMBER", 100);
+  ```
+
+  c. 提交Editor操作
+
+  ```
+  editor.apply();
+  ```
+
+  d. 从sharedpreferences中读取数据
+
+  ```java
+  int x = shp.getInt("NUMBER", 0);
+  ```
+
+  e. 
+
