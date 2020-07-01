@@ -14,7 +14,28 @@ ViewModel(LiveData)  -> View Group (View)
 
 如： Student st = new Student();//创建对象  
 
+访问接口（API）需要
 
+a. 查API定义 `android.content.SharedPreferences` 因此同父类`content`的class可以直接访问SharedPreferences API。
+
+b. 父类不同的class想访问API时，需要在类中的构造方法中传入context，然后通过context来getSharPreferences
+
+```java
+public class MyData{
+	private COntext context;
+	public MyData(Context context){
+		this.context = context
+	}
+    
+    public void test(){
+        SharedPreferences shp = context.getSharePreference();
+    }
+}
+```
+
+c. 在第三方类中创建对象时，传context时要传ApplicationContext
+
+`MyData myData = new MyData(getApplicationContext());`
 
 ### 1. Activity的4种状态
 
@@ -990,5 +1011,81 @@ https://blog.csdn.net/feather_wch/article/details/88648559
   int x = shp.getInt("NUMBER", 0);
   ```
 
-  e. 
+  e. 非context父类的类需要访问是，需要在类中的构造方法中传入context，然后通过context来getSharPreferences
+
+
+
+### 32. AndroidViewModel
+
+* 什么是AndroidVIewModel
+
+
+
+* 怎么使用AndroidViewModel
+
+  a. 需要SavedStateHandle handle；
+
+  b. 在构造方法中，将handle的值传给handle；
+
+  ```java
+  // MyViewModel Class对应的构造方法
+  public MyViewModel(Application application, SavedStateHandle handle){
+      super(application);
+      //访问a中的handle，将传入的handle赋值给a中的handle
+      this.handle = handle;
+      //判断handle中是否包含有需要的信息，如果没有，执行load方法加载
+      if (!handle.contains(key)){
+          load();
+      }
+  }
+  
+  //从SharedPreferences里读取需要的数据，数据的标记是preferences的名称
+  //Context.MODE_PRIVATE 是模式的固定写法
+  private void load() {
+      SharedPreference shp = getApplication().getSharedPreferences(shpName, Context.MODE_PRIVATE)
+      //读取后复制给handle
+      int x =
+      handle.set(key, x)
+  }
+  ```
+
+  c. 同之前，创建get方法供外部类访问LiveData.并由此可见，handle持有LiveData
+
+  ```
+  public LiveData<integer> getNumber(){
+  	return handle.getLiveData(key);
+  }
+  ```
+
+  d. 创建save()方法保存数据到SharedPreferences
+
+  ```java
+  void save(){
+  	SharedPreferences shp = getApplication().getSharedPreferences(shpName, Context.MODE_PRIVATE);
+  	SharedPreferences.Editor editor = shp.edit();
+  	//将handle的值存在Preferences
+  	editor.putInt(key, getNumber().getValue());
+      editor.apply();
+  }
+  ```
+
+  
+
+### 33. Navigation组件
+
+Handle everything needed for in-app navigation.
+
+* **NavHost**
+
+  是一个容器，用来存放页面
+
+* **Fragment**
+
+  Navigation是在Fragment之间切换 
+
+* **NavController**
+
+  负责控制导航的逻辑。
+
+* NavGraph
 
