@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav_graph"
+    android:label="@"
+    app:startDestination="@id/fragmentWelcome">
+
+    <fragment
+        android:id="@+id/fragmentWelcome"
+        android:name="com.danny.mental_arithmetic_challenge.FragmentWelcome"
+        android:label="@string/Welcome_fragment"
+        tools:layout="@layout/fragment_welcome">
+        <action
+            android:id="@+id/action_fragmentWelcome_to_gameFragment"
+            app:destination="@id/gameFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/gameFragment"
+        android:name="com.danny.mental_arithmetic_challenge.GameFragment"
+        android:label="@string/game_fragment"
+        tools:layout="@layout/fragment_game">
+        <action
+            android:id="@+id/action_gameFragment_to_gameOverFragment2"
+            app:destination="@id/gameOverFragment" />
+        <action
+            android:id="@+id/action_gameFragment_to_gameWinFragment"
+            app:destination="@id/gameWinFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/gameOverFragment"
+        android:name="com.danny.mental_arithmetic_challenge.GameOverFragment"
+        android:label="fragment_game_over"
+        tools:layout="@layout/fragment_game_over">
+        <action
+            android:id="@+id/action_gameOverFragment_to_fragmentWelcome3"
+            app:destination="@id/fragmentWelcome" />
+    </fragment>
+    <fragment
+        android:id="@+id/gameWinFragment"
+        android:name="com.danny.mental_arithmetic_challenge.GameWinFragment"
+        android:label="fragment_game_win"
+        tools:layout="@layout/fragment_game_win" >
+        <action
+            android:id="@+id/action_gameWinFragment_to_fragmentWelcome"
+            app:destination="@id/fragmentWelcome" />
+    </fragment>
+</navigation>

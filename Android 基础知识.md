@@ -1157,4 +1157,34 @@ Handle everything needed for in-app navigation.
 
   核心：利用ViewModel来管理Fragment中的数据
 
+  a、建立ViewModel后，与Fragment通讯部分与跟Activity相同
+  
+  b、在Fragment中创建Binding实例
+  
+  ```java
+  MyViewModel myViewModel;
+  myViewModel = ViewModelProviders.of(getActivity()).get(MyViewModel.class);
+  FragmentMasterBinding binding;
+  binding = DataBindingUtil.inflate(inflater, R.layout.fragment_master, container, false);
+  binding.setData(ViewMOdel);
+  binding.setLifecycleOwner(getActivity());
+  ```
+  
+  d、按键监听实例
+  
+  ```java
+  //因为ViewModel的数据可以直接在Fragment之间共享获得，所以按键动作不用再传递数据。
+  binding.button.setOnclickListener(new View.OnClickListener(){
+      @Override
+      public void onClick(View v){
+          NavController controller = Navigation.findNavController(v);
+          controller.navigate(R.id.action_masterFaragment_to_detailFragment);    
+      }
+  });
+  ```
+  
+  
+  
+  
+  
   
