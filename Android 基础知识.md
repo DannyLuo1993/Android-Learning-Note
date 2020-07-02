@@ -1089,3 +1089,72 @@ Handle everything needed for in-app navigation.
 
 * NavGraph
 
+
+
+* 怎么使用Navigation组件
+
+  a、新建好空白的fragment activity & xml；
+  
+  b、移除fragment xml中的TextView ，并将布局改为ConstraintLayout
+  
+  c、创建Navigation资源文件，并添加fragment间的导航线路图（NavGraph）
+  
+  d、到Activity_main.xml的Containers控件栏下添加Host - NavHostFragment
+  
+  e、到对应的Fragment（Home Fragment）中写监听事件
+  
+  ```java
+  public void onActivityCreated(Bundle savedInstanceState){
+      super.onActivityCreated(sacedInstanceState);
+      getView().findViewById(R.id.button).setOnClickListener(new View.OnclickListener()){
+          @Override
+          public void onClick(View v){
+              NavController controller = Navigation.findNavController(v);
+              controller.navigate(R.id.action_homeFragment_to_detailFragment);
+          }
+      });
+  }
+  ```
+  
+  f、在MainActivity中添加返回键
+  
+  ```java
+  NavController controller = Navigation.findNavController(this, R.id.fragment);
+  NavigationUI.setupActionBarWithNavController(this,controller);
+  
+  //添加返回功能
+  @Override
+  public boolean onSupportNaviagateUp(){
+      NavCOntroller controller = Naviagation.findNavController(this, R.id,fragment);
+      return controller.navigateUp();
+  }
+  ```
+  
+  g、Navigate action的数据传递 - 在xml文件中添加Arguments (Key Value型数据)，可以在Fragment activity中获取到。然后action中允许在argument中重载fragment中的值。 【传递静态方式案例】
+  
+  ```java
+  String string = getArguments().getString(key);
+  ```
+  
+  h. 用Bundle传递动态数据，先判要传的数据是否为空，再用Bundle传数据
+  
+   ```
+  //起点放入数据
+  Bundle bundle = new Bundle();
+  bundle.putString("my_name", string);
+  
+  NavController controller = Navigation.findNavController(v);
+  controller.navigate(R.id.action_homeFragment_to_detailFragment, bundle);
+  
+  //终点取出数据
+  String string2 = getArguments().getString("my_name");
+  
+   ```
+  
+  
+
+* 数据传递（ViewModel篇）
+
+  核心：利用ViewModel来管理Fragment中的数据
+
+  
