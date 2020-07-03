@@ -1,10 +1,12 @@
 package com.danny.mental_arithmetic_challenge;
 
+
 import android.os.Bundle;
 
-import androidx.databinding.DataBindingComponent;
-import androidx.databinding.DataBindingUtil;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
@@ -16,29 +18,23 @@ import com.danny.mental_arithmetic_challenge.databinding.FragmentGameBinding;
 
 public class GameFragment extends Fragment {
 
-    DataViedModel dataViedModel = new ViewModelProvider(getActivity()).get(DataViedModel.class);
-
+    DataViewModel dataViewModel;
+    FragmentGameBinding binding;
 
     public GameFragment() {
         // Required empty public constructor
     }
 
 
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        FragmentGameBinding binding;
+        dataViewModel = new ViewModelProvider(requireActivity()).get(DataViewModel.class);
+
         binding = FragmentGameBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         return view;
     }
+
 }

@@ -3,11 +3,11 @@ package com.danny.mental_arithmetic_challenge;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class DataViedModel extends ViewModel {
+public class DataViewModel extends ViewModel {
 
-    private MutableLiveData<Integer> score;
-    private MutableLiveData<Integer> cal_result;
-    private MutableLiveData<Integer> user_result;
+    private MutableLiveData<Integer> score = new MutableLiveData<>();
+    private MutableLiveData<Integer> cal_result = new MutableLiveData<>();
+    private MutableLiveData<Integer> user_result = new MutableLiveData<>();
 
     public MutableLiveData<Integer> getScore(){
         if(score == null){
@@ -32,6 +32,10 @@ public class DataViedModel extends ViewModel {
             user_result.setValue(2);
         }
         return user_result;
+    }
+
+    public void DataVIewModel(){
+
     }
 
 
