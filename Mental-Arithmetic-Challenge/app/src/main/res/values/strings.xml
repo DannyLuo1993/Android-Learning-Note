@@ -29,4 +29,6 @@
     <string name="win_record_result">创造了新纪录：</string>
     <string name="lose_record_result">你本次的战果：</string>
     <string name="over_return_button">返回</string>
+    <string name="default_question">numberA + \" + \" + numberB + \" = ?\"</string>
+    <string name="correct_hint">回答正确！请继续答题</string>
 </resources>
