@@ -14,7 +14,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+
 import com.danny.mental_arithmetic_challenge.databinding.FragmentGameBinding;
+import com.danny.mental_arithmetic_challenge.databinding.FragmentGameOverBinding;
 
 import java.util.Random;
 
@@ -26,52 +28,72 @@ public class GameFragment extends Fragment {
     Random rand = new Random();
     int numberA ;
     int numberB ;
-    String reference_answer;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-
         // Inflate the layout for this fragment
         binding = FragmentGameBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         return view;
+        //return inflater.inflate(R.layout.fragment_game, container, false);
     }
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        //Get ViewModelProvider to observe data
+        //Get ViewModelProvider to observe the change of score
+
         dataViewModel = new ViewModelProvider(requireActivity()).get(DataViewModel.class);
-        dataViewModel.getScore().observe(getViewLifecycleOwner(), new Observer<Integer>() {
-            @Override
-            public void onChanged(Integer integer) {
-                dataViewModel.addScore();
-            }
-        });
         //initialize the question
         generateQuestion();
+        //Get ViewModelProvider to observe the change of the number
+        dataViewModel.setCalResultText();
+
+        //设置数据与Layout之间的监听
+        binding.setScore(dataViewModel);
+        binding.setLifecycleOwner(this);
+
+        //Add socre when question is answered correctly.
+        dataViewModel.score.observe(getViewLifecycleOwner(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                binding.textView5.setText("得分： " + String.valueOf(dataViewModel.score.getValue()));
+                if (dataViewModel.score.getValue() == 10){
+                    NavController navController = Navigation.findNavController(requireActivity(), R.id.button_submit);
+                    navController.navigate(R.id.action_gameFragment_to_gameWinFragment);
+                }else{
+                    generateQuestion();}
+            }
+        });
+
+        //Gameover when question is not correctly answered.
+        dataViewModel.gameover.observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                NavController navController = Navigation.findNavController(requireActivity(), R.id.button_submit);
+                navController.navigate(R.id.action_gameFragment_to_gameOverFragment2);
+            }
+        });
+        dataViewModel.load();
+
     }
 
     //Generate the challenge question randomly;
-    public String generateQuestion(){
+    public void generateQuestion(){
         numberA = rand.nextInt(10);
         numberB = rand.nextInt(10);
+        dataViewModel.referenceAnswer.setValue(String.valueOf(numberA + numberB));
         binding.textViewQuestion.setText(numberA + " + " +numberB + " = ?");
-        reference_answer = String.valueOf(numberA+numberB);
-        return reference_answer;
+
     }
 
-    //Set Text when user answer the question correctly
-    public void setTextWhenAnswerCorrectly(){
-        binding.textViewCalResult.setText(R.string.correct_hint);
+    @Override
+    public void onPause() {
+        super.onPause();
+        //dataViewModel.save();
     }
-
-    public void onClick(){
-        NavController controller = Navigation.findNavController(binding.getRoot());
-        controller.navigate(R.id.action_gameFragment_to_gameOverFragment2);
-    }
-
 
     public GameFragment() {
         // Required empty public constructor

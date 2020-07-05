@@ -2,30 +2,50 @@ package com.danny.mental_arithmetic_challenge;
 
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.danny.mental_arithmetic_challenge.databinding.FragmentGameOverBinding;
+
 public class GameOverFragment extends Fragment {
 
+    FragmentGameOverBinding binding;
+    DataViewModel dataViewModel;
     public GameOverFragment() {
         // Required empty public constructor
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_game_over, container, false);
+        binding = FragmentGameOverBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        return view;
+
     }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        dataViewModel = new ViewModelProvider(requireActivity()).get(DataViewModel.class);
+        binding.setReport(dataViewModel);
+        binding.setLifecycleOwner(this);
+        dataViewModel.gameover.observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                binding.textViewFailReport.setText("你本次的战果是： " + dataViewModel.score.getValue());
+            }
+        });
+    }
+
+
 }
