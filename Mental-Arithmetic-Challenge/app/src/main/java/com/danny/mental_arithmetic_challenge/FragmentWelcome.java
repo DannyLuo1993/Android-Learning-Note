@@ -5,9 +5,14 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.SavedStateViewModelFactory;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +25,7 @@ import com.danny.mental_arithmetic_challenge.databinding.FragmentWelcomeBinding;
 public class FragmentWelcome extends Fragment {
 
     FragmentWelcomeBinding binding;
+    DataViewModel dataViewModel;
 
     public FragmentWelcome() {
         // Required empty public constructor
@@ -35,14 +41,19 @@ public class FragmentWelcome extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_welcome, container, false);
+        binding = FragmentWelcomeBinding.inflate(getLayoutInflater());
+
+        View view = binding.getRoot();
+        return view;
     }
 
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        dataViewModel =  ViewModelProviders.of(this, getDefaultViewModelProviderFactory()).get(DataViewModel.class);
+        System.out.println(dataViewModel.gameover.getValue());
+        dataViewModel.game_over = 0;
         Button buttonStart;
         buttonStart = getView().findViewById(R.id.button_start);
         buttonStart.setOnClickListener(new View.OnClickListener() {
@@ -52,6 +63,14 @@ public class FragmentWelcome extends Fragment {
                 controller.navigate(R.id.action_fragmentWelcome_to_gameFragment);
             }
         });
+
+        binding.textViewRecord.setText("最高纪录： " + dataViewModel.getScoreRecord().getValue());
+        dataViewModel.gameover.setValue(false);
+        binding.setWelcomescore(dataViewModel);
+        binding.setLifecycleOwner(this);
+
     }
+
+
 }
 

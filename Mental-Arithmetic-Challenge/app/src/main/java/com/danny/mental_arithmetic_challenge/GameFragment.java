@@ -67,18 +67,19 @@ public class GameFragment extends Fragment {
                     generateQuestion();}
             }
         });
-
+        System.out.println(dataViewModel.game_over);
         //Gameover when question is not correctly answered.
         dataViewModel.gameover.observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
+                System.out.println("game over");
                 NavController navController = Navigation.findNavController(requireActivity(), R.id.button_submit);
                 navController.navigate(R.id.action_gameFragment_to_gameOverFragment2);
             }
         });
-        dataViewModel.load();
-
     }
+
+
 
     //Generate the challenge question randomly;
     public void generateQuestion(){
@@ -92,7 +93,7 @@ public class GameFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        //dataViewModel.save();
+        dataViewModel.save();
     }
 
     public GameFragment() {

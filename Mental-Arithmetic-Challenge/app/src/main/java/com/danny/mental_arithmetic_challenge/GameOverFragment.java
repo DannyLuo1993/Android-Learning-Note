@@ -2,11 +2,14 @@ package com.danny.mental_arithmetic_challenge;
 
 import android.os.Bundle;
 
+import androidx.annotation.NavigationRes;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,7 +48,18 @@ public class GameOverFragment extends Fragment {
                 binding.textViewFailReport.setText("你本次的战果是： " + dataViewModel.score.getValue());
             }
         });
+        binding.button13.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dataViewModel.gameover.setValue(false);
+                System.out.println(dataViewModel.gameover.getValue());
+                NavController navController = Navigation.findNavController(view);
+                navController.navigate(R.id.action_gameOverFragment_to_fragmentWelcome3);
+            }
+        });
     }
+
+
 
 
 }

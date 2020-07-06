@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
@@ -19,6 +20,7 @@ public class DataViewModel extends AndroidViewModel {
 
 
     int score_n = 0;
+    int game_over = 0;
     SavedStateHandle handle;
     public MutableLiveData<String> calResultText = new MutableLiveData<>();
     public MutableLiveData<String> referenceAnswer = new MutableLiveData<>();
@@ -28,20 +30,30 @@ public class DataViewModel extends AndroidViewModel {
     public DataViewModel(@NonNull Application application, SavedStateHandle handle) {
         super(application);
         this.handle = handle;
+        if(!handle.contains("Score")){
+           load();
+        }
+    }
+
+    public LiveData<Integer> getScoreRecord(){
+
+        return handle.getLiveData("Score");
     }
 
     //Load the score record from preference;
     public void load(){
         SharedPreferences shp = getApplication().getSharedPreferences("Score", Context.MODE_PRIVATE);
-        int x = shp.getInt("Score", 0);
-        handle.set("Score", x);
+        int welcome_page_score = shp.getInt("Score", 0);
+        handle.set("Score", welcome_page_score);
     }
 
     //Save the score to SharedPreference
     public void save(){
         SharedPreferences shp = getApplication().getSharedPreferences("Score", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = shp.edit();
-        editor.putInt("Score", score.getValue());
+        editor.putInt("Score", getScoreRecord().getValue());
+        //为何用apply（）会报空指令？ 非要异步处理？
+        editor.commit();
     }
 
     public void setCalResultText() {
@@ -69,7 +81,10 @@ public class DataViewModel extends AndroidViewModel {
             calResultText.setValue("回答正确！请继续答题");
             getScore();
         }else{
+            addRecordScore(score_n);
+            game_over = 1;
             gameover.setValue(true);
+
         }
     }
 
@@ -81,6 +96,12 @@ public class DataViewModel extends AndroidViewModel {
         }
         ++score_n;
         score.setValue(score_n);
+    }
+
+    public void addRecordScore(int score_n){
+        int x = score_n - getScoreRecord().getValue();
+        if(x > 0){
+        handle.set("Score", score_n);}
     }
 
     //Generate the challenge question randomly;

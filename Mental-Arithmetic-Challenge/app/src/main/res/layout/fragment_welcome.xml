@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+    <variable
+        name="welcomescore"
+        type="com.danny.mental_arithmetic_challenge.DataViewModel" />
     </data>
 
     <FrameLayout

@@ -37,6 +37,8 @@ c. 在第三方类中创建对象时，传context时要传ApplicationContext
 
 `MyData myData = new MyData(getApplicationContext());`
 
+需要访问全局资源时，用方法`getApplication().getResource()`，例如：getApplication().getResource().getString(R.id.xxx)
+
 ### 1. Activity的4种状态
 
 什么是activity
