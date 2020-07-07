@@ -35,8 +35,8 @@ public class DataViewModel extends AndroidViewModel {
         }
     }
 
-    public LiveData<Integer> getScoreRecord(){
 
+    public LiveData<Integer> getScoreRecord(){
         return handle.getLiveData("Score");
     }
 

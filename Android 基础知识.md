@@ -1199,4 +1199,14 @@ Handle everything needed for in-app navigation.
   
   
   
-  
+
+### 34. LiveData
+
+* LiveData is a `data holder class` that can be observed within a given `lifecycle`.
+
+
+
+### 35. 泛型
+
+https://blog.csdn.net/H12KJGJ/article/details/74482066
+
