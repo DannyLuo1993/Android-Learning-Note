@@ -760,6 +760,12 @@ public void onCreate(Bundle savedInstancestate){
 
 * 属于Android Jetpack里的一个类（Androidx的一个库）
 
+* 定义：ViewModel is a class that is responsible for preparing and managing the data for an `Activity` or a `Fragment`. 
+
+* 目的：The purpose of the ViewModel is to acquire and keep the information that is necessary for an Activity or a Fragment. The Activity or the Fragment should be able to observe changes in the ViewModel. ViewModels usually expose this information via `LiveData` or Android Data Binding.
+
+* ViewModel's only responsibility is to manage the data for the UI. It should never access your view hierarchy or hold a reference back to the Activity or the Fragment.
+
 * 使用步骤
 
   a. 新建class文件，继承于ViewModel类
@@ -1185,7 +1191,11 @@ Handle everything needed for in-app navigation.
   });
   ```
   
+  https://developer.android.google.cn/reference/androidx/lifecycle/AndroidViewModel
   
+  https://developer.android.google.cn/reference/androidx/lifecycle/package-summary?hl=en
+  
+  https://developer.android.google.cn/reference/androidx/lifecycle/ViewModelProvider.Factory
   
   
   

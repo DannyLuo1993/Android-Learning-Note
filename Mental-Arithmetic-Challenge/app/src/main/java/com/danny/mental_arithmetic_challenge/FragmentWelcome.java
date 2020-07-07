@@ -9,6 +9,7 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.SavedStateViewModelFactory;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -52,6 +53,8 @@ public class FragmentWelcome extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         dataViewModel =  ViewModelProviders.of(this, getDefaultViewModelProviderFactory()).get(DataViewModel.class);
+        //ViewModelProvider.Factory
+        //dataViewModel = ViewModelProvider(this, )
         System.out.println(dataViewModel.gameover.getValue());
         dataViewModel.game_over = 0;
         Button buttonStart;
