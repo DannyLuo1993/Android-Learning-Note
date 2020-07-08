@@ -13,6 +13,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
 
+import java.util.Random;
 
 
 public class DataViewModel extends AndroidViewModel {
@@ -21,17 +22,23 @@ public class DataViewModel extends AndroidViewModel {
 
     private static String NEW_HIGH_RECORD = "NewHighRecord";
     private static String CURRENT_SCORE = "CurrentScore";
+    private int reference_answer = 0;
     public MutableLiveData<Integer> NewHighRecord = new MutableLiveData<>();
     public MutableLiveData<Integer> CurrentScore = new MutableLiveData<>();
     private MutableLiveData<Integer> LeftNumber = new MutableLiveData<>();
     private MutableLiveData<String> Operator = new MutableLiveData<>();
-    private MutableLiveData<String> RightNumber = new MutableLiveData<>();
+    private MutableLiveData<Integer> RightNumber = new MutableLiveData<>();
     private MutableLiveData<Integer> calResult = new MutableLiveData<>();
 
 
     public DataViewModel(@NonNull Application application, SavedStateHandle handle) {
         super(application);
         this.handle = handle;
+        //初始化
+        if (!handle.contains(NEW_HIGH_RECORD)){
+            handle.set(NEW_HIGH_RECORD, 0);
+            handle.set(CURRENT_SCORE, 0);
+        }
     }
 
     public MutableLiveData<Integer> getNewHighRecord(){
@@ -47,6 +54,24 @@ public class DataViewModel extends AndroidViewModel {
     public MutableLiveData<Integer> getCurrentScore(){
 
         //通过这个操作，拿到得是存放在handle里的CurrentScore值
+        //如果是这里填 return CurrentScore, 那么在Activity被杀死时，关联的Current Score就会丢失。
         return handle.getLiveData(CURRENT_SCORE);
+    }
+
+    //Question and Answer generator
+    public void generateQA (){
+        int Level = 20;
+        Random random = new Random();
+        //是否应该在这里赋值？
+        int x = random.nextInt(Level) + 1;
+        int y = random.nextInt(Level) + 1;
+        LeftNumber.setValue(x);
+        RightNumber.setValue(y);
+        if(x%2==0){
+            Operator.setValue("+");
+        }else{
+            Operator.setValue("-");
+        }
+
     }
 }

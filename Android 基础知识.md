@@ -768,6 +768,8 @@ public void onCreate(Bundle savedInstancestate){
 
 * ViewModel's only responsibility is to manage the data for the UI. It should never access your view hierarchy or hold a reference back to the Activity or the Fragment.
 
+* 生命周期：存活于Activity的整个生命周期，当Activity被后台进程杀死时，ViewModel也会被重新创建，此时ViewModel管理的UI数据会丢失。
+
 * 使用步骤
 
   a. 新建class文件，继承于ViewModel类
