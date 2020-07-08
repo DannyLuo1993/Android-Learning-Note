@@ -1,5 +1,7 @@
 ## Android 基础知识
 
+https://www.jianshu.com/p/f3775715bd1f
+
 分析源码时，首先是看数据结构，其次是看算法。
 
 Android四大组件： Activity、BroadcastReceiver、Service、Content Provider
@@ -1209,4 +1211,26 @@ Handle everything needed for in-app navigation.
 ### 35. 泛型
 
 https://blog.csdn.net/H12KJGJ/article/details/74482066
+
+
+
+### 36. xml文件中的占位符
+
+https://www.jianshu.com/p/a97beae40eb9
+
+`%s、%1$s、%d、%1$d` s是String类型的占位符， d是int类型的占位符；
+
+```java
+1.在strings.xml中定义 
+
+	我叫%1$s，我%2$s贼溜，我段位王者%3$d,不信可以%4$s一起玩!
+
+2.在类中调用
+
+    String.format(mActivity.getResources().getString(R.string.tips),"张三“，”吃鸡“，1,”晚上“))
+
+输出结果就会拼接上。
+
+输出结果：我叫张三，我吃鸡贼溜，我段位王者1,不信可以晚上一起玩!
+```
 

@@ -106,7 +106,9 @@ public class DataViewModel extends AndroidViewModel {
 
     //Generate the challenge question randomly;
 
+    public void test (){
 
+    }
 
 
 
