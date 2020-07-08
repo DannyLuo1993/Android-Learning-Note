@@ -42,21 +42,7 @@ public class GameOverFragment extends Fragment {
         dataViewModel = new ViewModelProvider(requireActivity()).get(DataViewModel.class);
         binding.setReport(dataViewModel);
         binding.setLifecycleOwner(this);
-        dataViewModel.gameover.observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-                binding.textViewFailReport.setText("你本次的战果是： " + dataViewModel.score.getValue());
-            }
-        });
-        binding.button13.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dataViewModel.gameover.setValue(false);
-                System.out.println(dataViewModel.gameover.getValue());
-                NavController navController = Navigation.findNavController(view);
-                navController.navigate(R.id.action_gameOverFragment_to_fragmentWelcome3);
-            }
-        });
+
     }
 
 

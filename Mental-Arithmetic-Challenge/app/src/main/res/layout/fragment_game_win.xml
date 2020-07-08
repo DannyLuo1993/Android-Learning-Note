@@ -71,7 +71,7 @@
                 android:id="@+id/imageView_win"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:contentDescription="@string/game_result"
+                android:contentDescription="@string/app_title"
                 android:src="@drawable/ic_baseline_sentiment_satisfied_24"
                 app:layout_constraintBottom_toTopOf="@+id/textView"
                 app:layout_constraintEnd_toEndOf="parent"

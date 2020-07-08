@@ -1214,7 +1214,19 @@ https://blog.csdn.net/H12KJGJ/article/details/74482066
 
 
 
-### 36. xml文件中的占位符
+### 36. 口算挑战项目总结
+
+`SavedStateHandle`
+
+定义：This is a key-value map that will let you write and retrieve objects to and from the saved state.
+
+用法：You can read a value from SavedStateHandle via `get(String)` or observe SavedStateHandle via `LiveData` returned by `getLiveData(String)`.
+
+You can write a value to SavedStateHandle via `set(String, Object)` or setting a value to `MutableLiveData` returned by `getLiveData(String)`.
+
+
+
+xml文件中的占位符
 
 https://www.jianshu.com/p/a97beae40eb9
 
@@ -1233,4 +1245,6 @@ https://www.jianshu.com/p/a97beae40eb9
 
 输出结果：我叫张三，我吃鸡贼溜，我段位王者1,不信可以晚上一起玩!
 ```
+
+
 

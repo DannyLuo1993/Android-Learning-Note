@@ -17,100 +17,36 @@ import androidx.lifecycle.ViewModel;
 
 public class DataViewModel extends AndroidViewModel {
 
-
-
-    int score_n = 0;
-    int game_over = 0;
     SavedStateHandle handle;
-    public MutableLiveData<String> calResultText = new MutableLiveData<>();
-    public MutableLiveData<String> referenceAnswer = new MutableLiveData<>();
-    public MutableLiveData<Integer> score = new MutableLiveData<>();
-    public MutableLiveData<Boolean> gameover = new MutableLiveData<>();
+
+    private static String NEW_HIGH_RECORD = "NewHighRecord";
+    private static String CURRENT_SCORE = "CurrentScore";
+    public MutableLiveData<Integer> NewHighRecord = new MutableLiveData<>();
+    public MutableLiveData<Integer> CurrentScore = new MutableLiveData<>();
+    private MutableLiveData<Integer> LeftNumber = new MutableLiveData<>();
+    private MutableLiveData<String> Operator = new MutableLiveData<>();
+    private MutableLiveData<String> RightNumber = new MutableLiveData<>();
+    private MutableLiveData<Integer> calResult = new MutableLiveData<>();
+
 
     public DataViewModel(@NonNull Application application, SavedStateHandle handle) {
         super(application);
         this.handle = handle;
-        if(!handle.contains("Score")){
-           load();
-        }
     }
 
+    public MutableLiveData<Integer> getNewHighRecord(){
 
-    public LiveData<Integer> getScoreRecord(){
-        return handle.getLiveData("Score");
+        //因为返回值是MutableLiveData，所以它在生命周期内会持续被Fragment 或 Activity观察
+        //但因ViewModel的生命周期特性，Fragment或Activity被后台杀死后，数据不会被保存 【看回放】
+        //这时需要将需要被保存的数据，传给SharedPreference保存，由SavedStateHandle完成存放&转交。
+        SharedPreferences shp = getApplication().getSharedPreferences(NEW_HIGH_RECORD, Context.MODE_PRIVATE);
+        handle.set(NEW_HIGH_RECORD, shp.getInt(NEW_HIGH_RECORD, 0));
+        return NewHighRecord;
     }
 
-    //Load the score record from preference;
-    public void load(){
-        SharedPreferences shp = getApplication().getSharedPreferences("Score", Context.MODE_PRIVATE);
-        int welcome_page_score = shp.getInt("Score", 0);
-        handle.set("Score", welcome_page_score);
+    public MutableLiveData<Integer> getCurrentScore(){
+
+        //通过这个操作，拿到得是存放在handle里的CurrentScore值
+        return handle.getLiveData(CURRENT_SCORE);
     }
-
-    //Save the score to SharedPreference
-    public void save(){
-        SharedPreferences shp = getApplication().getSharedPreferences("Score", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = shp.edit();
-        editor.putInt("Score", getScoreRecord().getValue());
-        //为何用apply（）会报空指令？ 非要异步处理？
-        editor.commit();
-    }
-
-    public void setCalResultText() {
-        calResultText.setValue("开始答题");
-    }
-
-    //Button 0 - 9 CLick Event
-    public void inputNumber(String n){
-        if (calResultText.getValue() == "开始答题" || calResultText.getValue() == "回答正确！请继续答题"){
-            clearNumber();
-        }
-        calResultText.setValue( calResultText.getValue() + n);
-    }
-
-    //Button C CLick Event
-    public void clearNumber(){
-        calResultText.setValue("");
-    }
-    //Button submit CLick Event
-    public void submitNumber(){
-        int userinput = Integer.parseInt(calResultText.getValue());
-        int reference_answer = Integer.parseInt(referenceAnswer.getValue());
-        //if( calResultText.getValue() == referenceAnswer.getValue()){
-        if(userinput == reference_answer){
-            calResultText.setValue("回答正确！请继续答题");
-            getScore();
-        }else{
-            addRecordScore(score_n);
-            game_over = 1;
-            gameover.setValue(true);
-
-        }
-    }
-
-    public void getScore(){
-
-        if(score == null){
-            score = new MutableLiveData<>();
-            score.setValue(0);
-        }
-        ++score_n;
-        score.setValue(score_n);
-    }
-
-    public void addRecordScore(int score_n){
-        int x = score_n - getScoreRecord().getValue();
-        if(x > 0){
-        handle.set("Score", score_n);}
-    }
-
-    //Generate the challenge question randomly;
-
-    public void test (){
-
-    }
-
-
-
-
 }

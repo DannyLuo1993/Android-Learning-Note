@@ -25,9 +25,7 @@ public class GameFragment extends Fragment {
 
     DataViewModel dataViewModel;
     FragmentGameBinding binding;
-    Random rand = new Random();
-    int numberA ;
-    int numberB ;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,56 +43,12 @@ public class GameFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         //Get ViewModelProvider to observe the change of score
 
-        dataViewModel = new ViewModelProvider(requireActivity()).get(DataViewModel.class);
-        //initialize the question
-        generateQuestion();
-        //Get ViewModelProvider to observe the change of the number
-        dataViewModel.setCalResultText();
 
-        //设置数据与Layout之间的监听
-        binding.setScore(dataViewModel);
-        binding.setLifecycleOwner(this);
 
-        //Add socre when question is answered correctly.
-        dataViewModel.score.observe(getViewLifecycleOwner(), new Observer<Integer>() {
-            @Override
-            public void onChanged(Integer integer) {
-                binding.textView5.setText("得分： " + String.valueOf(dataViewModel.score.getValue()));
-                if (dataViewModel.score.getValue() == 10){
-                    NavController navController = Navigation.findNavController(requireActivity(), R.id.button_submit);
-                    navController.navigate(R.id.action_gameFragment_to_gameWinFragment);
-                }else{
-                    generateQuestion();}
-            }
-        });
-        System.out.println(dataViewModel.game_over);
-        //Gameover when question is not correctly answered.
-        dataViewModel.gameover.observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-                System.out.println("game over");
-                NavController navController = Navigation.findNavController(requireActivity(), R.id.button_submit);
-                navController.navigate(R.id.action_gameFragment_to_gameOverFragment2);
-            }
-        });
+
     }
 
 
-
-    //Generate the challenge question randomly;
-    public void generateQuestion(){
-        numberA = rand.nextInt(10);
-        numberB = rand.nextInt(10);
-        dataViewModel.referenceAnswer.setValue(String.valueOf(numberA + numberB));
-        binding.textViewQuestion.setText(numberA + " + " +numberB + " = ?");
-
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        dataViewModel.save();
-    }
 
     public GameFragment() {
         // Required empty public constructor

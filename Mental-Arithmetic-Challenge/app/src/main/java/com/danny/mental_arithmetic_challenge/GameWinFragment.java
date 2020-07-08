@@ -35,13 +35,6 @@ public class GameWinFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        binding.buttonGamewinReturn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavController navController = Navigation.findNavController(view);
-                navController.navigate(R.id.action_gameWinFragment_to_fragmentWelcome);
 
-            }
-        });
     }
 }
