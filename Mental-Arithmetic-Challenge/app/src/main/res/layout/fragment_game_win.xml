@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+    <variable
+        name="data"
+        type="com.danny.mental_arithmetic_challenge.DataViewModel" />
     </data>
 
     <FrameLayout
@@ -51,7 +53,7 @@
                 android:id="@+id/textView6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/win_record_result"
+                android:text="@{@string/win_record_result(data.NewHighRecord)}"
                 android:textSize="36sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

@@ -1,5 +1,6 @@
 package com.danny.mental_arithmetic_challenge;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -52,7 +53,6 @@ public class FragmentWelcome extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         dataViewModel =  ViewModelProviders.of(this, getDefaultViewModelProviderFactory()).get(DataViewModel.class);
-        dataViewModel.win_flag = false;
         //ViewModelProvider.Factory
         //dataViewModel = ViewModelProvider(this, )
         Button buttonStart;
@@ -64,8 +64,6 @@ public class FragmentWelcome extends Fragment {
                 controller.navigate(R.id.action_fragmentWelcome_to_gameFragment);
             }
         });
-
-        binding.textViewRecord.setText("");
 
         binding.setData(dataViewModel);
         binding.setLifecycleOwner(this);

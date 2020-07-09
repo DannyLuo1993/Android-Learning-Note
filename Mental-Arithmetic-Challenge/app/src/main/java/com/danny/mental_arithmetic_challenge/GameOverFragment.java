@@ -34,14 +34,24 @@ public class GameOverFragment extends Fragment {
         View view = binding.getRoot();
         return view;
 
+
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         dataViewModel = new ViewModelProvider(requireActivity()).get(DataViewModel.class);
-        binding.setReport(dataViewModel);
+        binding.setData(dataViewModel);
         binding.setLifecycleOwner(this);
+        binding.button13.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println(dataViewModel.getCurrentScore().getValue());
+                System.out.println(dataViewModel.getNewHighRecord().getValue());
+                NavController navController = Navigation.findNavController(v);
+                navController.navigate(R.id.action_gameOverFragment_to_fragmentWelcome3);
+            }
+        });
 
     }
 

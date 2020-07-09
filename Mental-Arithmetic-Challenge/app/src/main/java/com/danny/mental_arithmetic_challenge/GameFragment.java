@@ -41,10 +41,13 @@ public class GameFragment extends Fragment {
         dataViewModel = ViewModelProviders.of(requireActivity(),getDefaultViewModelProviderFactory()).get(DataViewModel.class);
         binding.setScore(dataViewModel);
         binding.setLifecycleOwner(this);
+        //初始化当前分数
+        dataViewModel.getCurrentScore().setValue(0);
+        dataViewModel.win_flag = false;
         dataViewModel.generateQA();
+        final StringBuilder stringBuilder = new StringBuilder();
         //设置数字按键和清除按键的监听事件
     View.OnClickListener onClickListener = new View.OnClickListener() {
-        StringBuilder stringBuilder = new StringBuilder();
         @Override
         public void onClick(View view) {
         switch (view.getId()){
@@ -110,19 +113,21 @@ public class GameFragment extends Fragment {
     View.OnClickListener submitListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            System.out.println(Integer.parseInt(binding.textViewCalResult.getText().toString()));
-            System.out.println(dataViewModel.reference_answer);
+            stringBuilder.setLength(0);
             if(Integer.parseInt(binding.textViewCalResult.getText().toString()) == dataViewModel.reference_answer){
                 binding.textViewCalResult.setText(getString(R.string.correct_hint));
+                System.out.println(dataViewModel.getCurrentScore().getValue());
+                System.out.println(dataViewModel.getNewHighRecord().getValue());
                 //加当前分数；
                 dataViewModel.addScore();
+                //如果创造了记录，就保存最高记录
+                dataViewModel.saveNewHighRecord();
                 //生成下一道问题
                 dataViewModel.generateQA();
+
             }else{
                 //如果挑战胜利，就跳转到跳转胜利的页面
                 if(dataViewModel.win_flag == true){
-                    //将当前分数保存为最高分；
-                    dataViewModel.saveNewHighRecord();
                     NavController navController = Navigation.findNavController(view);
                     navController.navigate(R.id.action_gameFragment_to_gameWinFragment);
                 }

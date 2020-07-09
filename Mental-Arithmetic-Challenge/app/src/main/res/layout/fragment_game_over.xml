@@ -5,7 +5,7 @@
 
     <data>
     <variable
-        name="report"
+        name="data"
         type="com.danny.mental_arithmetic_challenge.DataViewModel" />
     </data>
 
@@ -53,7 +53,7 @@
                 android:id="@+id/textView_fail_report"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/lose_record_result"
+                android:text="@{@string/lose_record_result(data.CurrentScore)}"
                 android:textSize="36sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

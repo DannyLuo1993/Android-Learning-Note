@@ -19,43 +19,41 @@ import java.util.Random;
 public class DataViewModel extends AndroidViewModel {
 
     SavedStateHandle handle;
-
     public static String NEW_HIGH_RECORD = "NewHighRecord";
     public static String CURRENT_SCORE = "CurrentScore";
     public static String LEFT_NUMBER = "LeftNumber";
     public static String RIGHT_NUMBER = "RightNumber";
     public static String OPERATOR = "Operator";
+    public static String SAVESHP = "SaveShp";
     public int reference_answer = 0;
     public boolean win_flag = false;
-    public MutableLiveData<Integer> NewHighRecord = new MutableLiveData<>();
-    public MutableLiveData<Integer> CurrentScore = new MutableLiveData<>();
-    public MutableLiveData<Integer> LeftNumber = new MutableLiveData<>();
-    public MutableLiveData<String> Operator = new MutableLiveData<>();
-    public MutableLiveData<Integer> RightNumber = new MutableLiveData<>();
-    private MutableLiveData<Integer> calResult = new MutableLiveData<>();
+
 
 
     public DataViewModel(@NonNull Application application, SavedStateHandle handle) {
         super(application);
-        this.handle = handle;
-        //初始化
+        //初始化，创建Savestatehandle的key-value map
+        //This is a key-value map that will let you write and retrieve objects to and from the saved state
+        //问题，那这些key-value map的值有变化吗？ 是怎么变化的呢？
+        //答案，有变化，是通过读取方法的setValue()来变更的。
         if (!handle.contains(NEW_HIGH_RECORD)){
-            handle.set(NEW_HIGH_RECORD, 0);
+            SharedPreferences shp = getApplication().getSharedPreferences(SAVESHP,Context.MODE_PRIVATE);
+            handle.set(NEW_HIGH_RECORD, shp.getInt(SAVESHP, 0));
+
             handle.set(CURRENT_SCORE, 0);
             handle.set(LEFT_NUMBER, 0);
             handle.set(RIGHT_NUMBER,0);
             handle.set(OPERATOR,"+");
         }
+        this.handle = handle;
     }
 
+    //get方法的作用是获取（读取）到相应的LiveData
+    //得到的LiveData均会被Activity或Fragment中的ViewModelProvide接收；
+    //返回值是从Savestatehandle中读取的；
     public MutableLiveData<Integer> getNewHighRecord(){
 
-        //因为返回值是MutableLiveData，所以它在生命周期内会持续被Fragment 或 Activity观察
-        //但因ViewModel的生命周期特性，Fragment或Activity被后台杀死后，数据不会被保存 【看回放】
-        //这时需要将需要被保存的数据，传给SharedPreference保存，由SavedStateHandle完成存放&转交。
-        SharedPreferences shp = getApplication().getSharedPreferences(NEW_HIGH_RECORD, Context.MODE_PRIVATE);
-        handle.set(NEW_HIGH_RECORD, shp.getInt(NEW_HIGH_RECORD, 0));
-        return NewHighRecord;
+        return handle.getLiveData(NEW_HIGH_RECORD);
     }
 
     public MutableLiveData<Integer> getLeftNumber(){
@@ -73,6 +71,7 @@ public class DataViewModel extends AndroidViewModel {
 
         //通过这个操作，拿到得是存放在handle里的CurrentScore值
         //如果是这里填 return CurrentScore, 那么在Activity被杀死时，关联的Current Score就会丢失。
+        //CurrentScore = handle.getLiveData(CURRENT_SCORE);
         return handle.getLiveData(CURRENT_SCORE);
     }
 
@@ -106,20 +105,25 @@ public class DataViewModel extends AndroidViewModel {
     //保存最高分
     //Save new high record;
     public void saveNewHighRecord(){
-        if(getNewHighRecord().getValue() < getCurrentScore().getValue()){
+
+        //因为MutableLiveData在生命周期内会持续被Fragment 或 Activity观察
+        //但因ViewModel的生命周期特性，Fragment或Activity被后台杀死后，数据不会被保存 【看回放】
+        //这时需要将需要被保存的数据，传给SharedPreference保存，由SavedStateHandle完成存放&转交。
+        if (getCurrentScore().getValue() > getNewHighRecord().getValue()) {
             win_flag = true;
-            SharedPreferences shp = getApplication().getSharedPreferences(NEW_HIGH_RECORD, Context.MODE_PRIVATE);
+            SharedPreferences shp = getApplication().getSharedPreferences(SAVESHP, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = shp.edit();
-            editor.putInt(NEW_HIGH_RECORD, getCurrentScore().getValue());
-            editor.commit();
+            editor.putInt(SAVESHP, getCurrentScore().getValue());
+            editor.apply();
+            getNewHighRecord().setValue(getCurrentScore().getValue());
+            //handle.set(NEW_HIGH_RECORD, shp.getInt(SAVESHP,0));
+
         }
     }
 
     // 答对问题时加分
     // add 1 to current score when question is answered correctly.
-    public void addScore(){
-       getCurrentScore().setValue(CurrentScore.getValue() + 1);
+    public void addScore() {
+        getCurrentScore().setValue(getCurrentScore().getValue() + 1);
     }
-
-
 }

@@ -22,7 +22,7 @@
                 android:id="@+id/textView_record"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{@string/record_text(data.getNewHighRecord)}"
+                android:text="@{@string/record_text(data.NewHighRecord)}"
                 android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

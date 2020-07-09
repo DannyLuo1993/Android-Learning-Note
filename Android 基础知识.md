@@ -840,7 +840,7 @@ public void onCreate(Bundle savedInstancestate){
 
 ### 29.LiveData
 
-LiveDataLiveData是一种类,持有可被观察的数据。
+LiveData是一种类,持有可被观察的数据。
 
 https://blog.csdn.net/feather_wch/article/details/88648559
 
