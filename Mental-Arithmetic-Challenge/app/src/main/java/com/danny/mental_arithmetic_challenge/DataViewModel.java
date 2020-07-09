@@ -20,14 +20,18 @@ public class DataViewModel extends AndroidViewModel {
 
     SavedStateHandle handle;
 
-    private static String NEW_HIGH_RECORD = "NewHighRecord";
-    private static String CURRENT_SCORE = "CurrentScore";
-    private int reference_answer = 0;
+    public static String NEW_HIGH_RECORD = "NewHighRecord";
+    public static String CURRENT_SCORE = "CurrentScore";
+    public static String LEFT_NUMBER = "LeftNumber";
+    public static String RIGHT_NUMBER = "RightNumber";
+    public static String OPERATOR = "Operator";
+    public int reference_answer = 0;
+    public boolean win_flag = false;
     public MutableLiveData<Integer> NewHighRecord = new MutableLiveData<>();
     public MutableLiveData<Integer> CurrentScore = new MutableLiveData<>();
-    private MutableLiveData<Integer> LeftNumber = new MutableLiveData<>();
-    private MutableLiveData<String> Operator = new MutableLiveData<>();
-    private MutableLiveData<Integer> RightNumber = new MutableLiveData<>();
+    public MutableLiveData<Integer> LeftNumber = new MutableLiveData<>();
+    public MutableLiveData<String> Operator = new MutableLiveData<>();
+    public MutableLiveData<Integer> RightNumber = new MutableLiveData<>();
     private MutableLiveData<Integer> calResult = new MutableLiveData<>();
 
 
@@ -38,6 +42,9 @@ public class DataViewModel extends AndroidViewModel {
         if (!handle.contains(NEW_HIGH_RECORD)){
             handle.set(NEW_HIGH_RECORD, 0);
             handle.set(CURRENT_SCORE, 0);
+            handle.set(LEFT_NUMBER, 0);
+            handle.set(RIGHT_NUMBER,0);
+            handle.set(OPERATOR,"+");
         }
     }
 
@@ -49,6 +56,17 @@ public class DataViewModel extends AndroidViewModel {
         SharedPreferences shp = getApplication().getSharedPreferences(NEW_HIGH_RECORD, Context.MODE_PRIVATE);
         handle.set(NEW_HIGH_RECORD, shp.getInt(NEW_HIGH_RECORD, 0));
         return NewHighRecord;
+    }
+
+    public MutableLiveData<Integer> getLeftNumber(){
+
+        return handle.getLiveData(LEFT_NUMBER);
+    }
+    public MutableLiveData<Integer> getRightNumber(){
+        return handle.getLiveData(RIGHT_NUMBER);
+    }
+    public MutableLiveData<String> getOperator(){
+        return handle.getLiveData(OPERATOR);
     }
 
     public MutableLiveData<Integer> getCurrentScore(){
@@ -65,13 +83,43 @@ public class DataViewModel extends AndroidViewModel {
         //是否应该在这里赋值？
         int x = random.nextInt(Level) + 1;
         int y = random.nextInt(Level) + 1;
-        LeftNumber.setValue(x);
-        RightNumber.setValue(y);
+        //这里填getLeftNumber和直接填LeftNumber有什么区别？
+        getLeftNumber().setValue(x);
+        getRightNumber().setValue(y);
         if(x%2==0){
-            Operator.setValue("+");
+            getOperator().setValue("+");
+            reference_answer = x + y;
         }else{
-            Operator.setValue("-");
+            getOperator().setValue("-");
+            if(x - y < 0){
+                getLeftNumber().setValue(y);
+                getRightNumber().setValue(x);
+                reference_answer = y - x;
+            }else{
+                reference_answer = x - y;
+            }
+
         }
 
     }
+
+    //保存最高分
+    //Save new high record;
+    public void saveNewHighRecord(){
+        if(getNewHighRecord().getValue() < getCurrentScore().getValue()){
+            win_flag = true;
+            SharedPreferences shp = getApplication().getSharedPreferences(NEW_HIGH_RECORD, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = shp.edit();
+            editor.putInt(NEW_HIGH_RECORD, getCurrentScore().getValue());
+            editor.commit();
+        }
+    }
+
+    // 答对问题时加分
+    // add 1 to current score when question is answered correctly.
+    public void addScore(){
+       getCurrentScore().setValue(CurrentScore.getValue() + 1);
+    }
+
+
 }

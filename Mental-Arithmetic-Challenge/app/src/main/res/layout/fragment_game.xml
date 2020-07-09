@@ -212,7 +212,6 @@
                 app:layout_constraintTop_toTopOf="@+id/guideline" />
 
 
-
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline10"
                 android:layout_width="wrap_content"
@@ -224,12 +223,59 @@
                 android:id="@+id/textView5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/game_score_text"
+                android:text="@{@string/game_score_text(score.CurrentScore)}"
                 android:textSize="24sp"
                 app:layout_constraintBottom_toTopOf="@+id/guideline10"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/guideline4"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/TextView_LeftNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{String.valueOf(score.LeftNumber)}"
+                android:textSize="60sp"
+                app:layout_constraintBottom_toTopOf="@+id/guideline"
+                app:layout_constraintEnd_toStartOf="@+id/textView_Operator"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/guideline10"
+                tools:text="1" />
+
+            <TextView
+                android:id="@+id/textView_Operator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{score.Operator}"
+                android:textSize="60sp"
+                app:layout_constraintBottom_toBottomOf="@+id/TextView_LeftNumber"
+                app:layout_constraintEnd_toStartOf="@+id/textView_RightNumber"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/TextView_LeftNumber"
+                app:layout_constraintTop_toTopOf="@+id/TextView_LeftNumber"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <TextView
+                android:id="@+id/textView_RightNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{String.valueOf(score.RightNumber)}"
+                android:textSize="60sp"
+                app:layout_constraintBottom_toBottomOf="@+id/TextView_LeftNumber"
+                app:layout_constraintEnd_toStartOf="@+id/textView8"
+                app:layout_constraintStart_toEndOf="@+id/textView_Operator"
+                app:layout_constraintTop_toTopOf="@+id/TextView_LeftNumber" />
+
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="= ?"
+                android:textSize="60sp"
+                app:layout_constraintBottom_toBottomOf="@+id/TextView_LeftNumber"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textView_RightNumber"
+                app:layout_constraintTop_toTopOf="@+id/TextView_LeftNumber" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>

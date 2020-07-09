@@ -2,7 +2,7 @@
     <string name="app_name">Mental-Arithmetic-Challenge</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="Welcome_fragment">欢迎</string>
-    <string name="record_text">最高纪录：</string>
+    <string name="record_text">最高纪录：%d</string>
     <string name="app_title">口算测试</string>
     <string name="start_button">开始挑战</string>
     <!-- TODO: Remove or change this placeholder text -->

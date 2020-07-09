@@ -43,7 +43,6 @@ public class FragmentWelcome extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentWelcomeBinding.inflate(getLayoutInflater());
-
         View view = binding.getRoot();
         return view;
     }
@@ -53,10 +52,9 @@ public class FragmentWelcome extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         dataViewModel =  ViewModelProviders.of(this, getDefaultViewModelProviderFactory()).get(DataViewModel.class);
+        dataViewModel.win_flag = false;
         //ViewModelProvider.Factory
         //dataViewModel = ViewModelProvider(this, )
-        System.out.println(dataViewModel.gameover.getValue());
-        dataViewModel.game_over = 0;
         Button buttonStart;
         buttonStart = getView().findViewById(R.id.button_start);
         buttonStart.setOnClickListener(new View.OnClickListener() {
@@ -67,9 +65,9 @@ public class FragmentWelcome extends Fragment {
             }
         });
 
-        binding.textViewRecord.setText("最高纪录： " + dataViewModel.getScoreRecord().getValue());
-        dataViewModel.gameover.setValue(false);
-        binding.setWelcomescore(dataViewModel);
+        binding.textViewRecord.setText("");
+
+        binding.setData(dataViewModel);
         binding.setLifecycleOwner(this);
 
     }
