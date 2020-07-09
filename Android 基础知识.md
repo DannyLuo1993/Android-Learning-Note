@@ -1228,7 +1228,7 @@ You can write a value to SavedStateHandle via `set(String, Object)` or setting a
 
 
 
-xml文件中的占位符
+`xml文件中的占位符`
 
 https://www.jianshu.com/p/a97beae40eb9
 
@@ -1249,4 +1249,25 @@ https://www.jianshu.com/p/a97beae40eb9
 ```
 
 
+
+`View.OnClickListener`
+
+```java
+View.OnClickListener onClickListener = new View.OnClickListener() {
+        StringBuilder stringBuilder = new StringBuilder();
+        @Override
+        public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.button1:
+            stringBuilder.append(1);
+            binding.textViewCalResult.setText(stringBuilder.toString());
+        }
+        }
+    };
+binding.button1.setOnClickListener(onClickListener);
+```
+
+
+
+`StringBuilder`
 
