@@ -1271,3 +1271,63 @@ binding.button1.setOnClickListener(onClickListener);
 
 `StringBuilder`
 
+```java
+//创建实例
+StringBuilder stringBuilder = new stringBuilder();
+//访问实例中的方法
+stringBuilder.xxx;
+```
+
+
+
+`NavigationUI`
+
+```
+//添加NavigationUI时， 定义NavController的作用是？
+NavController controller;
+
+//Navigation 是一个框架，用于在 Android 应用中的“目标”之间导航；
+controller = Navigation.findNavController(this, R.id.fragment);
+
+//Sets up the ActionBar returned by AppCompatActivity#getSupportActionBar() for use with a NavController.
+NavigationUI.setupActionBarWithController(this, controller);
+
+public boolean onNavigateUp(){
+	//dialog part
+	return super.onNavigateUp();
+}
+```
+
+
+
+`AlertDialog` - 提示框
+
+```java
+AlertDialog.Builder builder = new alertDialog.Builder(this);
+builder.setTitle{getString(R.string.xxx), new DialogInterface.OnClickListener()} {
+    @Override
+    public void onClick(DialogInterface dialog, int which){
+        controller.navigateUp();
+    }
+}
+
+//创建上面画好的dialog
+AlertDialog dialog = builder.create();
+dialog.show();
+
+```
+
+
+
+onNavigateUp() 和 onSupportNavigateUp() 的区别
+
+- Handles the Up button by delegating its behavior to the given NavController. This is an alternative to using `NavController.navigateUp()` directly when the given `AppBarConfiguration` needs to be considered when determining what should happen when the Up button is pressed.
+
+- Handles the Up button by delegating its behavior to the given NavController. This should generally be called from `AppCompatActivity.onSupportNavigateUp()`.
+
+  If you do not have a `Openable` layout, you should call `NavController.navigateUp()` directly.
+
+----
+
+区别在于是否有a openable layout.
+

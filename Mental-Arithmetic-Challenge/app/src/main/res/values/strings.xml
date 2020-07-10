@@ -31,4 +31,7 @@
     <string name="over_return_button">返回</string>
     <string name="default_question">numberA + \" + \" + numberB + \" = ?\"</string>
     <string name="correct_hint">回答正确！请继续答题</string>
+    <string name="quit_dialog_title">你确定要退出吗？</string>
+    <string name="dialog_postive_button">是</string>
+    <string name="dialog_negative_button">否</string>
 </resources>
