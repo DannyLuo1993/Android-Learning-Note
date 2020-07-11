@@ -1331,3 +1331,14 @@ onNavigateUp() 和 onSupportNavigateUp() 的区别
 
 区别在于是否有a openable layout.
 
+
+
+### 37.  LiftCycles
+
+
+
+- chronometer
+
+
+
+- SystemClock
