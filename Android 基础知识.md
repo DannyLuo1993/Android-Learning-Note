@@ -1339,6 +1339,125 @@ onNavigateUp() 和 onSupportNavigateUp() 的区别
 
 - chronometer
 
+倒计时计数器
+
+* LifeCycleObserver
+
+通过类implements Lifecycle 来实现
+
+* Static关键字
+
+问题： 为什么页面旋转后， static关键字后存放的数据不会被丢失？
 
 
-- SystemClock
+
+### 38. Room
+
+
+
+- Entity
+
+实体 - 例如将Excel表看成是数据库，表中的每一行都是一个Entity。 Entity是对数据内容的定义
+
+```
+@Entity
+public class Word{
+	@PrimaryKey(autoGenerate =ture)
+	private int = id;
+	
+	@ColumInfo(name = "english_word")
+	private String word;
+	
+	@ColumInfo(name = "chinese_meaning")
+	private string chineseMeaning;
+	
+	//生成word、chineseMeaning的constructer
+    
+    //生成word、chineseMeaning和id的getter和setter
+}
+```
+
+
+
+
+
+Dao
+
+访问数据库的接口（DataBase Access Object）
+
+数据库的增删查改操作
+
+```java
+@Dao
+public interface WordDao{
+    //增
+    @Insert
+    void insertWords(word... words);
+    
+    //改
+    @Update
+    void updateWords(word... words);
+    
+    //删
+    @Delete
+    void deleteword (word... words);
+
+    //查 - 删除表中的全部信息
+    @Query("DELETE FROM WORD")
+    void deleteallwords();
+    
+    //查 - 查询表中的信息并返回
+    //以ID为根据降序排序
+    @Query("SELECT * FROM WORD ORDER BY ID DESC" )
+    List<Word> getallwords()
+```
+
+
+
+
+
+DataBase
+
+```
+//继承父类Room database
+//定义为抽象，因为实现的功能不用我们自己写，编译器会帮我们写。
+
+@base(entities = (Word.class), version = 1, exportSchema = false)
+public abstract class WordDatabase extends RoomDatabase{
+
+	public abstract WordDao getWordDao();
+}
+```
+
+
+
+* AsyncTask
+
+  对数据库的操作
+
+  ```java
+  
+  ```
+
+  
+
+* ViewModel
+
+  数据库的内容放在ViewModel
+
+  
+
+* Repository
+
+  数据存&读取放到仓库类里
+
+
+
+### 39. Adapter
+
+An Adapter object acts as a bridge between an `AdapterView` and the underlying data for that view. The Adapter provides access to the data items. The Adapter is also responsible for making a `View` for each item in the data set.
+
+
+
+
+
