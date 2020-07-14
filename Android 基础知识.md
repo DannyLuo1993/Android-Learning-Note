@@ -1,6 +1,6 @@
 ## Android 基础知识
 
-https://www.jianshu.com/p/f3775715bd1f
+https://www.runoob.com/android/android-content-providers.html
 
 分析源码时，首先是看数据结构，其次是看算法。
 
