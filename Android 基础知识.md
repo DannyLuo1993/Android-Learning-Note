@@ -43,6 +43,10 @@ c. 在第三方类中创建对象时，传context时要传ApplicationContext
 
 
 
+*接口方法的抽象方法是实现这个接口必须要实现的方法；*
+
+
+
 ### 1. Activity的4种状态
 
 什么是activity
@@ -1481,6 +1485,8 @@ An Adapter object acts as a bridge between an `AdapterView` and the underlying d
 
 以Signleton的格式封装，从代码上保证某些类只有一个实例存在；
 
+JVM保证单例思維 - JVM确保在加载内部类时只会被加载一次；
+
 - 应用场景
 
   例如各种各样的Manager
@@ -1512,8 +1518,6 @@ Mgr01 m1 = Mgr01.getInstance();
 
 写法2： 静态内部类方式
 
-JVM保证单例
-
 加载外部类时不会加载内部类。(写法1的优化)
 
 ```java
@@ -1532,4 +1536,36 @@ public class Mgr07{
 }
 ```
 
-https://www.bilibili.com/video/BV1MJ411F7DP?p=2
+
+
+写法3： 枚举类 - 反序列化不成枚举
+
+
+
+```java
+public enum Mar08 {
+    INSTANCE;
+   
+    public void = (){}
+    
+    public static void main(String[] args){
+        for(int i=0; i<100; i++){
+            new Thread(()->{
+                System.out.println(Mgr08.INSTANCE.hashcode());
+            }).start();
+        }
+    } 
+}
+```
+
+
+
+
+
+### 43.设计模式之策略模式
+
+- Comparator接口
+
+  
+
+* Comparable接口
