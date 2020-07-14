@@ -41,6 +41,8 @@ c. 在第三方类中创建对象时，传context时要传ApplicationContext
 
 需要访问全局资源时，用方法`getApplication().getResource()`，例如：getApplication().getResource().getString(R.id.xxx)
 
+
+
 ### 1. Activity的4种状态
 
 什么是activity
@@ -1457,7 +1459,77 @@ public abstract class WordDatabase extends RoomDatabase{
 
 An Adapter object acts as a bridge between an `AdapterView` and the underlying data for that view. The Adapter provides access to the data items. The Adapter is also responsible for making a `View` for each item in the data set.
 
+​	a. Adapter 是充当view（展示页）的底层数据与AdapterView（）之间的桥梁。
+
+​	b. Adapter提供数据项的访问权限
+
+​	c. Adapter负责为数据集合中的每一项制作View
+
+
+
+### 40. Singleton
 
 
 
 
+
+### 41. List
+
+
+
+### 42. 设计模式之Signleton
+
+以Signleton的格式封装，从代码上保证某些类只有一个实例存在；
+
+- 应用场景
+
+  例如各种各样的Manager
+
+  各种各样的Factory
+
+  
+
+写法1：饿汉式，类加载时就马上实例化了。
+
+```java
+//创建
+public class Mgr01{
+    //创建一个静态的实例
+    private static final Mgr01 INSTANCE = new Mgr01();
+    //私有化构造方法
+    private Mgr01() {};
+    //以getInstance的方法返回Mgr01(),无论调用多少次，拿到得都是同一个INSTANCE Mgr01();
+    public static Mgr01 getInstance(){ return INSTANCE;}
+}
+
+//访问
+Mgr01 m1 = Mgr01.getInstance();
+```
+
+
+
+
+
+写法2： 静态内部类方式
+
+JVM保证单例
+
+加载外部类时不会加载内部类。(写法1的优化)
+
+```java
+public class Mgr07{
+	private Mgr07(){}
+    
+    //不调用时不会被加载
+    private static class Mgr07Holder{
+        private final static Mgr07 INSTANCE = new Mgr07();
+        
+    }
+    
+    public static Mgr07 getInstance(){
+        return Mgr01Holder.INSTANCE;
+    }
+}
+```
+
+https://www.bilibili.com/video/BV1MJ411F7DP?p=2
