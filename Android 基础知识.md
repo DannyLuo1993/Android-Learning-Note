@@ -1463,25 +1463,143 @@ public abstract class WordDatabase extends RoomDatabase{
 
 An Adapter object acts as a bridge between an `AdapterView` and the underlying data for that view. The Adapter provides access to the data items. The Adapter is also responsible for making a `View` for each item in the data set.
 
-​	a. Adapter 是充当view（展示页）的底层数据与AdapterView（）之间的桥梁。
+​	a. Adapter 是充当view（Adapter View的展示页）的底层数据 （AdapterView上展示的数据）与AdapterView（是一个ViewGroup）之间的桥梁（搭路）。
 
-​	b. Adapter提供数据项的访问权限
+​	b. Adapter提供数据项（AdapterView上展示的数据）的访问权限
 
 ​	c. Adapter负责为数据集合中的每一项制作View
 
 
 
-### 40. Singleton
+* **Recycler View**
+
+  对应的Adapter：RecyclerView.Adapter
+
+  RecyclerView.Adapter: 列表中的视图由“视图持有者”对象表示,每个视图持有者负责显示一个带有视图的项.
+
+  
+
+  使用步骤：
+
+  a. 添加dependency支持库;
+
+  ```java
+  dependencies {
+          implementation 'com.android.support:recyclerview-v7:28.0.0'
+      }
+  ```
+
+  b. 将 `RecyclerView` 添加到布局文件中;
+
+  ```java
+   <?xml version="1.0" encoding="utf-8"?>
+      <!-- A RecyclerView with some commonly used attributes -->
+      <android.support.v7.widget.RecyclerView
+          android:id="@+id/my_recycler_view"
+          android:scrollbars="vertical"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"/>
+  ```
+
+  c. 在布局中添加了 `RecyclerView` 微件之后，获取对象句柄，将其连接到布局管理器，并为要显示的数据附加适配器：
+
+  ```java
+  public class MyActivity extends Activity {
+          private RecyclerView recyclerView;
+          private RecyclerView.Adapter mAdapter;
+          private RecyclerView.LayoutManager layoutManager;
+  
+          @Override
+          protected void onCreate(Bundle savedInstanceState) {
+              super.onCreate(savedInstanceState);
+              setContentView(R.layout.my_activity);
+              recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+  
+              // use this setting to improve performance if you know that changes
+              // in content do not change the layout size of the RecyclerView
+              recyclerView.setHasFixedSize(true);
+  
+              // use a linear layout manager
+              layoutManager = new LinearLayoutManager(this);
+              recyclerView.setLayoutManager(layoutManager);
+  
+              // specify an adapter (see also next example)
+              mAdapter = new MyAdapter(myDataset);
+              recyclerView.setAdapter(mAdapter);
+          }
+          // ...
+      }
+  ```
+
+  d. 要将所有数据输入列表中，您必须扩展 `RecyclerView.Adapter` 类。此对象会创建项的视图，并在原始项不再可见时用新数据项替换部分视图的内容:
+
+  ```java
+  public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
+          private String[] mDataset;
+  
+          // Provide a reference to the views for each data item
+          // Complex data items may need more than one view per item, and
+          // you provide access to all the views for a data item in a view holder
+          public static class MyViewHolder extends RecyclerView.ViewHolder {
+              // each data item is just a string in this case
+              public TextView textView;
+              public MyViewHolder(TextView v) {
+                  super(v);
+                  textView = v;
+              }
+          }
+  
+          // Provide a suitable constructor (depends on the kind of dataset)
+          public MyAdapter(String[] myDataset) {
+              mDataset = myDataset;
+          }
+  
+          // Create new views (invoked by the layout manager)
+          @Override
+          public MyAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent,
+                                                         int viewType) {
+              // create a new view
+              TextView v = (TextView) LayoutInflater.from(parent.getContext())
+                      .inflate(R.layout.my_text_view, parent, false);
+              ...
+              MyViewHolder vh = new MyViewHolder(v);
+              return vh;
+          }
+  
+          // Replace the contents of a view (invoked by the layout manager)
+          @Override
+          public void onBindViewHolder(MyViewHolder holder, int position) {
+              // - get element from your dataset at this position
+              // - replace the contents of the view with that element
+              holder.textView.setText(mDataset[position]);
+  
+          }
+  
+          // Return the size of your dataset (invoked by the layout manager)
+          @Override
+          public int getItemCount() {
+              return mDataset.length;
+          }
+      }
+  ```
+
+  
+
+  布局管理器会调用适配器的 `onCreateViewHolder()` 方法。该方法需要构造一个 `RecyclerView.ViewHolder` 并设置用于显示其内容的视图。ViewHolder 的类型必须与 Adapter 类签名中声明的类型一致。通常，它会通过扩充 XML 布局文件来设置视图。由于视图持有者尚未分配到任何特定数据，因此该方法实际上不会设置视图的内容。
+  
+  布局管理器随后会将视图持有者绑定到相应数据。具体操作是调用适配器的 `onBindViewHolder()` 方法并将视图持有者的位置传入 `RecyclerView`。`onBindViewHolder()` 方法需要获取适当的数据，并使用它填充视图持有者的布局。例如，如果 `RecyclerView` 显示名称列表，该方法可能会在列表中找到适当的名称，并填充视图持有者的 `TextView` 微件。
+  
+  如果列表需要更新，请对 `RecyclerView.Adapter` 对象调用通知方法，例如 `notifyItemChanged()`。然后，布局管理器会重新绑定任何受影响的视图持有者，使其数据得到更新。
+
+https://www.cnblogs.com/huolan/p/5126794.html
 
 
 
-
-
-### 41. List
+### 40. List
 
 
 
-### 42. 设计模式之Signleton
+### 41. 设计模式之Signleton
 
 以Signleton的格式封装，从代码上保证某些类只有一个实例存在；
 
@@ -1562,10 +1680,10 @@ public enum Mar08 {
 
 
 
-### 43.设计模式之策略模式
+### 42.设计模式之策略模式
 
 - Comparator接口
 
   
 
-* Comparable接口
+https://github.com/android/views-widgets-samples
