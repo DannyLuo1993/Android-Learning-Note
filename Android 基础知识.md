@@ -1522,18 +1522,17 @@ An Adapter object acts as a bridge between an `AdapterView` and the underlying d
               // use a linear layout manager
               layoutManager = new LinearLayoutManager(this);
               recyclerView.setLayoutManager(layoutManager);
-  
-              // specify an adapter (see also next example)
+  ·
               mAdapter = new MyAdapter(myDataset);
               recyclerView.setAdapter(mAdapter);
           }
           // ...
       }
   ```
-
-  d. 要将所有数据输入列表中，您必须扩展 `RecyclerView.Adapter` 类。此对象会创建项的视图，并在原始项不再可见时用新数据项替换部分视图的内容:
-
-  ```java
+  
+d. 要将所有数据输入列表中，您必须扩展 `RecyclerView.Adapter` 类。此对象会创建项的视图，并在原始项不再可见时用新数据项替换部分视图的内容:
+  
+```java
   public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
           private String[] mDataset;
   
@@ -1582,10 +1581,10 @@ An Adapter object acts as a bridge between an `AdapterView` and the underlying d
           }
       }
   ```
-
   
 
-  布局管理器会调用适配器的 `onCreateViewHolder()` 方法。该方法需要构造一个 `RecyclerView.ViewHolder` 并设置用于显示其内容的视图。ViewHolder 的类型必须与 Adapter 类签名中声明的类型一致。通常，它会通过扩充 XML 布局文件来设置视图。由于视图持有者尚未分配到任何特定数据，因此该方法实际上不会设置视图的内容。
+  
+布局管理器会调用适配器的 `onCreateViewHolder()` 方法。该方法需要构造一个 `RecyclerView.ViewHolder` 并设置用于显示其内容的视图。ViewHolder 的类型必须与 Adapter 类签名中声明的类型一致。通常，它会通过扩充 XML 布局文件来设置视图。由于视图持有者尚未分配到任何特定数据，因此该方法实际上不会设置视图的内容。
   
   布局管理器随后会将视图持有者绑定到相应数据。具体操作是调用适配器的 `onBindViewHolder()` 方法并将视图持有者的位置传入 `RecyclerView`。`onBindViewHolder()` 方法需要获取适当的数据，并使用它填充视图持有者的布局。例如，如果 `RecyclerView` 显示名称列表，该方法可能会在列表中找到适当的名称，并填充视图持有者的 `TextView` 微件。
   
@@ -1601,7 +1600,7 @@ https://www.cnblogs.com/huolan/p/5126794.html
 
 ### 41. 设计模式之Signleton
 
-以Signleton的格式封装，从代码上保证某些类只有一个实例存在；
+以Signleton的格式封装，从代码上保证某些类只有一个实例存在；（当实例化对象比较耗资源时，建议采用单例的设计模式）
 
 JVM保证单例思維 - JVM确保在加载内部类时只会被加载一次；
 

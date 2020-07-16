@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name = "serial_number_size">24dp</dimen>
+    <dimen name = "english_word">36dp</dimen>
+    <dimen name = "chinese_word">24dp</dimen>
+</resources>
