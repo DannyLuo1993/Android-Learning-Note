@@ -2,7 +2,7 @@
 
 https://www.runoob.com/android/android-content-providers.html
 
-分析源码时，首先是看数据结构，其次是看算法。
+分析源码时，首先是看数据结构（输入），其次是看算法，最后看输出；
 
 Android四大组件： Activity、BroadcastReceiver、Service、Content Provider
 
@@ -45,7 +45,7 @@ c. 在第三方类中创建对象时，传context时要传ApplicationContext
 
 *接口方法的抽象方法是实现这个接口必须要实现的方法；*
 
-
+对于一个Activity，思考如何获取视图、如何管理视图、如何管理动态的视图数据及如何响应用户操作。
 
 ### 1. Activity的4种状态
 
@@ -62,6 +62,10 @@ paused ：Activity失去焦点时，被透明的Activity占据栈顶时
 stopped ：Activity不可见
 
 killed ：Activity已经被系统回收
+
+
+
+
 
 
 
