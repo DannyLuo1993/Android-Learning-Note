@@ -47,6 +47,12 @@ c. 在第三方类中创建对象时，传context时要传ApplicationContext
 
 对于一个Activity，思考如何获取视图、如何管理视图、如何管理动态的视图数据及如何响应用户操作。
 
+
+
+当方法的传参提示是成对出现时， 如`Observer<> observer`  和 ` LayoutManager layout` ,即提示用户这里要初始化一个类的实例，所以我们要new一个对象传入或传入已经初始化过的参数。 
+
+
+
 ### 1. Activity的4种状态
 
 什么是activity
@@ -1465,6 +1471,8 @@ public abstract class WordDatabase extends RoomDatabase{
 
 ### 39. Adapter
 
+特性： Input （View單元） ≠ OutPut （全景View）
+
 An Adapter object acts as a bridge between an `AdapterView` and the underlying data for that view. The Adapter provides access to the data items. The Adapter is also responsible for making a `View` for each item in the data set.
 
 ​	a. Adapter 是充当view（Adapter View的展示页）的底层数据 （AdapterView上展示的数据）与AdapterView（是一个ViewGroup）之间的桥梁（搭路）。
@@ -1534,8 +1542,9 @@ An Adapter object acts as a bridge between an `AdapterView` and the underlying d
       }
   ```
   
+
 d. 要将所有数据输入列表中，您必须扩展 `RecyclerView.Adapter` 类。此对象会创建项的视图，并在原始项不再可见时用新数据项替换部分视图的内容:
-  
+
 ```java
   public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
           private String[] mDataset;
@@ -1584,14 +1593,14 @@ d. 要将所有数据输入列表中，您必须扩展 `RecyclerView.Adapter` �
               return mDataset.length;
           }
       }
-  ```
-  
+```
 
-  
+
+
 布局管理器会调用适配器的 `onCreateViewHolder()` 方法。该方法需要构造一个 `RecyclerView.ViewHolder` 并设置用于显示其内容的视图。ViewHolder 的类型必须与 Adapter 类签名中声明的类型一致。通常，它会通过扩充 XML 布局文件来设置视图。由于视图持有者尚未分配到任何特定数据，因此该方法实际上不会设置视图的内容。
-  
+
   布局管理器随后会将视图持有者绑定到相应数据。具体操作是调用适配器的 `onBindViewHolder()` 方法并将视图持有者的位置传入 `RecyclerView`。`onBindViewHolder()` 方法需要获取适当的数据，并使用它填充视图持有者的布局。例如，如果 `RecyclerView` 显示名称列表，该方法可能会在列表中找到适当的名称，并填充视图持有者的 `TextView` 微件。
-  
+
   如果列表需要更新，请对 `RecyclerView.Adapter` 对象调用通知方法，例如 `notifyItemChanged()`。然后，布局管理器会重新绑定任何受影响的视图持有者，使其数据得到更新。
 
 https://www.cnblogs.com/huolan/p/5126794.html

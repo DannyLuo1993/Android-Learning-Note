@@ -2,4 +2,6 @@
     <string name="app_name">EnglishDictionary</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="init_word_en">Hello</string>
+    <string name="init_word_cn">你好</string>
 </resources>
