@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModel;
 
 public class WordList extends AndroidViewModel {
 
-    public MutableLiveData<Integer> serialnumber = new MutableLiveData<>();
+
     public MutableLiveData<String> englishword = new MutableLiveData<>();
     public MutableLiveData<String> chineseword = new MutableLiveData<>();
 
@@ -18,13 +18,6 @@ public class WordList extends AndroidViewModel {
     }
 
 
-    public MutableLiveData<Integer> getSerialnumber() {
-        if(serialnumber == null){
-            serialnumber = new MutableLiveData<>();
-            serialnumber.setValue(1);
-        }
-        return serialnumber;
-    }
 
     public MutableLiveData<String> getEnglishword() {
         if(englishword == null){
@@ -42,4 +35,11 @@ public class WordList extends AndroidViewModel {
         return chineseword;
     }
 
+    public void setEnglishword() {
+        englishword.setValue("Update");
+    }
+
+    public void setChineseword(){
+        chineseword.setValue("更新");
+    }
 }

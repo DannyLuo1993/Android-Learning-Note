@@ -14,13 +14,15 @@ import java.util.List;
 
 public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordListViewHolder> {
 
+    private String[] number = {"1"};
+    private String[] EN = {"Hello"};
+    private String[] CN = {"你好"};
 
-    List<WordList> allwords = new ArrayList<>();
-    public void setAllwords(List<WordList> allwords) {
-        this.allwords = allwords;
+    public void setListContent(String[] number, String[] EN, String[] CN){
+        this.number = number;
+        this.EN = EN;
+        this.CN = CN;
     }
-
-
     //創建ViewHolder來管理Adapter的Input layout中的全部View
     //在內部類前加Static防止內存洩露
     static class WordListViewHolder extends RecyclerView.ViewHolder {
@@ -54,17 +56,19 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordLi
     @Override
     public void onBindViewHolder(@NonNull WordListViewHolder holder, int position) {
         //allwords是數據的ArrayList集合，這裡會獲取集合裡每個position的數據
-        WordList wordList = allwords.get(position);
         //將獲取到的數據綁定到視圖上
-        holder.textViewNumber.setText(position + 1);
-        holder.textViewEnglish.setText(wordList.getEnglishword().getValue());
-        holder.textViewChinese.setText(wordList.getChineseword().getValue());
+        System.out.println("onBindVIewHolder");
+        holder.textViewNumber.setText(number.toString());
+        holder.textViewEnglish.setText(EN.toString());
+        holder.textViewChinese.setText(CN.toString());
     }
 
     @Override
     public int getItemCount() {
         return 0;
     }
+
+
 
 
 }

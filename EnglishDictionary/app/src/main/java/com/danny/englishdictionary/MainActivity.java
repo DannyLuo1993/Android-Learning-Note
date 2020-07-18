@@ -5,16 +5,23 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    WordList wordList;
     WordListAdapter wordListAdapter;
     RecyclerView recyclerView;
+    private String[] number = {"1"};
+    private String[] EN = {"Hello"};
+    private String[] CN = {"你好"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        System.out.println("onCreate");
         setContentView(R.layout.activity_main);
         //初始化recycler view
         recyclerView = findViewById(R.id.recyclerview);
@@ -25,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         //稍候調用wordlist adapter中的setter方法設置數據。
         wordListAdapter = new WordListAdapter();
         recyclerView.setAdapter(wordListAdapter);
+        wordListAdapter.setListContent(number,EN,CN);
 
 
     }
