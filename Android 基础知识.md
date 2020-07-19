@@ -1369,6 +1369,12 @@ onNavigateUp() 和 onSupportNavigateUp() 的区别
 
 ### 38. Room
 
+该库可帮助您在运行应用的设备上创建应用数据的缓存。此缓存充当应用的单一可信来源，使用户能够在应用中查看关键信息的一致副本，无论用户是否具有互联网连接。
+
+
+
+主键：
+
 
 
 - Entity
@@ -1400,6 +1406,10 @@ public class Word{
 Dao
 
 访问数据库的接口（DataBase Access Object）
+
+如需使用 [Room 持久性库](https://developer.android.google.cn/training/data-storage/room?hl=zh_cn)访问应用的数据，您可以使用数据访问对象 (DAO)。这些 [`Dao`](https://developer.android.google.cn/reference/androidx/room/Dao?hl=zh_cn) 对象构成了 Room 的主要组件，因为每个 DAO 都包含一些方法，这些方法提供对应用数据库的抽象访问权限。
+
+通过使用 DAO 类（而不是查询构建器或直接查询）访问数据库，您可以拆分数据库架构的不同组件。此外，借助 DAO，您可以在[测试应用](https://developer.android.google.cn/training/data-storage/room/testing-db?hl=zh_cn)时轻松模拟数据库访问。
 
 数据库的增删查改操作
 
@@ -1434,38 +1444,25 @@ public interface WordDao{
 
 DataBase
 
-```
+```java
 //继承父类Room database
 //定义为抽象，因为实现的功能不用我们自己写，编译器会帮我们写。
 
-@base(entities = (Word.class), version = 1, exportSchema = false)
+@database(entities = (Word.class), version = 1, exportSchema = false)
 public abstract class WordDatabase extends RoomDatabase{
-
+	
+	//如果有多个Entity，需要写多个Dao来操作
 	public abstract WordDao getWordDao();
 }
 ```
 
 
 
-* AsyncTask
-
-  对数据库的操作
-
-  ```java
-  
-  ```
-
-  
-
-* ViewModel
-
-  数据库的内容放在ViewModel
-
-  
-
 * Repository
 
   数据存&读取放到仓库类里
+
+
 
 
 
