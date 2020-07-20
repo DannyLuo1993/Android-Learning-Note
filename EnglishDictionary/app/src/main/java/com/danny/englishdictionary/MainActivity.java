@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
     //DataBase 部分定义
     private WordListDao wordListDao;
-    private WordListDataBase wordListDataBase;
+    private WordListDataBase INSTANCE;
     private LiveData<List<WordListViewModel>> allwordsLive;
 
     //主页面控件部分定义
@@ -49,7 +49,8 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(wordListAdapter);
 
         //初始化Dao
-        wordListDao = wordListDataBase.getWordListDao();
+        INSTANCE = WordListDataBase.getInstance(this);
+        wordListDao = INSTANCE.wordListDao();
         allwordsLive = wordListDao.getallwordslive();
 
         //初始化页面控件
@@ -58,12 +59,7 @@ public class MainActivity extends AppCompatActivity {
         buttonSearch = findViewById(R.id.buttonQuery);
         buttonUpdate = findViewById(R.id.buttonUpdate);
 
-        allwordsLive.observe(this, new Observer<List<WordListViewModel>>() {
-            @Override
-            public void onChanged(List<WordListViewModel> wordListViewModels) {
 
-            }
-        });
 
     }
 }
