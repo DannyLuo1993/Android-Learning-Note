@@ -27,5 +27,5 @@ public interface WordListDao {
     void deleteallwords();
 
     @Query("SELECT * FROM DICTIONARY ORDER BY ID DESC")
-    LiveData<List<WordListViewModel>> getallwordslive();
+    LiveData<List<Word>> getallwordslive();
 }

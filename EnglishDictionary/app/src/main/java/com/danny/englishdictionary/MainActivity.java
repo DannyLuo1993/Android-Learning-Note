@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -21,13 +22,13 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private WordListViewModel wordListViewModel;
 
-    //DataBase 部分定义
-    private WordListDao wordListDao;
-    private WordListDataBase INSTANCE;
-    private LiveData<List<WordListViewModel>> allwordsLive;
 
     //主页面控件部分定义
     Button buttonInsert, buttonUpdate, buttonDelete, buttonSearch;
+
+    //
+    List<String> englishword = new ArrayList<>();
+    List<String> chineseword = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,28 +37,52 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //初始化ViewModel
-        wordListViewModel = ViewModelProviders.of(this).get(WordListViewModel.class);
+        wordListViewModel = new ViewModelProvider(this).get(WordListViewModel.class);
+
         //初始化recycler view
         recyclerView = findViewById(R.id.recyclerview);
-
         //設定recycler view的layout manager
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         //將wordlist adapter中的輸入綁定到recycler view 中輸出。
         //稍候調用wordlist adapter中的构造方法設置數據。
-        wordListAdapter = new WordListAdapter(wordListViewModel.getChineseword().getValue(), wordListViewModel.getEnglishword().getValue());
+        wordListAdapter = new WordListAdapter(englishword, chineseword);
         recyclerView.setAdapter(wordListAdapter);
 
-        //初始化Dao
-        INSTANCE = WordListDataBase.getInstance(this);
-        wordListDao = INSTANCE.wordListDao();
-        allwordsLive = wordListDao.getallwordslive();
+        wordListViewModel.getAllwordslive().observe(this, new Observer<List<Word>>() {
+            @Override
+            public void onChanged(List<Word> words) {
+                StringBuilder text = new StringBuilder();
+                for(int i = 0; i<words.size(); i++){
+                    Word word = words.get(i);
+                    englishword.add(word.getEnglishword());
+                    chineseword.add(word.getChineseword());
+                }
+            }
+        });
+
 
         //初始化页面控件
         buttonInsert = findViewById(R.id.buttonInsert);
         buttonDelete = findViewById(R.id.buttonDelete);
         buttonSearch = findViewById(R.id.buttonQuery);
         buttonUpdate = findViewById(R.id.buttonUpdate);
+
+        buttonInsert.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Word word1 = new Word("Hello", "你好");
+                Word word2 = new Word( "World","世界");
+                wordListViewModel.insertWords(word1, word2);
+            }
+        });
+
+        buttonDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                wordListViewModel.deleteallWords();
+            }
+        });
 
 
 

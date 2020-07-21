@@ -10,12 +10,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordListViewHolder> {
 
-    private String[] mDataset;
-    private String[] tDataset;
+    private List<String> menglishword;
+    private List<String> mchineseword;
 
 
 
@@ -34,9 +35,10 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordLi
 
     // Provide a suitable constructor (depends on the kind of dataset)
     // To allow activity to pass parameter
-    public WordListAdapter(String[] myDataset, String[] testDataset){
-        mDataset = myDataset;
-        tDataset = testDataset;
+    // 传进来的参数即将要通过OnBindViewHolder设置给控件，所以传递过来的参数格式极其重要
+    public WordListAdapter(List<String> myDataset, List<String> testDataset){
+        menglishword = myDataset;
+        mchineseword = testDataset;
     }
 
 
@@ -62,14 +64,15 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordLi
         //allwords是數據的ArrayList集合，這裡會獲取集合裡每個position的數據
         //將獲取到的數據綁定到視圖上
         System.out.println("onBindVIewHolder");
-        holder.textViewNumber.setText(mDataset[position]);
-        holder.textViewEnglish.setText(tDataset[position]);
-        holder.textViewChinese.setText(mDataset[position]);
+        holder.textViewNumber.setText(String.valueOf(position));
+
+        holder.textViewEnglish.setText(menglishword.get(position));
+        holder.textViewChinese.setText(mchineseword.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return mDataset.length;
+        return menglishword.size();
     }
 
 
