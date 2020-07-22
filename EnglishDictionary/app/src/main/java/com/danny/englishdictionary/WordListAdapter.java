@@ -15,10 +15,12 @@ import java.util.List;
 
 public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordListViewHolder> {
 
-    private List<String> menglishword;
-    private List<String> mchineseword;
 
+    private List<Word> wordList;
 
+    public void setWordList(List<Word> wordList) {
+        this.wordList = wordList;
+    }
 
     //創建ViewHolder來管理Adapter的Input layout中的全部View
     //在內部類前加Static防止內存洩露
@@ -36,9 +38,8 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordLi
     // Provide a suitable constructor (depends on the kind of dataset)
     // To allow activity to pass parameter
     // 传进来的参数即将要通过OnBindViewHolder设置给控件，所以传递过来的参数格式极其重要
-    public WordListAdapter(List<String> myDataset, List<String> testDataset){
-        menglishword = myDataset;
-        mchineseword = testDataset;
+    public WordListAdapter(List<Word> wordList){
+        this.wordList = wordList;
     }
 
 
@@ -61,18 +62,18 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordLi
     // 2.
     @Override
     public void onBindViewHolder(@NonNull WordListViewHolder holder, int position) {
+        Word word = wordList.get(position);
         //allwords是數據的ArrayList集合，這裡會獲取集合裡每個position的數據
         //將獲取到的數據綁定到視圖上
         System.out.println("onBindVIewHolder");
         holder.textViewNumber.setText(String.valueOf(position));
-
-        holder.textViewEnglish.setText(menglishword.get(position));
-        holder.textViewChinese.setText(mchineseword.get(position));
+        holder.textViewEnglish.setText(word.getEnglishword());
+        holder.textViewChinese.setText(word.getChineseword());
     }
 
     @Override
     public int getItemCount() {
-        return menglishword.size();
+        return wordList.size();
     }
 
 

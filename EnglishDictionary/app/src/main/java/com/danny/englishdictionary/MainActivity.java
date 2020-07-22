@@ -46,7 +46,8 @@ public class MainActivity extends AppCompatActivity {
 
         //將wordlist adapter中的輸入綁定到recycler view 中輸出。
         //稍候調用wordlist adapter中的构造方法設置數據。
-        wordListAdapter = new WordListAdapter(englishword, chineseword);
+        //wordListAdapter = new WordListAdapter();
+        //数据通过setAdapter里的wordListAdapter传递
         recyclerView.setAdapter(wordListAdapter);
 
         wordListViewModel.getAllwordslive().observe(this, new Observer<List<Word>>() {
@@ -54,9 +55,9 @@ public class MainActivity extends AppCompatActivity {
             public void onChanged(List<Word> words) {
                 StringBuilder text = new StringBuilder();
                 for(int i = 0; i<words.size(); i++){
-                    Word word = words.get(i);
-                    englishword.add(word.getEnglishword());
-                    chineseword.add(word.getChineseword());
+                wordListAdapter.setWordList(words);
+                //设置完还要告诉recycler view数据发生改变了，需要刷新视图
+                wordListAdapter.notifyDataSetChanged();
                 }
             }
         });
