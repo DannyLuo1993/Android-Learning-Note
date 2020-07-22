@@ -46,18 +46,18 @@ public class MainActivity extends AppCompatActivity {
 
         //將wordlist adapter中的輸入綁定到recycler view 中輸出。
         //稍候調用wordlist adapter中的构造方法設置數據。
-        //wordListAdapter = new WordListAdapter();
-        //数据通过setAdapter里的wordListAdapter传递
+        wordListAdapter = new WordListAdapter();
+        //View的数据通过setAdapter里的wordListAdapter传递
         recyclerView.setAdapter(wordListAdapter);
 
         wordListViewModel.getAllwordslive().observe(this, new Observer<List<Word>>() {
             @Override
             public void onChanged(List<Word> words) {
-                StringBuilder text = new StringBuilder();
-                for(int i = 0; i<words.size(); i++){
-                wordListAdapter.setWordList(words);
-                //设置完还要告诉recycler view数据发生改变了，需要刷新视图
-                wordListAdapter.notifyDataSetChanged();
+                System.out.println("Observer_AllWordsLive");
+                for(int i = 0; i<words.size()||i==words.size(); i++){
+                    wordListAdapter.setWordList(words);
+                    //设置完还要告诉recycler view数据发生改变了，需要刷新视图
+                    wordListAdapter.notifyDataSetChanged();
                 }
             }
         });

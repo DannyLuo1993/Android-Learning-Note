@@ -19,11 +19,13 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordLi
     private List<Word> wordList;
 
     public void setWordList(List<Word> wordList) {
+        if(wordList == null){
+            wordList = new ArrayList<>();
+        }
         this.wordList = wordList;
     }
 
     //創建ViewHolder來管理Adapter的Input layout中的全部View
-    //在內部類前加Static防止內存洩露
     public static class WordListViewHolder extends RecyclerView.ViewHolder {
         TextView textViewNumber, textViewEnglish, textViewChinese;
         public WordListViewHolder(@NonNull View itemView) {
@@ -35,12 +37,7 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordLi
         }
     }
 
-    // Provide a suitable constructor (depends on the kind of dataset)
-    // To allow activity to pass parameter
-    // 传进来的参数即将要通过OnBindViewHolder设置给控件，所以传递过来的参数格式极其重要
-    public WordListAdapter(List<Word> wordList){
-        this.wordList = wordList;
-    }
+
 
 
     //Input方法，將需要ViewHolder管理的內容注入ViewHolder
@@ -73,7 +70,10 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordLi
 
     @Override
     public int getItemCount() {
-        return wordList.size();
+        if(wordList == null){
+            return 0;
+        }else{
+        return wordList.size();}
     }
 
 

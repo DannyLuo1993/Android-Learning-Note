@@ -32,7 +32,6 @@ public class WordRepository {
             this.wordListDao = wordListDao;
         }
 
-
         @Override
         protected Void doInBackground(Word... words) {
             wordListDao.insertwords(words);
@@ -43,8 +42,8 @@ public class WordRepository {
     static class QueryAsynTask extends AsyncTask<Word, Void, Void>{
         private WordListDao wordListDao;
 
-        public QueryAsynTask(WordListDao wordListDaod){
-            this.wordListDao = wordListDaod;
+        public QueryAsynTask(WordListDao wordListDao){
+            this.wordListDao = wordListDao;
         }
 
 
@@ -59,7 +58,7 @@ public class WordRepository {
         new InsertAsynTask(wordListDao).execute(words);
     }
 
-    public void deleteallWords(Word... words){
+    public void deleteallWords(){
         new QueryAsynTask(wordListDao).execute();
     }
 }
