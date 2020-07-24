@@ -1403,7 +1403,7 @@ public class Word{
 
 
 
-Dao
+* Dao
 
 访问数据库的接口（DataBase Access Object）
 
@@ -1442,7 +1442,9 @@ public interface WordDao{
 
 
 
-DataBase
+* DataBase
+
+  创建示例
 
 ```java
 //继承父类Room database
@@ -1454,7 +1456,43 @@ public abstract class WordDatabase extends RoomDatabase{
 	//如果有多个Entity，需要写多个Dao来操作
 	public abstract WordDao getWordDao();
 }
+
+
+
 ```
+
+
+
+​	更新示例 - 向数据表中插入一列
+
+```java
+.addMigration(MIGRATION_2_3)
+    
+static final Migration MIGRATION_2_3 = new Migration(2,3){
+    @Override
+    public void migration(@NotNull SupportSQLitedatabase database){
+        database.execSQL("ALTER TABLB table-name ADD COLUMN data INTEGER NOT NULL DEFAULT 1")
+    }
+}
+```
+
+
+
+​	更新示例 - 删除数据表中的列信息
+
+```java
+ static final Migration MIGRATION_3_4 = new Migration(3,4){
+     @Override
+     public void migration(@NotNull SupportSQLitedatabase database){
+         database.exeSQL("CREATE TABLE table-name-temp(id INTEGER PRIMARY KEY NOT NULL, english_word TEXT, chinese_meaning TEXT)");
+         database.exeSQL("INSERT INFO table-name-temp (id, english_word, chinese_meaning) INSERT id,english_word, chinese_meaning FROM table-name");
+         database.exeSQL("DROP TABLE talble-name");
+         database.exeSQL("ALTER TABLE table-name-temp to table-name");
+     }
+ }
+```
+
+
 
 
 
