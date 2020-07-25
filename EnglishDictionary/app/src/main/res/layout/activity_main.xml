@@ -9,7 +9,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="393dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline7"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -19,38 +20,32 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Insert"
-        app:layout_constraintBottom_toTopOf="@+id/buttonDelete"
-        app:layout_constraintStart_toStartOf="@+id/buttonDelete"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerview" />
-
-    <Button
-        android:id="@+id/buttonUpdate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Update"
-        app:layout_constraintBottom_toTopOf="@+id/buttonQuery"
-        app:layout_constraintEnd_toEndOf="@+id/buttonQuery"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerview" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline7" />
 
     <Button
         android:id="@+id/buttonDelete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="118dp"
         android:text="Delete"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/buttonQuery"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonInsert" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline5"
+        app:layout_constraintTop_toTopOf="@+id/buttonInsert" />
 
-    <Button
-        android:id="@+id/buttonQuery"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Search"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/buttonDelete"
-        app:layout_constraintTop_toBottomOf="@+id/buttonUpdate" />
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.81" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

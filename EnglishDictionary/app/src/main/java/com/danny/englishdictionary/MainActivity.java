@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +25,10 @@ public class MainActivity extends AppCompatActivity {
     private WordListViewModel wordListViewModel;
 
 
+
     //主页面控件部分定义
-    Button buttonInsert, buttonUpdate, buttonDelete, buttonSearch;
+    Button buttonInsert, buttonDelete;
+
 
     //
     List<String> englishword = new ArrayList<>();
@@ -66,8 +70,6 @@ public class MainActivity extends AppCompatActivity {
         //初始化页面控件
         buttonInsert = findViewById(R.id.buttonInsert);
         buttonDelete = findViewById(R.id.buttonDelete);
-        buttonSearch = findViewById(R.id.buttonQuery);
-        buttonUpdate = findViewById(R.id.buttonUpdate);
 
         buttonInsert.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
                 wordListViewModel.deleteallWords();
             }
         });
+
 
 
 

@@ -4,6 +4,7 @@ import android.provider.UserDictionary;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -28,12 +29,14 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordLi
     //創建ViewHolder來管理Adapter的Input layout中的全部View
     public static class WordListViewHolder extends RecyclerView.ViewHolder {
         TextView textViewNumber, textViewEnglish, textViewChinese;
+        Switch aSwitch;
         public WordListViewHolder(@NonNull View itemView) {
             super(itemView);
             System.out.println("WordListViewHolder");
             textViewNumber = itemView.findViewById(R.id.textView);
             textViewEnglish = itemView.findViewById(R.id.textView2);
             textViewChinese = itemView.findViewById(R.id.textView3);
+            aSwitch = itemView.findViewById(R.id.switch2);
         }
     }
 
@@ -49,7 +52,7 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordLi
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
 
         //解析input源的View
-        View itemView = layoutInflater.inflate(R.layout.fragment_word_list, parent, false);
+        View itemView = layoutInflater.inflate(R.layout.cell_card, parent, false);
         //將解析後的View投入ViewHolder管理
         return new WordListViewHolder(itemView);
     }
