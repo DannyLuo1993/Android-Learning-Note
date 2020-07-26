@@ -31,8 +31,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     //
-    List<String> englishword = new ArrayList<>();
-    List<String> chineseword = new ArrayList<>();
+    //List<String> englishword = new ArrayList<>();
+    //List<String> chineseword = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
         //將wordlist adapter中的輸入綁定到recycler view 中輸出。
         //稍候調用wordlist adapter中的构造方法設置數據。
-        wordListAdapter = new WordListAdapter();
+        wordListAdapter = new WordListAdapter(wordListViewModel);
         //View的数据通过setAdapter里的wordListAdapter传递
         recyclerView.setAdapter(wordListAdapter);
 
@@ -74,9 +74,18 @@ public class MainActivity extends AppCompatActivity {
         buttonInsert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Word word1 = new Word("Hello", "你好");
-                Word word2 = new Word( "World","世界");
-                wordListViewModel.insertWords(word1, word2);
+                Word word1 = new Word("Hello", "你好", true);
+                Word word2 = new Word("World","世界", true);
+                Word word3 = new Word("Java", "安卓",true);
+                Word word4 = new Word("Dota2", "刀塔2", true);
+                Word word5 = new Word("Lays", "乐事", true);
+                Word word6 = new Word("cake", "蛋糕", true);
+                Word word7 = new Word("Tomato", "番茄",true);
+                Word word9 = new Word("flavor","口味",true);
+                Word word10 = new Word("chip", "薯片", true);
+                Word word11 = new Word("tissue", "纸巾",true);
+                Word word12 = new Word("Chair", "椅子", true);
+                wordListViewModel.insertWords(word1,word2,word3,word4,word5,word6,word7,word9,word10,word11,word12);
             }
         });
 

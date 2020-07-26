@@ -11,9 +11,10 @@ public class Word {
     @PrimaryKey(autoGenerate = true)
     private int id;
 
-    public Word(String englishword, String chineseword) {
+    public Word(String englishword, String chineseword, boolean isVisible) {
         this.englishword = englishword;
         this.chineseword = chineseword;
+        this.isVisible = isVisible;
     }
 
     @ColumnInfo(name = "English Word")
@@ -21,6 +22,17 @@ public class Word {
 
     @ColumnInfo(name = "Chinese Word")
     private String chineseword;
+
+    public boolean isVisible() {
+        return isVisible;
+    }
+
+    public void setVisible(boolean visible) {
+        isVisible = visible;
+    }
+
+    @ColumnInfo(name = "Chinese Visible Flag")
+    private boolean isVisible;
 
     public int getId() {
         return id;

@@ -1739,3 +1739,19 @@ https://github.com/android/views-widgets-samples
 
 ### 43. volatile关键字的字节码
 
+
+
+### 44. Intent
+
+* 基础用法
+
+  ```java
+  //实例化Intent时传入Action，对应Intent想操作的数据类型
+  Intent intent = new Intent(Intent.ACTION_XXX);
+  //将需要Intent处理的数据传给Intent
+  intent.setData(data);
+  //将intent传给需要新开的activity
+  startActivity(intent);
+  ```
+
+  
