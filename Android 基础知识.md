@@ -1771,3 +1771,85 @@ https://developer.android.google.cn/reference/androidx/recyclerview/widget/ItemT
 
 https://www.jianshu.com/p/2ae483118c8e
 
+* 创建ItemTouchStatus接口
+
+```java
+public interface ItemTouchStatus {
+
+    boolean onItemMove(int fromPosition, int toPosition);
+
+    boolean onItemRemove(int position);
+}
+```
+
+* 创建类继承ItemTouchHelper.Callback
+
+```java
+public class CustomItemTouchCallback extends ItemTouchHelper.Callback{
+	
+    // 定义ItemTouchStatus常量，作用：记录ItemMove和ItemRemove的position
+    private final ItemTouchStatus mItemTouchStatus;
+    
+    // 构造方法，关联ItemTouchStatus接口
+    public CustomItemTouchCallback(ItemTouchStatus itemTouchStatus) {
+        mItemTouchStatus = itemTouchStatus;
+    }
+    
+    //实现回调函数 getMovementFlag、onMove和onSwiped
+ 	@Override
+    public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+        // 上下拖动
+        int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
+        // 向左滑动
+        int swipeFlags = ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
+        return makeMovementFlags(dragFlags, swipeFlags);
+    }
+    
+    //如果item离开位置后就一直返回True，否则没有返回值。
+    @Override
+    public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+        // 交换在数据源中相应数据源的位置
+        return mItemTouchStatus.onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+    }
+    
+    
+    @Override
+    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+        // 从数据源中移除相应的数据
+        mItemTouchStatus.onItemRemove(viewHolder.getAdapterPosition());
+    }
+    
+}
+```
+
+* 在ViewAdapter中实现ItemTouchStatus接口的OnItemMove和OnItemRemove接口
+
+```java
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.RecyclerViewHolder> implements ItemTouchStatus {
+    
+    @Override
+    public boolean onItemMove(int fromPosition, int toPosition) {
+        //交换list集合中任意两个位置的元素
+        Collections.swap(mDataList, fromPosition, toPosition);
+        //通知UI刷新视图
+        notifyItemMoved(fromPosition, toPosition);
+        return true;
+    }
+
+    @Override
+    public boolean onItemRemove(int position) {
+        mDataList.remove(position);
+        notifyItemRemoved(position);
+        return true;
+    }
+}
+
+```
+
+* 在Main Activity中新建ItemTouchHelper对象，并绑定给recyclerview；
+
+```java
+ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new CustomItemTouchCallback(mAdapter));
+itemTouchHelper.attachToRecyclerView(mRecyclerView);
+```
+
