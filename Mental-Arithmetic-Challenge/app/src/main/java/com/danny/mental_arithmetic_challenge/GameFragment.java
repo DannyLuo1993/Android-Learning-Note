@@ -40,6 +40,7 @@ public class GameFragment extends Fragment {
         //Get ViewModelProvider to observe the change of score
         dataViewModel = ViewModelProviders.of(requireActivity(),getDefaultViewModelProviderFactory()).get(DataViewModel.class);
         binding.setScore(dataViewModel);
+        //添加被观察者 - 生命周期正在被观察
         binding.setLifecycleOwner(this);
         //初始化当前分数
         dataViewModel.getCurrentScore().setValue(0);

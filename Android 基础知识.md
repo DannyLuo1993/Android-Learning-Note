@@ -2,8 +2,6 @@
 
 https://www.runoob.com/android/android-content-providers.html
 
-分析源码时，首先是看数据结构（输入），其次是看算法，最后看输出；
-
 Android四大组件： Activity、BroadcastReceiver、Service、Content Provider
 
 Controller(Activity, Fragment 业务逻辑) ->  ViewModel(LiveData) [双向]
@@ -50,6 +48,12 @@ c. 在第三方类中创建对象时，传context时要传ApplicationContext
 
 
 当方法的传参提示是成对出现时， 如`Observer<> observer`  和 ` LayoutManager layout` ,即提示用户这里要初始化一个类的实例，所以我们要new一个对象传入或传入已经初始化过的参数。 
+
+
+
+解耦： 很大程序上表现为系统组件的生命周期与普通组件之间的解耦。普通组件在使用过程中通常需要依赖于系统组件的生命周期。有时我们需要在系统组件的生命周期回调方法中，主动对普通组件进行调用或控制，因为普通组件无法主动获知系统组件的生命周期事件。例如我们常需要在页面的onCreate方法中对组件进行初始化、在onPause方法中停止组件，在onDestroy方法中进行资源回收
+
+
 
 
 
@@ -1852,4 +1856,62 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new CustomItemTouchCallback(mAdapter));
 itemTouchHelper.attachToRecyclerView(mRecyclerView);
 ```
+
+
+
+### 47. AsynTask
+
+
+
+### 48. Context
+
+
+
+### 49. JetPack
+
+JetPack主要包括4个方面：架构（Arichitecture）、界面（UI）、行为（Behavior）、基础（Foundation）
+
+* 架构部分包括：DataBinding、Lifecycles、LiveData、Navigation、paging、Room、ViewModel、WorkManager
+
+* 界面部分包括：Animation&Transitions、Auto,TV&Wear、Emoji、Fragment、Layout、Palette
+* 基础部分包括： AppCompat、 Android KTX、 Multidex、Test
+* 行为部分包括： Download Manager、Media&Playback、Permission、Notification、Sharing、Slices
+
+
+
+* LifeCycles
+
+  基于解耦的设计思路，我们希望普通组件（widget）不依赖于页面生命周期的回调方法也能及时收到Activity生命周期变化的通知。为此Google提供LiftCycle作为解决方案。此外，LifeCycle在Service和Appllcation中也能大显身手。
+
+  
+
+* LifeCycle解决问题的原理
+
+  jetpack提供了两个类： LifecycleOwner（被观察者）、LifecycleObserver（观察者）。即通过观察者模式，实现对页面生命周期的监听。对应源码：
+
+  ```java
+  public class SupportActivity extends Activity implements LifecycleOwner, Component{
+     ...
+     private LifecycleRegistry mLifecycleRegistry = new LifecycleRegistry(this);
+     
+     public SupportActivity(){}
+     
+     //得到一个LifecycleRegistry对象
+     public Lifecycle getLifecycle() {
+         return this.mLifecycleRegistry;
+     }
+  }
+  ```
+
+* Lifecycle解决方案
+
+  a. 编写自定义组件类，实现LifecycleObserver接口。对组件中那些需要再页面生命周期发生变化时得到通知的方法，我们需要在这些方法上使用@ OnLifecycleEvent（Liftcycle.Event.ON_xxx）标签进行标识。这样当页面生命周期发生变化时，这些被标识过的方法便后被自动调用。
+
+  ```java
+  public class MyLocationListener implements LifecycleObserver{
+      public MyLocationListener(Activity context, )
+  }
+  ```
+
+  
 
