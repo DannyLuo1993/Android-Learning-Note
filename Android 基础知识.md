@@ -1879,11 +1879,11 @@ JetPack主要包括4个方面：架构（Arichitecture）、界面（UI）、行
 
 
 
-* LifeCycles
+### 50. LifeCycles
 
-  基于解耦的设计思路，我们希望普通组件（widget）不依赖于页面生命周期的回调方法也能及时收到Activity生命周期变化的通知。为此Google提供LiftCycle作为解决方案。此外，LifeCycle在Service和Appllcation中也能大显身手。
+基于解耦的设计思路，我们希望普通组件（widget）不依赖于页面生命周期的回调方法也能及时收到Activity生	命周期变化的通知。为此Google提供LiftCycle作为解决方案。此外，LifeCycle在Service和Appllcation中也能大	显身手。
 
-  
+
 
 * LifeCycle解决问题的原理
 
@@ -1903,15 +1903,102 @@ JetPack主要包括4个方面：架构（Arichitecture）、界面（UI）、行
   }
   ```
 
-* Lifecycle解决方案
+* Lifecycle解决方案 
 
   a. 编写自定义组件类，实现LifecycleObserver接口。对组件中那些需要再页面生命周期发生变化时得到通知的方法，我们需要在这些方法上使用@ OnLifecycleEvent（Liftcycle.Event.ON_xxx）标签进行标识。这样当页面生命周期发生变化时，这些被标识过的方法便后被自动调用。
 
+  **通过这种方式将Activity的生命周期同步给普通组件**
+  
   ```java
   public class MyLocationListener implements LifecycleObserver{
-      public MyLocationListener(Activity context, )
+      public MyLocationListener(Activity context, OnLocationChangedListener onLocationChangedListener){
+        //初始化操作
+          iniLocationManager();
+      }
+  }
+  
+  //当Activity执行onPause（）方法时，该方法会被自动调用
+  @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+  public void stopGetLocation(){
+      Log.d(TAG, "stopGetLocation")
+  }
+  
+  //当地理位置发生变化时，通过该接口通知调用者
+  public interface OnLocationChangeListener{
+      void onChanged(double latitude, double longitude);
+  }
+  ```
+  
+  **然后在Activity中通过getLifecycle().addObserver()方法将观察者和被观察者绑定**
+  
+  ```java
+  public class MainActivity extends AppCompatActivity{
+      private MyLocationListener myLocationListener;
+      
+      @Override
+      protected void onCreate(Bundle savedInstanceState){
+          myLocationListener = new MyLocationListener(this, new MyLocationListener.OnLocationchangedListener(){
+             @Override
+             public void onChanged(double latitude, double longitude){
+                 //展示收到的位置信息
+             }
+          });
+      }
+      //将观察者与被观察者绑定
+      getLifecycle().addObserver(myLocationListener);
+  }
+  
+  ```
+  
+  
+
+### 51. LifeCycleService
+
+拥有生命周期概念的组件除了Activity和Fragment，还有两个个非常重要的组件， 它就是Service 和 Application。
+
+* Lifecycleservice使用方法
+
+  a. 在app的build gradle文件中添加相关依赖。
+
+  b. 创建类继承LifecycleService类
+
+  ```java
+  public class Myservice extends LifecycleService{
+      private MyServiceObserver myServiceObserver;
+      
+      public Myservice(){
+          myServiceObserver = new MyserviceOberver();
+          
+          //将观察者与被观察者绑定
+          //在有生命周期的类页面调用并填入没有生命周期的类
+          getLiftcycle().addObserver(myServiceObserver);
+      }
   }
   ```
 
-  
+  c. 接着在MyServiceObserver类中实现LifecycleObserver接口，使用OnLifecycleEvent标签将service的生命周期同步给MyServiceObserver类
 
+  ```java
+  public class MyServiceObserver implements LifecycleObserver{
+      private String TAG = this.getCLass().getName();
+    
+      //当Service的onCreate方法被调用时，该方法会被调用
+    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+      private void startGetLocation(){
+          Log.d(TAG, "startGetLocation()");
+      }
+      
+      //当Service的onDestory()方法被调用时，该方法会被调用
+      @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY){
+          private void stopGetLocation(){
+              Log.d(TAG, "stopGetLocation()")
+          }
+      }
+  }
+  ```
+  
+  
+  
+  ### 52. ProcessLifecycleOwner
+  
+  
