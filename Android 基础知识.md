@@ -2001,4 +2001,30 @@ JetPack主要包括4个方面：架构（Arichitecture）、界面（UI）、行
   
   ### 52. ProcessLifecycleOwner
   
+  a. 将观察者与被观察者绑定
+  
+  ```java
+  public class MyApplication extends Application
+  {
+      @Override
+      public void onCreate(){
+          super.onCreate();
+          ProcessLifecycleOwner.get.getLifecycle()
+              					.addObserver(new ApplicationObserver());
+          
+      }
+  }
+  ```
+  
+  b. 监听类实现LifecycleObserver接口，监听Application的生命周期
+  
+  ```java
+  public class ApplicationObserver implements LifecycleObserver{
+      private String TAG = this.getClass().getName();
+      
+      //在应用程序的整个生命周期中只会被调用一次
+      
+  }
+  ```
+  
   
