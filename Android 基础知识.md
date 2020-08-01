@@ -1107,34 +1107,38 @@ https://blog.csdn.net/feather_wch/article/details/88648559
 
 Handle everything needed for in-app navigation.
 
+它具备以下优势： a. 可视化的页面导航图、便于开发者理清页面间的关系。b. 通过destination和action完成页面间的导航。c. 方便添加页面切换动画。 d. 页面间类型安全的参数传递。 e. 通过Navigation UI类，对菜单、底部导航、抽屉菜单导航进行统一的管理。 f. 支持深层链接DeepLink
+
 * **NavHost**
 
   是一个容器，用来存放页面
 
-* **Fragment**
+* **NavHostFragment**
 
-  Navigation是在Fragment之间切换 
+  NavHostFragment是一个特殊的Fragment，我们需要将其减价到Activity的布局文件中，作为NavGraph的容器。 
 
 * **NavController**
 
-  负责控制导航的逻辑。
+  是一个Java/Kotlin对象，用于在代码中完成Navigation Graph中具体的页面切换工作
 
-* NavGraph
+* **NavGraph**
+
+  新型的XML资源文件，包含了App（部分）Fragment的导航关系。
 
 
 
 * 怎么使用Navigation组件
 
   a、新建好空白的fragment activity & xml；
-  
+
   b、移除fragment xml中的TextView ，并将布局改为ConstraintLayout
-  
+
   c、创建Navigation资源文件，并添加fragment间的导航线路图（NavGraph）
-  
+
   d、到Activity_main.xml的Containers控件栏下添加Host - NavHostFragment
-  
+
   e、到对应的Fragment（Home Fragment）中写监听事件
-  
+
   ```java
   public void onActivityCreated(Bundle savedInstanceState){
       super.onActivityCreated(sacedInstanceState);
@@ -1147,9 +1151,9 @@ Handle everything needed for in-app navigation.
       });
   }
   ```
-  
+
   f、在MainActivity中添加返回键
-  
+
   ```java
   NavController controller = Navigation.findNavController(this, R.id.fragment);
   NavigationUI.setupActionBarWithNavController(this,controller);
@@ -1161,15 +1165,15 @@ Handle everything needed for in-app navigation.
       return controller.navigateUp();
   }
   ```
-  
+
   g、Navigate action的数据传递 - 在xml文件中添加Arguments (Key Value型数据)，可以在Fragment activity中获取到。然后action中允许在argument中重载fragment中的值。 【传递静态方式案例】
-  
+
   ```java
   String string = getArguments().getString(key);
   ```
-  
+
   h. 用Bundle传递动态数据，先判要传的数据是否为空，再用Bundle传数据
-  
+
    ```
   //起点放入数据
   Bundle bundle = new Bundle();
@@ -1182,7 +1186,7 @@ Handle everything needed for in-app navigation.
   String string2 = getArguments().getString("my_name");
   
    ```
-  
+
   
 
 * 数据传递（ViewModel篇）
@@ -1190,9 +1194,9 @@ Handle everything needed for in-app navigation.
   核心：利用ViewModel来管理Fragment中的数据
 
   a、建立ViewModel后，与Fragment通讯部分与跟Activity相同
-  
+
   b、在Fragment中创建Binding实例
-  
+
   ```java
   MyViewModel myViewModel;
   myViewModel = ViewModelProviders.of(getActivity()).get(MyViewModel.class);
@@ -1201,9 +1205,9 @@ Handle everything needed for in-app navigation.
   binding.setData(ViewMOdel);
   binding.setLifecycleOwner(getActivity());
   ```
-  
+
   d、按键监听实例
-  
+
   ```java
   //因为ViewModel的数据可以直接在Fragment之间共享获得，所以按键动作不用再传递数据。
   binding.button.setOnclickListener(new View.OnClickListener(){
@@ -1214,15 +1218,43 @@ Handle everything needed for in-app navigation.
       }
   });
   ```
+
   
-  https://developer.android.google.cn/reference/androidx/lifecycle/AndroidViewModel
+
+  使用Safe args插件传递参数：
+
+  在学习safe args插件之前，先回顾Fragment间最常见的传递参数和接受参数的方式。
+
+  ```java
+  //传递参数
+  Bundle bundle = new Bundle();
+  bundle.putString("user_name", "Michael");
+  bundle.putInt("age", 30);
+  Navigation.findNavController(v)
+      .navigate(R.id.action..., bundle);
+  ```
+
+  ```java
+  //接受参数
+  Bundle bundle = getAtguments();
+  if(bundle !=null){
+      String userName = bundle.getString("user_name");
+      int age = bundle.getInt("age");
+      TextView tvSub = view.findViewById(R.id.tvSub);
+      tvSub.setText(userName + age);
+  }
+  ```
+
+  接下来看safe args 有什么不同：
+
   
-  https://developer.android.google.cn/reference/androidx/lifecycle/package-summary?hl=en
+
   
-  https://developer.android.google.cn/reference/androidx/lifecycle/ViewModelProvider.Factory
+
   
+
   
-  
+
 
 ### 34. LiveData
 
@@ -2023,8 +2055,23 @@ JetPack主要包括4个方面：架构（Arichitecture）、界面（UI）、行
       private String TAG = this.getClass().getName();
       
       //在应用程序的整个生命周期中只会被调用一次
+      @OnLifecycleEvent(Lifecycle.Event.ON_START)
+      public void onStart(){
+          Log.d(TAG, "Lifecycle.Event.ON_START")
+      }
       
+      //当程序在前台出现时被调用
+      @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+      
+      //当程序退出到后台时被调用
+      @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+      
+      //当程序退出到后台时被调用
+      @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
+      
+      //永远不会被调用，系统不会分发调用ON_DESTROY事件
+      @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
   }
   ```
   
-  
+  从以上案例可以看出，ProcessLifecycleOwner是针对整个应用程序（App）的监听，与Activity数量无关。
