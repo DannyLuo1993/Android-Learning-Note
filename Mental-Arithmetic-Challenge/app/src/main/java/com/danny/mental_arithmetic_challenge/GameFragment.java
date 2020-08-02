@@ -39,6 +39,7 @@ public class GameFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         //Get ViewModelProvider to observe the change of score
         dataViewModel = ViewModelProviders.of(requireActivity(),getDefaultViewModelProviderFactory()).get(DataViewModel.class);
+        //将dataViewModel对象传递到布局文件中。
         binding.setScore(dataViewModel);
         //添加被观察者 - 生命周期正在被观察
         binding.setLifecycleOwner(this);
