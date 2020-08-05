@@ -1247,12 +1247,36 @@ Handle everything needed for in-app navigation.
 
   接下来看safe args 有什么不同：
 
-  
+  在Fragment之间进行参数传递
 
+  ```java
+//插入参数
+  Bundle bundle = new MainFragmentArgs.Builder()
+    							 .setUserName("Michael")
+      							 .setAge(30)
+      							 .build().toBunlde();
   
-
+  Navigation.findNavController(v)
+      	.navigate(R.id.action_xxx_to_xxx);
+  ```
   
-
+  ```java
+  //接受参数
+  Bundle bundle = getArguments();
+  if(bundle != null){
+      String userName = MainFragmentArgs
+          				.fromBundlegetArguments().getUserName();
+      int age = MainFragmentArgs.fromBundle(getArgument()).getAge();
+      tvSub.setText(userName + age);
+  }
+  ```
+  
+  
+  
+  
+  
+  
+  
   
 
 
@@ -2075,3 +2099,93 @@ JetPack主要包括4个方面：架构（Arichitecture）、界面（UI）、行
   ```
   
   从以上案例可以看出，ProcessLifecycleOwner是针对整个应用程序（App）的监听，与Activity数量无关。
+
+
+
+### 52. 深层链接DeepLink
+
+定义：DeepLink是Navigation组件的特性
+
+作用：通过DeepLink特性，开发者可以利用PendingIntent或一个真实的URL链接，直接跳转到应用程序中的某个页面（Activity/Fragment）
+
+* PendingIntent
+
+  当应用程序接收到某个通知推送，用户在点击通知后，可以通过PendingIntent来跳转到展示改通知内容的页面。
+
+  a. 通过sendNotification（）方法想通知栏发送一条通知，模拟用户收到一条推送的情况；
+
+  ```java
+  private void sendNotification(){
+      if(getActivity == null){
+          return
+      }
+      if (Bundle.VERSION.SDK.INT >= Build.VERSION_CODES.O){
+          int importance = NtificationManager.IMPORTANCE_DEFEAULT;
+          NotificationChannel channel = new NotificationChannel(
+          					CHANNEL_ID, "ChannelName", importance);
+          Channel.setDescription("description");
+          NotificationManager notificationManager = 
+              getActivity().getSystemService(NotificationManager.class);
+          notificationManager.createNotificationChannel(channel);
+      }
+  }
+  
+  NotificationCompat.Builder builder = new NotificationCompat
+      	.Builder(getActivity(), CHANNEL_ID)
+      	.setSmallIcon(R.drawable.ic_launcher_foreground)
+      	.setContentTitle("DeepLinkDemo")
+      	.setContentText("Hello World")
+      	.setPriority(NotificationCompat.PRIORITY_DEFAULT)
+      	.setContentIntent(getPendingIntent()) //设置PendingIntent
+      	.setAutoCancel(true);
+  
+  NotificationManagerCompat notificationManager = 
+      				NotificationManagerCompat.from(getActivity());
+  notificationManager.notify(notificationId, builder.build());
+  ```
+
+  
+
+* URL的方式
+
+  当用户通过手机浏览器浏览网站上的某个页面时，可以在网页上放置一个类似于 “在应用内打开” 的按钮。如果用户的手机安装有对应应用程序，那么通过DeepLink就能打开相应的页面；如果没有安装，那么网站可以导航到应用程序的下载页面，从而引导用户安装应用程序。
+
+
+
+### 53. Notification
+
+
+
+* a. NotificationManager
+
+  Class to notify the user of events that happen. This is how you tell the user that something has happened in the background.
+
+  ```java
+  //NotificationManager对象的创建 
+  NotificationManager notificationManager = 
+              getActivity().getSystemService(NotificationManager.class);
+  ```
+
+* b. 新建Notification对象
+
+  ```java
+  //使用Builder构造器来创建Notification对象
+  //NotificationCompat类来兼容各个版本
+  //构建Notification的内容
+  Notification notification = new NotificationCompat
+      	.Builder(MainActivity.this, channelId).build();
+  		.setContentTitle("这是测试通知标题")  //设置标题
+  .setContentText("这是测试通知内容") //设置内容
+  .setWhen(System.currentTimeMillis())  //设置时间
+  .setSmallIcon(R.mipmap.ic_launcher)  //设置小图标
+  .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.mipmap.ic_launcher))   //设置大图标
+  ```
+
+  c. 调用notify()让通知显示出来（第一个参数是ID， 保证每个通知所指定的id都是不同的，第二个参数是notification对象）
+  
+  ```java
+  manager.notify(id, notification);
+  ```
+  
+  
+
