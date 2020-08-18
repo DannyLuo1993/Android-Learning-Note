@@ -3008,6 +3008,35 @@ super（）  -  调用父类的无参构造
 
 （2）. 多态参数： 形参是父类的类型，实参是子类的对象；
 
+### 3.1.18 Instanceof	运算符
+
+语法格式： 变量 instanceof 对象
+
+结果： true or false；
+
+返回true的情况： 变量中储存的是 类的对象 或 子类的对象时
+
+```java
+public class TestInstanceof{
+    public static void main(String[] args){
+        Man m = new Man();
+        Woman w = new Woman();
+        test(m);
+        test(w);
+    }
+}
+
+public static void test(Person p){
+    if ( p instanceof Woman){
+        Woman m = (Woman) p; //思考&测试如果没有这句会有什么问题
+        p.shop();
+    }else{
+        Man m = (Man) p;	//思考&测试如果没有这句会有什么问题
+        p.smpke();
+    }
+}
+```
+
 
 
 ## 3.2 JVM内存结构
