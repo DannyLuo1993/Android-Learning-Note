@@ -3078,6 +3078,115 @@ native修饰的方法，不是用java语言实现的，而是调用了底层c/c+
 
 什么是类初始化？ 什么是实例初始化，他们运行的代码有什么区别？
 
+```java
+/**
+(1) 由Son son = new Son(); 方法觸發，先執行Father類的初始化方法<clinit>()： a. 類靜態變量顯示賦值。 b. 執行靜態代碼塊；System.out.println("(1) 父類的靜態代碼塊");
+(2) 接著執行Son類的類初始化方法<clinit>()： a. 類靜態變量顯示賦值； b. 執行靜態代碼塊；
+(3) 執行Father類的實例初始化方法<init>(): a. 非靜態成員變量的顯示賦值； b. 非靜態代碼塊執行；c. 調用父類的無參構造； 
+(4) 執行Son類的實例初始化方法<init>()： a. 非靜態成員變量的顯示賦值； b. 非靜態代碼塊執行；c. 調用子類的無參構造； 
+
+運行結果排序：142356
+*/
+
+public class TestEcer1{
+    public static void main(String[] args){
+        Son son = new Son();
+    }
+}
+
+class Father{
+    static{
+        System.out.println("(1) 父類的靜態代碼塊");
+    }
+    
+    {
+        System.out.println("(2) 父類的非靜態代碼塊");
+    }
+    Father(){
+        System.out.println("(3) 父類的無參構造");
+    }
+}
+
+class Son extends Father{
+    static{
+        System.out.println("(4) 子類的靜態代碼塊");
+    }
+    {
+        System.out.println("(5) 子類的非靜態代碼塊");
+    }
+    Son(){
+        System.out.println("(6) 子類的無參構造");
+    }
+}
+```
+
+示例二：
+
+```java
+/**
+(1) 由Zi zi = new Zi(); 方法觸發，先執行Fu類的初始化方法<clinit>()： a. 類靜態變量顯示賦值。 b. 執行靜態代碼塊；
+即先執行getNum("(1)i"); 然後執行print("3. FU"); -> (1),(3) int i = 2;
+(2) 再執行子類的初始化方法<clinit>()： a. 類靜態變量顯示賦值。 b. 執行靜態代碼塊；即先執行getNum("6. k");再執行print("8");
+-> (6)
+
+*/
+public class TestExer2{
+    public static void main(String[] args){
+        Zi zi = new Zi();
+    }
+}
+
+class Fu{
+    private static int i = getNum("(1)i");
+    private int j = getNum("(2)j");
+    static{
+        print("3. FU");
+    }
+    {
+        print("4. FU");
+    }
+    Fu(){
+        print("5");
+    }
+    public static void print(String str){
+        System.out.println(str + "->" + i);
+    }
+    public static int getNum(String str){
+        print(str);
+        return ++i;
+    }
+}
+
+class Zi extends Fu{
+    private static int k = getNum("6. k");
+    private int h = getNum("7. h");
+    static{
+        print("8");
+    }
+    {
+        print("9");
+    }
+    Zi(){
+        print("10");
+    }
+    public static void print(String str){
+        print(str);
+        public static void print(String str){
+            System.out.println(str + "->" + k);
+        }
+        return ++k;
+    }
+    public static int getNum(String str){
+        print(str);
+        return ++l;
+    }
+}
+```
+
+
+
+
+
 ## 3.2 JVM内存结构
 
 
