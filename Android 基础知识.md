@@ -3234,9 +3234,15 @@ e. 抽象類中也可能沒有抽象方法 - 存在意義： 在父類進行多�
 ```java
 //例如需要再圖形父類中求圖形面積時，由於不同圖形的面積公式不同，所以父類中無法給出正確的實現方法。
 class Graphic{
-    
+    public abstract double getArea();
 }
 ```
+
+abstract修饰符不能和哪些修饰符一起使用：
+
+类： 1. 和final不能一起修饰类；
+
+方法： 2. 和final不能一起修饰方法、 和static不能一起修饰、和native不能一起修饰（有歧义，因为都没有方法体）、和private不能一起修饰（private不能被重写？）； 
 
 
 
@@ -3308,17 +3314,961 @@ Method Area (方法区)、 Heap（堆）、JVM Stacks（虚拟机栈）、PC Reg
 
 
 
-### 接口
+## 3.3 设计模式
+
+解决问题的套路、代码结构；
+
+java中常用的设计模式有23种。
+
+### 3.3.1 模板设计模式
 
 
 
-### 设计模式
+
+
+### 3.3.2 单例设计模式
+
+重要程度：五颗星， 需要脱稿写
+
+
+
+### 3.3.3 工厂设计模式
+
+重要程度：两颗星，需要会调用工厂类的方法
+
+
+
+### 3.3.4 代理设计模式
+
+重要程度：三颗星，需要能模仿
+
+
+
+### 3.3.5 迭代器设计模式
+
+
+
+### 3.3.6 装饰者设计模式
+
+
+
+### 3.3.7 根父类 - Object
+
+java中规定，如果一个类没有显示声明它的父类，那么默认这个类的父类就是java.lang.Object
+
+定义：Object类是类层次的根类，每个类都使用Object作为超类。
+
+如何理解根父类： （1）所有对象（包括数组）都实现这个类的方法。即Object类中所有声明的方法，所有引用数据类型（包括）数组中都有。
+
+（2） 所有类的对象的实例化过程，都会调用Object的实例初始化方法
+
+（3）所有对象都可以赋值给Object的变量
+
+
+
+Object类中常用的方法：
+
+```java
+// 用于返回对象的信息，建议所有的子类重写
+// 该方法返回一个字符串，该字符串由类名+@+调用对象的哈希码的无符号16进制表示。即getClass().getName()+'@'+Integer.toHexString(hashCode());
+public String toString();
+
+/*
+返回调用方法的运行时类型（多态的编译时类型跟运行时类型不同）
+*/
+public final Class<?> getClass();
+
+/*
+当垃圾回收期确定不存在该对象的更多引用时，由 对象的垃圾回收器 调用此方法。子类重新 finalize 方法，以配置系统资源或执行其他清除。
+功能： 回收对象；
+特点： 每个对象， finalize（）只能被调用一次。 调用时机不确定。 由GC调用。
+*/
+protected void finalize();
+
+//finalize方法测试代码
+public class TestMethod3{
+    public static void main(String[] args) throws InterruptedException {
+        for (int i = 1; i <=10; i++) {
+            MyClass my = new MyClass();
+        }
+        
+        System.gc();
+        Thread.sleep(1000);
+    }
+}
+
+Class MyClass{
+    
+    @Override
+    protected void finalize() throws Throwable{
+        System.out.println("Collect the garbage object - my");
+    }
+}
+
+//返回对象的哈希码值，支持此方法是为了提高哈希码的性能
+//理想状态下，每一个对象都应该有一个唯一的哈希码值
+
+public int hashCode();
+
+// 判断两个对象最终是否相等，但是效率比hashCode比较低，所以先用hashCode做初步判断。
+public boolean equals(Object obj);
+
+
+```
+
+
+
+ ## 3.4 接口
+
+接口 - 类的行为标准。
+
+作用：管理类
+
+生活中的例子： USB接口
+
+a. 多提供几个USB接口，可以让很多的设备和电脑连接。
+
+b. 对于其他设备的厂商也简单了，只要你这个设备有与电脑连接的需求，那么就可以吧连接口设计为USB
+
+例如：电源接口 
+
+a. 插座的设计
+
+b. 电器的设计
+
+
+
+java中：
+
+为了限定某些类（这些类之间可能没有继承关系， 甚至都不是一个派系里面的）， 但是这些类都具有相同的行为特征。例如： Bird类、Plane类、Kite类，这个时候就可以设计接口，这个时候通过这个接口就可以同时管理这些类。
+
+
+
+### 3.4.1 如何声明接口
+
+【权限修饰符】 interface 接口名{
+
+​	接口的成员列表；
+
+}
+
+
+
+* 接口的成员
+
+a. 全局的静态的常量； `public static final` 因为规定了是常量所以写不写前面修饰符都是等价的。
+
+b. 公共的抽象方法： `public abstract` 而且这两个单词从上面来看也是可以省略的。
+
+​	因为标准只规定行为有什么行为标准、行为特征。实现细节开发者说了算
+
+```java
+public class TestInterfaceDefineAndUse{
+    
+    
+}
+
+interface Flyable{
+    
+}
+```
+
+
+
+### 3.4.2 如何实现接口
+
+语法格式：
+
+【修饰符】 class 实现类 implements 接口们	{
+
+
+
+}
+
+* 接口的特点
+
+  a. 接口是标准，就是用来被遵守和实现的；
+
+  b. 同抽象类，接口也是不能直接创建对象的；
+
+  c. 接口类型的变量与实现类的对象构成多态引用；
+
+  d. 一个类支持实现多个接口；
+
+  e. 一个类如果继承类&实现接口时，那么继承在前，实现在后；
+
+  f. 在java中，接口还可以继承接口；
+
+```java
+interface A{
+    void a();
+}
+
+interface B{
+    void b();
+}
+
+interface C extends A,B{
+    void c();
+}
+```
+
+
+
+### 3.4.3 java中常用的接口
+
+* java.util.Comparator<T> 接口  - 定制比较，定制顺序
+
+  抽象方法：int compare（T o1， T o2）
+
+  这个接口时代表java中比较两个对象的标准，而且是一种“定制”比较的标准。
+
+  这个接口中没有规定如何比较两个对象的大小，但是规定了如果认为o1大于o2，就返回正整数，小于的情况是负整数，等于的情况是0；
+
+`public static void sort(Object[] a, Comparator c)` 第一个形参： 需要排序的数组， Object[] 说明可以是任意类型的对象数组。 第二个形参： 比较器对象 Comparator接口不能创建对象，只能传入实现类对象 `new xxx` 其中xxx是一个实现了Comparator的类。
+
+
+
+* java.util.Comparable - 自然比较，自然顺序
+
+  抽象方法： int compareTo（Object obj）-	this指代的对象与obj对象比较。大于返回正整数，小于返回负整数，等于返回0. 
+
+这个方法可以让对象本身具备compare的能力；
+
+```java
+public class TestComparable{
+    public static void main(String[] args){
+        Student s1 = new Student("A", 24, 89);
+        Student s2 = new Student("B", 23, 100);
+        
+        if(s1.compareTo(s2)>0){
+            System.out.println("s1 > s2");
+        }
+    }
+}
+
+class Student implements Comparable{
+    private String name;
+    private int age;
+    private int score;
+    
+    public Student(String name, int age, int score){
+        this.name = name;
+        this.age = age;
+        this.score = score;
+    }
+    
+    //this = 调用这个方法的对象。
+    @Override
+    public int compareTo(Object obj){
+        
+        Student other = (Student) obj;
+        //把自然顺序定位按成绩升序排序
+        if(this.score > other.socre){
+            return 1;
+        }esle if(this.score < other.score){
+            return -1;
+        }else{
+            return 0;
+        }
+    }
+    
+    
+    
+}
+```
+
+
+
+* Array.sort 方法
+
+  如果传入方法中比较的元素，在比较器（Comparator 或 Comparable）中比较后得到的返回值大于0，则两个元素位置互换。
+
+  
+
+* String类实现了Comparable的接口，通过字母的ASCII值的大小来比较大小。
+
+
+
+### 3.4.5 JDK 1.8关于接口部分的新特性
+
+a. JDK1.8后，比原来多了两种成员：静态方法和默认方法 `public static xxx` 和 `public default xxx`
+
+b. 为什么java8要允许接口中定义静态方法？
+
+c. 为什么要有抽象方法？
+
+接口的默认方法 = 接口抽象方法默认的实现形式；
+
+d.冲突问题
+
+（1）当一个类同时实现了多个接口时，  这些接口中如果出现了方法签名相同的默认方法时，那么我们必须在这些实现类中做出选择。
+
+选择一：保留其中一个，放弃另一个；
+
+选择二：两者都不同，完全重写一个；
+
+（2）当一个类继承了类并实现了接口，但继承的类和实现的接口中出现了方法签名相同的方法时，
+
+选择一： 默认选择父类的方法调用
+
+选择二：改选保留接口的 `x.super.method()`
+
+选择三：完全重写；
+
+
+
+## 3.5 内部类
+
+定义：在一个类里面的类，就叫做内部类
+
+分类：成员内部类和局部内部类。这里不讨论局部内部类
+
+
+
+### 3.5.1 成员内部类
+
+（1）有static修饰的为静态成员内部类
+
+（2）没有static修饰的为非静态成员内部类
+
+- 什么情况下会用到成员内部类？【将内部类看做外部类的一个特殊属性】
+
+（1）当描述一个事物时，发现他的内部还有一个完整的结构需要用一个类来描述
+
+（2）并且发现这内部的结构独立存在是没有意义的，必须在这个外部类中才有意义。
+
+（3）并且这个内部结构只为这个外部类服务；
+
+* 特点
+
+（1）各种类，只有成员内部类可以用static修饰符修饰；
+
+（2）静态内部类中可以使用外部类的静态成员；
+
+（3）静态内部类不会随着外部类的初始化一起初始化，而是要再使用到这个静态内部类时才会初始化
+
+* 结论
+
+（1）同级来说，静态的不能直接使用非静态的
+
+（2）访问一个类的静态成员，用“类名.”即可
+
+（3）内部类需要初始化，要在初始化的同时使用。
+
+
+
+* 非静态内部类的特点：
+
+（1）不能出现任何跟static有关的声明；
+
+（2）在非静态内部类中，可以随意访问外部类的所有成员。
+
+（3）在外部内静态成员中，不能使用非静态的成员内部类； 
+
+（4）在外部类的runtime area中调用
+
+```java
+class outer{
+    abstract class Inner{
+        public abstract void test();
+    }
+}
+
+class MySub extends Inner{
+    MySub(Outer out){ //需要外部类对象， 才能调用非静态内部类的构造器或方法
+        out.super();
+    }
+    
+    @Override
+    public void test(){
+        System.out.println("");
+    }
+}
+```
+
+
+
+
+
+### 3.5.2 局部内部类
+
+（1）有名字的局部内部类：简称局部内部类
+
+（2）没有名字的局部内部类：简称匿名内部类
+
+特点：
+
+（1）局部内部类的修饰符，只能有abstract和final
+
+（2）有作用域 - 方法内
+
+（3） 如果局部内部类在静态方法中，那就不能使用外部类的非静态成员
+
+（4） 局部内部类需要使用局部内部类方法的局部变量时，必须用final修饰符 - 原因：避免局部内部类对象被返回到外部类外面使用时，访问不到这个局部变量，所以加final将变量的位置挪到方法区。
+
+
+
+
+
+### 3.5.3 匿名内部类
+
+语法格式：
+
+new 父类名（【实参列表】）{
+
+​	类的成员列表
+
+}
+
+new 父接口名（）{
+
+​	类的成员列表
+
+}
+
+特点：
+
+（1）声明匿名内部类与创建它的对象是一起完成的，所以匿名内部类只有唯一的对象
+
+（2）匿名内部类整体，既是类，也是对象；
+
+```java
+public class TestAnonymousInner{
+    public static void main(String[] args){
+        //要声明一个Object的子类，匿名子类
+        //并在子类中声明一个方法public void test（）
+        Object obj = new Object(){
+            public void test(){
+                System.out.println("hello, Anonymous Inner Class");
+            }
+        }
+    }
+}
+```
+
+
+
+## 3.6 枚举
+
+作用： 把某个类型的对象，全部列出来。
+
+当某个类型的对象是固定的，有限个数时，可以使用枚举；
+
+如： 星期 Week类： 对象只有7个
+
+性别 Gender 类， 对象只有2个
+
+季节 Season类， 对象只有4个
+
+* 构造器私有化的目的： 在类的外部无法随意地创建对象；
+
+如何声明枚举类型：
+
+【修饰符】 enum 枚举类型名{
+
+​	常量对象列表;
+
+​	其他成员列表
+
+}
+
+```java
+enum Season{
+    SPRINT("Spring"), SUMMER("Summer"), FALL("Fall"), WINTER("Winter");
+    private String description;
+}
+```
+
+
+
+* Enum类
+
+Enum类中有一个唯一的构造器，且这个构造器不能手动调用。编译器编译时会在所有枚举类型的构造器的首行自动调用，并自动传入name（常量对象名）和ordinal（常量对象的顺序）的值。
+
+
+
+* API中没有的方法，是编译器生成的方法
+
+（1）. enum.values（）； 返回enum的常量对象的枚举类型数组
+
+
+
+* 枚举类型实现接口
+
+枚举类实现接口后，每个常量对象都可以直接调用抽象方法。
+
+
+
+## 3.7 注解
+
+一个完整的注解，由三部分组成： （1）声明； （2）使用； （3）读取；
+
+系统中预定义的三个最基本的注解： （1）@Override； （2）@SuppressWarnings ； （3）@Deprecated ；
+
+Override的作用： 检查这个方法是否符合重写要求
+
+SuppressWarnings作用：抑制警告
+
+Deprecated作用：标记某个方法、类、属性等已过时；
+
+
+
+### 3.7.1 文档注释
+
+
+
+@param
+
+@return
+
+@throws
+
+@exception
+
+
+
+```java
+/**
+*	@author Danny
+*	@see	Reference
+*	@since	JDK1.8
+*	@Date	23rd Aug. 2020
+*/
+
+/**
+*	App Entry Method of Java.
+*	@param args String[] command line parameter
+*/
+public static void main(String[] args){
+    
+}
+```
+
+在程序中写好注释后，可以在编译器中调用javadoc.exe导出程序性说明文档。
+
+
+
+### 3.7.2 JUnit注解 - 白盒测试
+
+JUnit是有 Erich Gamma 和 Kent Beck 编写的一个回归测试框架（regression testing framework）。 供java开发人员便携单元测试用。多数java开发环境都已经集成了JUnit作为单元测试的工具。
+
+
+
+@Test标记 - 拥有该标记的方法可以作为一个独立的测试单元
+
+@Before - 拥有该标记的方法会在每一个拥有Test标记的方法执行前执行
+
+@After - 拥有该标记的方法会在每一个拥有Test标记的方法执行后执行
+
+@BeforeClass - 必须用于标记静态测试方法，会在类初始化阶段完成方法
+
+@AfterClass - 必须用于标记静态测试方法，会在类初始化阶段完成方法
+
+- Debug本地代码的步骤
+
+（1）导入JUnit库
+
+（2）创建JUnit类
+
+```java
+public class TestUnit{
+	@Test
+    public void test1(){
+        System.out.println("hello junit");
+    }
+}
+```
+
+ 要求：测试方法的访问权限必须全是public、参数必须无参； 
+
+
+
+### 3.7.3 静态导入
+
+语法格式： import static package.class.xxx
+
+作用： 允许直接用常量名调用其他类的静态成员
+
+
+
+## 3.8 异常
+
+概述：在某些情况下，因为用户的一些原因，例如：配置问题，错误输入问题、内存空间不足等导致程序无法正常运行；
+
+不是异常的情况： （1）语法错误； （2）逻辑错误；
+
+* java如何处理异常？
+
+（1）当程序运行到某一句时，发生了异常，程序会先停下来；
+
+（2）程序会在这句代码处，查看原因，生成一个合理“异常对象”，然后“抛”出
+
+（3）JVM会检测这句代码的外围，是否有try..catch结构，可以捕获它。如果可以捕获，那么程序在处理完异常后，继续运行，不会崩溃。如果不能捕获，程序会将这个异常继续抛给上级 - 即调用该方法的方法。如果上级能处理，程序从上级处理完的代码后继续运行。如果不能处理，一直往回报直到到达JVM
+
+```java
+public static void main(String[] args){
+    
+    try	{testInput();
+      }	catch (Exception e){
+        e.printStackTrace();
+    }
+}
+
+public static void testInput(){
+       try{
+        System,out.print("Please input an integer");
+        int num = input.nextInt();
+    } catch (Exception e){
+        System.out.println("Error Input");
+    }
+}
+```
+
+
+
+
+
+### 3.8.1 异常的类型体系结构
+
+所有类的根父类是Object；
+
+枚举的公共父类是Enum，根父类是Object
+
+异常的公共父类是Throwable，根父类是Object
+
+
+
+* java.lang.Throwable
+
+（1）只有当对象是此类（或其子类之一）的实例时，才能通过java虚拟机或者java throw 语句抛出
+
+Throwable有两个直接子类：Error 和 Exception
+
+
+
+* Error
+
+一般指严重错误，一般合理的应用不要试图去捕获它，如果出现了这个问题，要么需要升级程序、升级架构、升级硬件。例如报了一个OutOfMemoryError
+
+
+
+* Exception
+
+一般异常，合理的应用程序应该去捕获它
+
+主要分为两大类： （1）运行时异常RuntimeException； 运行时异常不建议用try...catch，因为它发生频率太高，而且一般都很不应该发生的问题。例如：空指针异常、数组下标越界异常、类型转换异常等。
+
+（2）编译时异常 - 除了EuntimeException异常及它的子类以为的都是（更常见）
+
+例如：FileNotFoundException、 IOException
+
+
+
+### 3.8.2 try...catch - 异常处理方式（unhandle exception）
+
+语法格式：try{
+
+​	可能发生异常的代码
+
+} catch（异常类型1 异常对象名）{
+
+​	处理这个异常的代码
+
+}catch（异常类型2 异常对象名）{
+
+​	处理这个异常的代码
+
+}catch（异常类型3 异常对象名）{
+
+​	处理这个异常的代码
+
+}
+
+
+
+* 异常对象的常用方法
+
+（1）e.printStackTrace（）；
+
+打印异常的详细信息，包括追踪信息，既这个异常对象一路经过了哪些方法
+
+（2）e.getMessage（）；
+
+返回异常对象中简单的错误信息
+
+（3）打印异常/错误信息
+
+System.err.println(xx) 
+
+
+
+### 3.8.3 try...catch...finally
+
+语法格式：try{
+
+​	可能发生异常的代码
+
+} catch（异常类型1 异常对象名）{
+
+​	处理这个异常的代码
+
+}catch（异常类型2 异常对象名）{
+
+​	处理这个异常的代码
+
+}catch（异常类型3 异常对象名）{
+
+​	处理这个异常的代码
+
+}
+
+...
+
+finally{
+
+​	不过try中是否发生异常，也不管catch是否可以捕获异常，这里代码必须执行
+
+}
+
+应用： 一般用于释放资源、断开连接等代码；
+
+
+
+### 3.8.4 try与return混用
+
+（1）如果finally中有return，就从finallly块的return回去。（实际开发中一般不让写）
+
+（2）如果finnally中没有return，那么先把try或catch中全部语句执行完，执行完后运行一下finally，然后回去结束当前方法。
+
+
+
+### 3.8.5 throws - 异常处理方式 （unhandle exception）
+
+异常处理的方式二：在当前方法中不处理，抛给调用者处理。
+
+throws：告知被调用者，调用的方法可能会出现哪些异常，使得调用者可以明确知道应该catch什么异常。
+
+throws 的语法格式：
+
+【修饰符】 返回值类型 方法名（【形参列表】）throws 异常列表们{
+
+}
+
+说明：对异常列表的顺序没有要求；
+
+```java
+public static void main(String[] args){
+	
+	try{copy("1.txt", "2.txt");
+	} catch (Exception e){
+		e.printStackTrace();
+	}
+}
+
+
+public static void copy(String srcFile, String destFile) throws FileNotFoundException{
+	FileInputStream fis = new FileInputStream(srcFIle);
+}
+```
+
+
+
+* 关于方法重写时，对throws抛出的异常的要求：
+
+子类重写的方法抛出的异常类型必须小于等于父类被重写的方法抛出的异常类型。
+
+
+
+### 3.8.6 throw
+
+语法格式：throw 异常对象；
+
+作用： 手动抛出程序员想抛的异常对象
+
+可以用于抛出系统预定义异常或用户自定义异常。
+
+
+
+### 3.8.7 自定义异常 - 类
+
+要求： 必须继承Throwable或它的子类。实际开发中一般继承RuntimeException和Exception的较多
+
+（2）建议大家保留父类的两种构造器的形式 - 无参构造 和 带给父类的message属性赋值的构造器
+
+
+
+## 3.9 包装类
+
+背景： java在发展过程中设计了很多API、新特性（泛型等），不支持基本数据类型，只支持对象。
+
+所以为了支持8种基本数据类型，java为他们配上了包装类
+
+基本类 				包装类
+
+byte					  Byte
+
+short					Short
+
+int						 Integer
+
+long					  Long
+
+float					 Float
+
+double				Double
+
+char					 Character
+
+boolean			  Boolean
+
+
+
+### 3.9.1 装箱与拆箱
+
+装箱： 把基本数据类型的数据 包装 称为包装类的对象
+
+拆箱： 把包装类的对象 拆解 称为基本数据类型的数据
+
+特点：
+
+（1）自动装箱： 当把基本数据类型的值，赋值给包装类的变量时，就会自动装箱；
+
+（2）当基本数据类型跟包装类对象比较时，包装类对象会自动拆箱，再用值跟基本类型比较
+
+```
+//装箱操作
+int a = 10;
+Integer obj = new Integer(a); //将a中的数据包装成一个对象，手动装箱例子；
+Interger obj_auto = a; //自动装箱例子
+
+//拆箱操作
+Integer i = new Integer(10);
+int a = i.intValue(); // 手动拆箱
+int b = i; // 自动拆箱
+
+
+```
+
+（3）常量值： MAX_VALUE； MIN_VALUE
+
+（4）转大小写： Character.toUpperCase（‘a’）； Character.toLowerCase（‘H’）
+
+
+
+* 包装类对象的缓存问题
+
+Byte,short,Integer,Long: 都有缓存对象 范围 -128 ~ 127
+
+Float，Double没有缓存对象
+
+Character有缓存对象，范围 0 ~ 127；
+
+Boolean有缓存对象： ture，false
+
+```java
+public void test13(){
+    Integer a = 1;
+    Integer b = 1;
+    System.out.println(a == b); //ture a == b 比较的是地址值，但a和b指向的是同一个缓存的常量对象地址。
+    
+    
+    Integer c = 130;
+    Integer d = 130;
+    System.out.println(c == d); //false 比较的也是地址值，但是c和d由于超出可指向的缓存对象范围，所以需要在堆中新建Integer对象。
+}
+```
+
+
 
 
 
 ## 第三阶段： Java新特性与API
 
 Java 新特性包括：泛型、元注解、装箱/拆箱、枚举、可变参数、Lambda表达式、Stream API、 Date/Time API；
+
+
+
+## 4.1 自定义注解和元注解
+
+
+
+### 4.1.1 自定义注解
+
+语法格式一： 
+
+@元注解
+
+【修饰符】 @interface 注解名{}
+
+声明注解：
+
+```JAVA
+@Target(ElementType.TYPE) //表示MyAnnotationvee注解只能用在类、接口等上面
+@Retention（RetentionPolicy.RUNTIME） //表示MyAnnotation这个注解可以直流到运行时，可以被反射读取到
+@interface MyAnnotation{}
+```
+
+使用注解：
+
+```JAVA
+@MyAnnotation
+class MyClass{}
+```
+
+
+
+语法格式二： 
+
+@元注解
+
+【修饰符】 @interface 注解名{
+
+​	配置参数列表 //在读取注解时用到
+
+​	或 配置参数 default 参数名
+
+}
+
+配置参数的数据类型要求： （1）8中基本数据类型、String、枚举、Class、Annotation、以上这些类型的数组
+
+声明注解
+
+```java
+@interface YourAnnotation{
+    String name();
+}
+```
+
+使用注解
+
+```
+//如果注解的配置参数只有一个，并且名字是value，那么赋值时可以省略"value="
+@YourAnnotation(name = "Test")
+class YourClass{
+
+}
+```
+
+
+
+
+
+
+
+### 4.1.2 元注解
+
+作用： 注解	注解的注解（既加在注解上面的注解，叫元注解）
+
+（1）@Target - 标记这个注解可以用于什么位置 `@Target（ElementType.METHOD）`、 `@Target（{ElementType.METHOD，ElementType.TYPE }）//表示方法可以用于注解方法和类型
+
+（2）@RetentionPolicy - 标记这个注解的生命周期 - 生命周期由3个常量指定： TYPE， CLASS，RUNTIME
+
+（3）@Documented - 标记某个注解是否可以被javadoc.exe读取到API；
+
+（4）@Inherited - 标记这个注解是否可以被子类继承
+
+
 
 
 
