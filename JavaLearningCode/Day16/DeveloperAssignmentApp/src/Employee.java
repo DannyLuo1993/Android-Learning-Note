@@ -1,13 +1,17 @@
 public class Employee {
 
     String name;
+    String member_position;
     int age;
     int salary;
+    int id;
 
-    public Employee(String name, int age, int salary) {
+    public Employee(String name, String member_position, int age, int salary, int id) {
         this.name = name;
+        this.member_position = member_position;
         this.age = age;
         this.salary = salary;
+        this.id = id;
     }
 
     public String getName() {
