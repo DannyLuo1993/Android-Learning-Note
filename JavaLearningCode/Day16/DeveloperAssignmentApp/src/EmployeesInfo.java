@@ -1,6 +1,9 @@
 public class EmployeesInfo {
 
-    //
+    // Employee ： 10,id，name，age，salary
+    // Programmer ： 11,id，name，age，salary
+    // Designer ： 12,id，name，age，salary,bonus
+    // Architect ： 13,id，name，age，salary,bonus,stock
     public static final int EMPLOYEE = 10;
     public static final int PROGRAMMER = 11;
     public static final int DESIGNER = 12;
@@ -16,14 +19,14 @@ public class EmployeesInfo {
 
             {"10","1","Jane","23","6000"},
             {"13","2","Fan","31","20000", "40000", "2000"},
-            {"11","3","Danny","27","8000", "10000"},
-            {"11","4","Walter","29","6000", "6000"},
+            {"11","3","Danny","27","8000"},
+            {"11","4","Walter","29","6000"},
             {"12","5","Nelson","31","8000","8000"},
-            {"11","6","Leo","38","20000","20000"},
+            {"11","6","Leo","38","20000"},
             {"12","7","Jay","44","6000","6000"},
             {"13","8","Lee","31","25000","50000"},
             {"12","9","Tao","31","6000","6000"},
-            {"11","10","Charlie","29","9000","9000"}
+            {"11","10","Charlie","29","9000"}
 
     };
 
