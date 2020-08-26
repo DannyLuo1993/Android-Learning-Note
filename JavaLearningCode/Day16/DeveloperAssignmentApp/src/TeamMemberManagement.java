@@ -18,14 +18,11 @@ public class TeamMemberManagement {
         member_position = employeeManagement.selectEmployeeById(member_id).member_position;
 
 
-        if(member_position.equals("10")){
-            throw new NotDeveloperMemberException("This employee can't be developer team member");
-        }
-
-        if(member_position.equals("11") && programmer_count < 4){
-            programmer_count ++;
-            team_member[select_count] = employeeManagement.selectEmployeeById(member_id);
-            select_count ++;
+        //a. 检查id对应的职位； b. 判断开发团队的人是否已经满；如果满了就抛出异常，如果没满就继续。
+        //c. 将id对应的对象取出，赋值给Employee【】team_member数组
+        switch(member_position){
+            case "10":
+                
         }
 
 
