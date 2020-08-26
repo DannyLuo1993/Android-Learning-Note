@@ -2,18 +2,16 @@ import Exception.*;
 
 public class TeamMemberManagement {
 
-    private Employee[] team_member;
     private int programmer_count;
     private int architeture_count;
     private int desigher_count;
     private int select_count;
     private String member_position;
-    EmployeeManagement employeeManagement = new EmployeeManagement();
+    private EmployeeManagement employeeManagement = new EmployeeManagement();
+    private Employee[] team_member = new Employee[6];
 
     public void addTeamMember(int member_id){
 
-        //初始化Employee[]数组
-        team_member = new Employee[6];
         //初始化member position
         employeeManagement.getAllEmployee();
         member_position = employeeManagement.selectEmployeeById(member_id).member_position;
@@ -65,7 +63,15 @@ public class TeamMemberManagement {
         if(select_count == 0){
             throw new MemberNotFoundException("No this member in developer team yet, please check.");
         }
+
+
         for (int i = 0; i < team_member.length; i++) {
+
+            String test;
+            if(team_member[i] == null){
+                System.out.println(i);
+                System.out.println("team_member[i] is null");
+            }
 
             if (member_id == team_member[i].id) {
 
@@ -88,6 +94,7 @@ public class TeamMemberManagement {
                         break;
                 }
             }
+
 
             //完成操作后，数组中以添加内容减一；
             select_count --;

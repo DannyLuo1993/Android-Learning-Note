@@ -16,7 +16,7 @@ public class MainActivity {
         while (loop_flag){
 
             System.out.println("----------Main Menu----------");
-            System.out.println("1. Team Member List" + "\t" + "2. Add Team Member" + "\t" + "3. Delete Team Member" + "\t" + "Exit");
+            System.out.println("1. Team Member List" + "\t" + "2. Add Team Member" + "\t" + "3. Delete Team Member" + "\t" + "4. Exit");
             System.out.println("Please input number to continue(1-4)");
             Scanner input = new Scanner(System.in);
 
