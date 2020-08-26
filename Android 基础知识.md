@@ -4280,6 +4280,20 @@ Please press Enter key to continous...
 
 
 
+### 项目总结：
+
+a. @Test注解怎么使用？
+
+b. 增强For怎么使用？
+
+https://blog.csdn.net/baidu_25310663/article/details/80222534
+
+c. Enum类怎么使用？
+
+d. 如何打印对象的文字信息？
+
+
+
 ## 第三阶段： Java新特性与API
 
 Java 新特性包括：泛型、元注解、装箱/拆箱、枚举、可变参数、Lambda表达式、Stream API、 Date/Time API；

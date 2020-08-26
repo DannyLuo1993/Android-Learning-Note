@@ -1,8 +1,9 @@
 import Exception.*;
+import org.junit.jupiter.api.Test;
 
 public class EmployeeManagement {
 
-    Employee[] all_employees;
+    Employee[] all_employees = new Employee[10];
 
     String member_position;
     String member_name;
@@ -17,10 +18,10 @@ public class EmployeeManagement {
      * 将二维String数组中的员工信息按Employee，Programmer， Designer及Architect对象归类后，放到Employeep[] 对象数组里。
      * @return Employee[]
      */
+    @Test
     public Employee[] getAllEmployee(){
 
         //初始化Employee数组；
-        all_employees = new Employee[10];
 
         //遍历二维数组，取出其中的一维数组，验证一维数组的职员位置，将职员安排到对应的对象中；
         for(int i = 0; i < EmployeesInfo.EMPLOYEES.length; i++){
