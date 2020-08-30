@@ -4374,6 +4374,80 @@ d. 如何打印对象的文字信息？
 
 在对象对应类的类中重写toString()方法。
 
+e. 使用arraycopy方法移动数组元素 或 复制数组；
+
+
+
+## 3.12 多线程
+
+* java中如何去实现多线程？
+
+线程是进程的其中一条执行路径，既一个进程至少有一个线程，那么main线程就是java进程的第一个线程（主线程）
+
+
+
+### 3.12.1 如何开启线程
+
+方法有两种： （1）继承Thread类； （2）实现Runable接口；
+
+* 继承Thread类步骤
+
+（1）编写线程类去继承java.lang.Thread类
+
+（2）必须重写父类的public void run() {}
+
+在run()中需要编写线程需要完成的任务
+
+（3）创建线程类对象
+
+（4）启动线程
+
+```java
+public class TestThread2{
+    public static void main(String[] args){
+        System.out.println("hello thread");
+        
+        MyThread myThread = new MyThread();
+        my.run(); // 这个调用方式不是开启多线程，而是普通对象的调用方法；
+        my.start(); //从父类Thread中继承的
+        
+        for(int i = 1; i <= 100; i++){
+            System.out.println("main: " + i);
+        }
+    }
+}
+
+class MyThread extends Thread{
+    @Override
+    public void run(){
+        // The task for thread i
+        for(int 1 = 1; i <= 100; i++){
+            System.out.println("New Thread" + i);
+        }
+    }
+}
+```
+
+
+
+* 实现runnable接口
+
+（1）编写线程类，实现java.lang.Runnable
+
+（2）必须实现接口的抽闲方法：public void run()
+
+（3）创建线程类对象
+
+（4）启动线程： start()
+
+但是start方法在Thread类中才有，说明我们要借用Thread类的对象
+
+`Thread t = new Thread(myRunnable)`;
+
+`t.start();`
+
+
+
 
 
 ## 第三阶段： Java新特性与API
