@@ -4448,6 +4448,104 @@ class MyThread extends Thread{
 
 
 
+### 3.12.2 线程相关概念
+
+a. JavaSE： 多线程基础
+
+b. JUC： 多线程高级
+
+* 多线程相关概念：
+
+程序： 当开发者需要实现某个功能，选择一种编程语言而编写的一组指令的集合
+
+软件： 程序 + 程序运行锁需要的一些资源文件
+
+进程： 程序的一次运行是一个进程，进程之间是独立的。操作系统在分配资源（如：内存）是，是以进程为单位。
+
+线程： 进程中的其中一个任务的执行路径； 同一个进程中的多个线程之间是可以共享内存的。每个现成的有些内存是独立的（虚拟机栈、本地方法栈、程序计数器）。 现成是CPU调度的最小单位。
+
+并行： 多个进程同时运行；
+
+并发： 多个线程同时运行；
+
+
+
+### 3.12.3 线程的生命周期
+
+* New
+
+线程类跟普通java类一样，使用前需要先new对象；
+
+* 就绪
+
+就绪状态的现成是具备被CPU调用的能力，也只有这个状态的线程才能被CPU调用；
+
+`myThread.start();`
+
+* 运行
+
+运行状态就是该线程当前正在被CPU调度；
+
+* 阻塞
+
+`myThread.sleep()` `myThread.wait()` `join()加塞，被其他线程加塞` `没有锁，synchronized`
+
+`suspend挂起` ，当线程遇到这5种情况时，线程对象进入阻塞状态： 
+
+解除状态条件： sleep（）时间到 或 被interrupt（）方法唤醒、 notify（）、 加塞的线程结束、占用锁的线程释放了锁、resume（）；
+
+* 死亡
+
+当 a. 任务完成后、 b. 遇到了异常没有被正确处理、 c. 被其他线程stop结束 时，线程生命周期结束；
+
+
+
+### 3.12.4 Thread类的常用API
+
+* public void run()
+
+子类必须重写，方法体也称为线程体。
+
+* public void start()
+
+线程必须用它
+
+* public static void sleep 
+
+线程对象休眠
+
+* public String getName()
+
+获取线程的名称
+
+* public static Thread currentThread()
+
+获取当前线程对象
+
+* 线程提供有参构造，这样开发者可以在建线程时，自定义线程的名字
+
+* setPriority()、getPriority()
+
+设置线程的优先级，优先级高的被CPU调度的概率增加，不代表优先级低的没有机会。
+
+* public void interrupt()
+
+终止线程的休眠
+
+* public void join()
+
+`A.join();`将A线程对象加塞到B线程中，此时被加塞的B线程要等A线程执行完后才能继续执行。
+
+* public void yield()
+
+
+
+
+
+### 3.12.5 Thread & Runnable的区别
+
+
+
 
 
 ## 第三阶段： Java新特性与API
