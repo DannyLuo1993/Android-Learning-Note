@@ -3,7 +3,7 @@ package service;
 
 public class RaceThread extends Thread{
 
-    private int total_time;
+    private long total_time;
     private int runway_length;
     private int speed;
     private int sleep_time;
@@ -20,11 +20,11 @@ public class RaceThread extends Thread{
     @Override
     public void run() {
 
+        long Start = System.currentTimeMillis();
         for(total_length = 1; total_length < 31; total_length++){
             System.out.println(getName() + "has run for" + total_length + "M");
             try {
                 Thread.sleep(speed);
-                total_time += speed;
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -40,10 +40,16 @@ public class RaceThread extends Thread{
                 }
             }
 
+            if(total_length == 30){
+                Thread.
+            }
+
         }
+        long End = System.currentTimeMillis();
+        total_time = End - Start;
     }
 
-    public int getTotal_time() {
+    public long getTotal_time() {
         return total_time;
     }
 
