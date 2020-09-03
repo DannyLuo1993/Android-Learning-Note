@@ -4771,6 +4771,59 @@ public class TestString02{
 
 
 
+方法系列四：
+
+* boolean startWith（） 方法， 检测字符串开头n位的字符
+* boolean endWith（）方法，检测字符串末尾n位的字符
+
+
+
+方法系列五：检索字符
+
+* boolean contains（）方法： 检测字符串是否包含传入的字符
+* int indexOf（）方法： 检测字符串是否包含字符，如果存在返回下标。不过不存在，返回-1
+* int lastIndexOf（）方法： 如果存在，返回最后一的下标，如果不存在，返回-1
+
+
+
+ 方法系列六：截取字符
+
+* String substring（int beginIndex）
+* String substring（int beginIndex， int endIndex）
+
+
+
+方法系列七： 匹配规则
+
+* boolean matches（正则表达式） 告知此字符串是否匹配给定的正则表达式
+* 正则表达式： 用于检测文本的格式 - 校验某个字符串是否符合xx规则 （不是java的语法，是独立于java的）
+
+
+
+方法系列八：替换
+
+* String replace（target，value）
+* String replaceAll（String regex， String replacement）【支持正则】
+* String replaceFirst（String regex, String replacement）【支持正则】
+
+
+
+方法系列九： 拆分
+
+* String[] split() 
+
+
+
+方法系列十：String类的兄弟类
+
+* StringBuffer
+
+
+
+* StringBuilder
+
+
+
 ## 第三阶段： Java新特性与API
 
 Java 新特性包括：泛型、元注解、装箱/拆箱、枚举、可变参数、Lambda表达式、Stream API、 Date/Time API；
