@@ -4642,15 +4642,132 @@ c. notify（）方法，基于notify方法，适用于生产者和消费者其�
 
 
 
+## 3.13 String类
 
 
 
+### 3.13.1 String类的特点
+
+* 特点： a String类型不能被继承，因为String是由final修饰的；
+
+  ​			b String类型的对象是不可变的，只要修改字符串，就会产生新对象；
+
+  ​			c String对象不可变的特性，字符串有常量池，常量池中的字符串是共享的；
+
+* 字符串常量池：
+
+（1）JDK1.6 及以前的版本： 字符串常量池在方法区 【Oracle 官方虚拟机 HotSpot】
+
+（2）JDK1.7： 字符串常量池在堆中
+
+（3）JDK1.8： 常量池从堆中挪出，挪到一个“元空间 meta space”， 即类似于方法区
 
 
 
+* String对象底层存储
+
+JDK1.9之前， 底层是用char[] 存储
+
+JDK1.9之后，底层是用byte[] 存储
 
 
 
+* String对象不可变特性说明
+
+（1）底层char[] 数组由final修饰，意味着这个数组不能变更等。
+
+（2）char[] 数组是私有的，程序员无法直接操作char[] 数组，而且String类没有提供char[] 数组的修改方法；
+
+（3）String类提供的所有方法，对字符串的修改都是返回一个新的字符串对象
+
+
+
+### 3.13.2 字符串的比较
+
+* == 比较对象地址
+
+* equals 比较字符串的内容，严格区分大小写。
+* equalsIgnoreCase 比较字符串的内容，不区分大小写。
+
+* compareTo String类实现了Comparable接口，可比较类的对象大小 【自然排序】
+
+* compareToIgnoreCase String类实现了Comparable接口，可忽略大小写比较类的对象大小 【自然排序】
+
+* sort(string, new Compartor)  【定制排序】 使用此方法需要自己重新写Compartor或传入系统的Compartor。
+
+* java.text.Collator, 使用此类可以为自然语言文本构建搜索和排序例程。但是Collator是抽象类，不能直接创建对象，它有一个直接子类RuleBaseCollator。 Collator内部提供getInstance静态方法，可以获取一个它的子类对象。
+
+  `Arrays.sort(string, Collator.getInstance(Locale.CHINA))`
+
+
+
+### 3.13.3 String对象的个数与拼接
+
+* 字符串实际创建的字符对象个数问题
+
+
+
+* 拼接结果的存储位置
+
+（1） 常量 + 常量 储存在常量池；
+
+（2） 变量 + 常量 储存在堆内存；
+
+（3） 变量 + 变量 储存在堆内存；
+
+（4） xx.intern() 在常量池
+
+
+
+* 空字符串问题
+
+
+
+```java
+public class TestString02{
+    public void test(){
+        String s1; // 局部变量为初始化
+        String s2 = null; // 局部变量初始化为null 空指针异常
+        String s3 = ""; // 空字符串常量对象
+        String s4 = new String(); // 空字符串对象
+        String s5 = new String(""); // 两个对象， 一个是常量池中的，一个是堆中的。
+    }
+}
+```
+
+
+
+### 3.13.4 String类中常用的方法
+
+方法系列一： 最常用的方法
+
+* int length(): 返回字符串的长度
+* boolean isEmpty（）： 判断是否是空字符串
+* String toLowerCase（）： 使用默认语言环境的规则将此String中的所有字符都转换为小写。
+* String toUpperCase（）： 使用默认语言环境的规则将此String中的所有字符都转换为大写。
+* String trim（）： 返回字符串的副本，忽略字符串内容前、后空白。
+* boolean euqals（Object obj）： 比较字符串的内容
+* boolean equalsIgnoreCase（String anotherString）： 与euqals方法类似，忽略大小写
+* String concat（String str）： 将指定的字符串连接到此字符串的结尾。等价于用+
+
+
+
+方法系列二： 和char相关的方法
+
+* char[] toCharArray()
+* char charAt(index) 取出某个位置的字符
+* String(Char[] arr)
+* String(Char[] arr, int star, int total)
+
+
+
+方法系列三： 和byte相关，或者说和编码与解码相关
+
+* byte[] getBytes(): 得到String内容的编码值 【编码的方法，编给计算机设备使用】
+
+编码： 对应ASCII码范围内（0 - 127），无论用什么编码方式，结果都是一样的，一个字符对应一个字节的编码值
+
+* 
 
 
 
