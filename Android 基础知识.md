@@ -4847,6 +4847,157 @@ freeMemory方法
 
 
 
+## 3.15 日期时间的API
+
+
+
+### 3.15.1 JDK1.8之前
+
+* java.util.Date
+
+getTime()方法， Date（）无参构造、Date（long ms）
+
+
+
+* java.util.Calendar 【抽象类】
+* 直接子类：GregorianCalendar
+
+内部提供无参或有参getInstance（）获取对象，提供get方法获取日历相关值
+
+
+
+* java.util.TimeZone
+
+static TimeZone getTimeZone(String ID)
+
+
+
+* java.text.DateFormat
+
+java.text.SimpleDateFormat
+
+```java
+public void test(){
+    Date d = new Date();
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日")；
+}
+```
+
+
+
+### 3.15.2 JDK1.8及之后
+
+旧的问题：
+
+（1）偏移性
+
+（2）对象的可变性问题
+
+一个日期时间的对象，应该对应一个日期时间的点，不应该变化。即类似String类，对象日期时间的修改应该产生新对象，不应该修改原来的对象。
+
+不可变对象：String类、包装类的对象
+
+（3）格式化：旧版只支持Date
+
+（4）日期时间API：不是线程安全的，不能处理闰秒
+
+
+
+新版内容：
+
+java.time：包含值对象的基础包
+
+java.time.chrono：提供对不同的日历系统的访问
+
+java.time.format： 格式化和解析时间和日期
+
+java.time.temporal：包括底层框架和扩展特性
+
+java.time.zone：包含时区支持的类
+
+
+
+### 3.15.3 基本类型
+
+LocalDate类：本地日期
+
+LocalTime： 本地时间
+
+LocalDateTime：本地日期时间
+
+方法： .now()：获取现在的时间
+
+.of() 传入时间
+
+get() 方法， 例如getDayOfYear（）；获取xx值
+
+plus
+
+minusDay（）：传入天数
+
+isLeapYear（）：是否是闰年
+
+
+
+### 3.15.4 日期时间格式化 
+
+作用：格式化传入的时间。
+
+老版：SimpleDateFormat
+
+新版：DateTimeFormatter类，类中提供了三种格式化方法
+
+预定义的标准格式：ISO_DATE_TIME； ISO_DATE
+
+本地化相关的格式：ofLocalizedDate（FormatStyle.MEDIUM）
+
+自定义的格式：ofPattern（”yyyy-MM-dd hh：mm：ss“）
+
+```java
+public void test(){
+    LocalDateTime now = LocalDateTime.now();
+    DataTimeFormatter df = DateTimeFormatter.ISO_DATE_TIME;
+    String str = df.format(now);
+    System.out.println(str);
+}
+```
+
+
+
+###  3.15.5 Math中的常用类
+
+* java.lang.Math
+
+Math.PI, Math.sqrt().Math.pow(),Math.max(),Math.min()
+
+ceil() 方法： 进一法， 例如传2.6输出3.0
+
+floor（）方法： 退一法 例如传2.6输出2.0
+
+round（）方法： 四舍五入
+
+
+
+* BigInteger 和 BigDecimal
+
+用来存Long类型都存不下的数
+
+```java
+BigInteger big 1 = new BigInteger("1111111111111111111");
+BigInteger big 2 = new BigInteger("1111111111111111111");
+big1.add(big2);
+```
+
+
+
+## 3.16 物理结构与逻辑结构
+
+
+
+### 3.16.1 数据的储存
+
+
+
 
 
 ## 第三阶段： Java新特性与API
