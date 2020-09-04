@@ -4820,7 +4820,32 @@ public class TestString02{
 
 
 
-* StringBuilder
+* StringBuilder： 默认char[]长度为16，如果不够扩容为旧长度的2倍+2  （线程不安全，但比StringBuffer快。建议单线程中使用。JDK1.5引入）
+* StringBuffer： 线程安全的可变字符序列
+
+方法： append（）：拼接、连接
+
+insert（），在index位置插入参数字符。
+
+delete(int start, int end): 删除【start end）位置的字符
+
+deleteCharAt（int index）删除index位置的字
+
+reverse(): 反转
+
+setCharAt（int index， char ch）：替换【index】位置的字符为ch
+
+
+
+### 3.14 Runtime
+
+JVM运行时环境，类型用单例设计
+
+totalMemory方法
+
+freeMemory方法
+
+
 
 
 
