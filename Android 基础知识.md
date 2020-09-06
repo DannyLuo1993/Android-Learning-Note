@@ -4610,7 +4610,9 @@ b. JUC： 多线程高级
 
 * 锁方法的语法格式： 【修饰符】 synchronized 返回值类型 方法名（【形参列表】） throws 异常列表 { 方法体 }
 
-同步方法的锁对象，程序员无法选择； 如果是非静态方法的锁对象是this，静态方法的锁对象是当前类的class对象；
+同步方法的锁对象，程序员无法选择； 
+
+**如果是非静态方法的锁对象是this，静态方法的锁对象是当前类的class对象；** 
 
 
 
@@ -5067,9 +5069,395 @@ class Tree{
 
 
 
-### 3.16.3 动态数组
+### 3.16.3 手动实现单向链表
+
+```java
+
+```
 
 
+
+### 3.16.4 手动实现动态数组
+
+```
+
+```
+
+
+
+### 3.16.5 Collection集合
+
+* java集合抽取的两大接口
+
+（1） Collection： 规范单值集合的接口 {obj}
+
+（2） Map： 规范对值集合的接口 {（kry，value）}
+
+简介：Collection是根接口，没有直接的直接的实现类，有具体的子接口（List 和 Set）。
+
+集合中不存基本数据类型，只能存对象。
+
+
+
+* Collection的API
+
+（1）添加 add（Object obj）， addAll（Collection c）
+
+（2）int size（）： 获取有效元素的个数
+
+（3）contains（Object o）： 判断o是否在当前集合中；
+
+（4）containsAll（Collection c）： 判断c是否是当前集合的子集
+
+（5）boolean isEmpty： 判断当前集合是否为空
+
+（6）remove（Object obj）
+
+（7）removeAll（Collection c）：删除当前集合与c集合的交集
+
+（8）clear（）：清空所有
+
+（9）retainAll（Collection<？> c）： 保留交集
+
+（10）Object[] toArray（）： 把集合中的元素 用一个数组返回
+
+```java
+public class TestCollection{
+    
+    public void test2(){
+        Collection c = new ArrayList();
+        c.add(1);
+        
+        Collection c2 = new ArrayList();
+        c.addAll(c2);
+    }
+}
+```
+
+
+
+### 3.16.6 Iterator 迭代器接口
+
+java.util.Iterator接口： 这个接口的实现类在每一种集合类中，例如：ArrayList内部有一个内部类实现了Iterator接口。这里声明为内部类有两个原因：
+
+（1）每一种集合的内部实现不同，意味着对迭代器的实现也是不同的。所以每一种集合都要单独定制迭代器
+
+（2）内部类可以直接访问外部类的私有的属性、成员。
+
+
+
+* Iterator的基本方法：
+
+（1） boolean hasNext（）
+
+（2） Object next（）
+
+（3） void remove（）
+
+
+
+* Collection系列集合的遍历
+
+（1）Object[] toArray（）： 先返回数组，然后遍历数组
+
+（2）迭代器设计模式
+
+（3）增强for循环
+
+每一个Collection系列的集合，内部都自带一个迭代器。
+
+```java
+public class TestIterator{
+    public void test1(){
+        Collection c = new ArrayList();
+        c.add("1");
+        c.add("2");
+        c.add("3");
+        
+        Iterator iterator = c.iterator();
+        while(iterator.hasNext()){
+            String obj = (String) iterator.next();
+            if(obj.startWith("2")){
+                iterator.remove();
+            }
+        }
+    }
+}
+```
+
+
+
+### 3.16.7 增强For循环
+
+语法格式：for（元素的数据类型 元素临时名称： 数组和集合名）{}
+
+```java
+public class TestEnhanceFor(){
+    String[] arr = {"hello", "world"};
+    for(String string: arr){
+        print();
+    }
+}
+```
+
+* 什么样的集合或容器类型可以使用foreach循环？
+
+凡是实现了java.lang.Iterable接口的集合或容器都支持foreach循环
+
+
+
+Iterable实现例
+
+```java
+public class MyArrayList implements Iterable{
+	
+    @Override
+    public Iterator iterator(){
+        
+        return new MyItr();
+    }
+    
+    private class MyItr implements Iterator{
+        private int cursor;
+        
+        @Override
+        public boolean hasNext(){
+            
+            return curosr!=total;
+        }
+        
+        @Override
+        public Object next(){
+            
+            return data[cursor++];
+        }
+    }
+}
+```
+
+
+
+### 3.16.8 List
+
+List系列的集合：有序的，可重复的。
+
+List系列的集合有： ArrayList（动态数组）、Vector（动态数组，向量类）、LinkedList（双向链表、双端队列、栈）、Stack（栈）
+
+
+
+* List的API （List在Collection类方法的基础上扩展了以下方法）
+
+（1）void add（int indes， Object element）在index位置插入element
+
+（2）boolean addAll（int index，Collection c）：在index位置添加多个元素
+
+（3）Object get（int index）：获取，返回index位置的元素
+
+（4）Object set（int index, Object element）： 替换index位置的元素为element
+
+（5）int indexOf（Object o） 在当前集合中查找o这个元素的下标，如果没有就返回-1，如果有多个就返回第一个目的元素的下标
+
+（6）int lastIndexOf（Object o）： 在当前当前集合中查找o这个元素的下标，如果没有就返回-1，如果有多个就返回最后目的元素的下标
+
+（7）List<E> subList（int fromIndex, int toIndex） ： 截取【fromIndex，toIndex）部分的子集
+
+（8）ListIterator listIterator（）： 获取一种迭代器
+
+ListIterator 是Iterator的子接口，它比Iterator增加了a. 从后往前遍历的方法，增加了遍历的同时添加和修改方法。
+
+
+
+ListIterator 方法：
+
+（1） boolean hasPrevious（）： 是否前面还有元素
+
+（2） Object previous（）： 获取前面的元素
+
+（3） void add（E e）：遍历的同时添加元素
+
+（4） void set（E e）：遍历的同时替换元素
+
+（5）int nextIndex（）：返回下一个元素的索引
+
+（6） int previousIndex（）：返回前一个元素的索引
+
+使用演示
+
+```java
+public void test(){
+    List list = new ArrayList();
+    list.add(1);
+    list.add(2);
+    list.add(3);
+    
+    //listIterator方法会返回一个ListIterator对象.
+    //@param int cursor； 指定遍历开始的位置
+    ListIterator listIterator = list.listIterator();
+    while(listIterator.hasNext()){
+        Object obj = listIterator.previous();
+        print(obj);
+    }
+}
+```
+
+
+
+注：List系列的集合，如LinkedList，不建议使用和索引有关的方法进行操作。因为他们底层的物理结构不是数组，如果通过索引操作效率不高。因为为了获得index，需要先遍历集合。
+
+
+
+### 3.16.9 Vector 动态数组
+
+线程安全的动态数组
+
+扩容算法： 扩容为原来的2倍，但容易造成空间浪费
+
+遍历集合的方法：（1）增强for循环；（2）Iterator；（3）支持旧版的Enumeration迭代器
+
+* 方法
+
+（1） new Vector（）： 初始化长度为10的数组，默认增量是0
+
+（2） synchronized boolean add（E e）：默认扩容为原来的两倍，也可以在构造器中传参手动传入增量。
+
+（3） add（index， e）：在指定位置插入e
+
+思路： a. 考虑扩容； b. 移动元素 c. 添加元素 d. 元素个数增加
+
+（4） remove（Object obj）
+
+（5） indexOf（）
+
+
+
+
+
+### 3.16.10 ArrayList 动态数组
+
+线程不安全的动态数组
+
+扩容算法： 扩容为原来的1.5倍，但扩容较频繁
+
+遍历集合的方法：（1）增强for循环；（2）Iterator；
+
+（1）new ArrayList（）： JDK1.8版本初始化了一个长度为0的空数组； JDK1.7的版本初始化了一个长度为0的空数组； JDK1.6版本初始化长度为10的数组
+
+
+
+
+
+
+
+### 3.16.11 Stack 栈类
+
+先进后出（FILO）或后进先出（LIFO）：Last in fist out
+
+Stack是Vector的子类，比Vector多了几个方法
+
+
+
+（1） Object peek（）： 访问当前栈顶元素，但是不拿走栈顶栈顶元素。
+
+（2） Object pop（）： 弹出栈顶元素 -> 先peek 后remove
+
+（3） Object push（Object item）： 把元素压入栈顶，等价于add（item）
+
+
+
+
+
+### 3.16.12 LinkedList 双向链表类
+
+方法：
+
+（1）new LinkedList（）：什么也没干，没有创建结点
+
+
+
+内部有一个结点的类型：
+
+```java
+class Node{
+    Object data;
+    Node previous;
+    Node next;
+}
+
+class LinkedList{
+    Node first;
+    Node last;
+}
+```
+
+空链表的特征：`first == null && last == null`
+
+只有一个结点的特征： `first == last`
+
+第一个结点的特征: `first.previous == null`
+
+**LinkedList可以被当做双向链表、栈、队列、双端队列等数据结构使用**
+
+* 如何体现双向链表？
+
+（1） E getFirst（）：
+
+（2） E getLast（）
+
+（3） boolean offerFirst（E e）：添加第一个
+
+（4） boolean offerLast（E e）： 添加最后一个
+
+（5） int indexOf（Objext o）： 从first开始找
+
+（6） int lastIndexOf（Object o）： 从last开始找
+
+（7） E get（int index）
+
+
+
+* 如何体现栈
+
+（1） E peek（）；
+
+（2） E pop（）；
+
+（3）void push（E e）；
+
+
+
+* 如何体现队列
+
+（1） offer（e）：插入队头
+
+（2） poll（e）： 移走队头元素
+
+（3） peek（）：检查队头元素
+
+```java
+public void test(){
+    
+    LinkedList list = new LinkedList();
+    list.add("1");
+    list.add("2");
+    list.add("3");
+    print(list.poll());
+    
+}
+```
+
+
+
+* 如何体现双端队列Deque类 （Since JDK1.6）
+
+
+
+### 3.16.13 Set接口
+
+
+
+* Set系列的集合的元素是不能重复的。
+* 如果按照元素的存储顺序来说，唯有LinkedHashSet可以保证添加的顺序，其他都是不能保证的。
+* 
 
 
 
