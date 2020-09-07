@@ -5455,9 +5455,170 @@ public void test(){
 
 
 
-* Set系列的集合的元素是不能重复的。
-* 如果按照元素的存储顺序来说，唯有LinkedHashSet可以保证添加的顺序，其他都是不能保证的。
-* 
+* Set接口的特性：
+
+Set系列的集合的元素是不能重复的。
+
+如果按照元素的存储顺序来说，唯有LinkedHashSet可以保证按添加的顺序排列，其他都是不能保证的。
+
+如果按照元素的大小顺序来说，唯有TreeSet可以保证按元素的大小顺序排列。
+
+其中HashSet是完全无序的。
+
+Set接口中没有增加方法，都是从Collection中继承的。
+
+
+
+* Set的底层实现
+
+（1） HashSet： 底层new了一个HashMap对象
+
+（2） TreeSet： 底层new了一个TreeMap对象
+
+...
+
+添加到Set中的元素，是作为底层Map的key，value选用了一个Object类型的静态常量对象PRESENT。
+
+
+
+* TreeSet
+
+当使用TreeSet类对象存储对象时，被存储的对象必须实现Compartor 或 Comparable 接口 或 new 对象时传入Compartor接口定义TreeSet对象的排序规则。
+
+当使用TreeSet类对象储存对象时，相同的元素被定义为大小“相等”的元素。同理，被存储的对象必须实现Compartor 或 Comparable 接口 或 new 对象时传入Compartor接口定义TreeSet对象的排序规则。
+
+```java
+public class TestSet{
+    
+    public void test(){
+        
+        /*	使用匿名内部类实现Comparator接口
+        * 	TreeSet(Comparator<? super E> comparator)
+	   * 	Constructs a new, empty tree set, sorted according to the specified comparator.
+        */
+        TreeSet set = new TreeSet(new Comparator(){
+            @Override
+            public int compare(Object o1, Object o2){
+                Student s1 = (Student) o1;
+                Student s2 = (Student) o2;
+                return s1.getId() - s2.getId();
+            }
+        });
+
+        set.add(new Student(3, "ZhangSan"));
+        set.add(new Student(1, "Zhang"));
+        set.add(new Student(2, "San"));
+    }
+    
+}
+```
+
+
+
+* 如何保证元素不可重复？
+
+（1） HashSet和LinkedHashSet做法：先比较hash值，如果不一样，说明一定不同，如果一样，再用euqals方法比较；
+
+
+
+### 3.16.14 Map
+
+Map中储存的是一组键值对，成映射关系。
+
+Map接口没有继承Iterable接口，所以不支持For each循环进行遍历；
+
+Map接口没有提供Iterator iterator（）方法返回迭代器对象；
+
+所有Map的Key不能重复： HashMap、LinkedHashMap、Hashtable和Properties是依据key的hashCode和equals方法判断是否是相同key。 TreeMap：依据Key的大小，认为大小相同的Key是相同的。
+
+如果Key重复了，后面的value会替换原来的value。
+
+如果要让TreeMap的key排大小，要么key类型本身实现了java.lang.Comparable接口，要么在创建TreeMap时，传入一个java.util.Comparator接口的实现类对象
+
+
+
+* Map的底层实现：
+
+（1） 哈希表系列： 数组 + 链表 或  数组 + 链表 / 红黑树
+
+* HashMap的底层实现： JDK1.7及之前：数组 + 链表； JDK 1.8：数组 + 链表 / 红黑树 【集数据结构的优点于一身】
+
+
+
+* Map类的API
+
+put（Object key，Object value）； 
+
+int size（）；
+
+putAll（Map map）； 将另一个map中所有的映射关系都添加到当前map中
+
+boolean containsKey（Object key）；
+
+boolean containsValue（Object Value）；
+
+get（Obejct key）； 获取key对应的value；
+
+remove（Object key）：根据key删除一对映射关系，并返回key对应的Value
+
+Set KeySet（）； 获取所有的key，可用于遍历Map。【所有的key组成一个Set集合，且不可重复】
+
+Collection values（）； 获取所有的vaule。【因为value可重复】
+
+Set entrySet（）； 获取所有的映射关系。此时吧一对映射关系（Key，Value）看成一个整体，是Entry类型的对象。
+
+因为key不可重复，因此所有的组合是唯一的。所以所有的映射关系也是Set集合
+
+
+
+* Map接口的实现类们
+
+（1）HashMap； （2） HashTable； （3） TreeMap； （4） LinkedHashMap； （5） Properties
+
+
+
+### 3.16.15 HashTable
+
+特性：（1）旧版；（2）线程安全； （3） key和value不能为null
+
+子类：Properties，不允许key和value是null，并且key和value累的都是String。
+
+通常用于存储配置属性
+
+而且为了可读性更好，还增加了两个方法：
+
+（1） setProperty（key，value）
+
+（2） String getProperty（key）
+
+```java
+public void test(){
+    Properties pro = new Properties();
+    pro.setProperty("User", "Danny");
+    pro.setProperty("pwd", "123456");
+    
+    String user = pro.getProperty("user");
+    String password = pro.getProperty("pwd");
+}
+```
+
+
+
+
+
+### 3.16.16 HashMap 
+
+HashMap特性：（1） 新版；（2）线程不安全的； （3） key和value可以为null； （4） 无序的；
+
+子类： LinkedHashMap，比HashMap多维护了映射关系的添加顺序，但因为维护了添加顺序，效率比HashMap低。
+
+
+
+### 3.16.17 TreeMap
+
+TreeMap特性：按照Key排大小顺序；
+
+
 
 
 
