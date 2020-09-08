@@ -5537,14 +5537,6 @@ Map接口没有提供Iterator iterator（）方法返回迭代器对象；
 
 
 
-* Map的底层实现：
-
-（1） 哈希表系列： 数组 + 链表 或  数组 + 链表 / 红黑树
-
-* HashMap的底层实现： JDK1.7及之前：数组 + 链表； JDK 1.8：数组 + 链表 / 红黑树 【集数据结构的优点于一身】
-
-
-
 * Map类的API
 
 put（Object key，Object value）； 
@@ -5619,6 +5611,139 @@ HashMap特性：（1） 新版；（2）线程不安全的； （3） key和valu
 TreeMap特性：按照Key排大小顺序；
 
 
+
+### 3.16.18 JDK1.7 Map的底层实现
+
+概述： 不同Key计算出来的数组index值，Array【i】可能相同，当往Array【i】中存数据时，Array中的表只能存不同Key对应的Value值。
+
+相同Key的对应的value值，新的值会将旧的值覆盖。
+
+* Map的底层实现：
+
+（1） 哈希表系列： 数组 + 链表 或  数组 + 链表 / 红黑树
+
+* HashMap的底层实现： JDK1.7及之前：数组 + 链表； JDK 1.8：数组 + 链表 / 红黑树 【集数据结构的优点于一身】
+
+
+
+* JDK1.7的HashMap底层实现： 数组+链表
+
+（1） new HashMap（）
+
+table数组初始化为一个长度为0的空数组
+
+DEFAULT_INITIAL_CAPACITY：16
+
+DEFAULT_LOAD_FACTOR：0.75： 默认加载因子，当数组元素个数大于threshold值时，数组扩容
+
+threshold = capacity x load factor：临界值。
+
+就算开发者在New的时候指定了capacity，这个capacity的要求是2的n次方
+
+
+
+
+
+（2）put（）
+
+若数组是空数组，会把数组初始化为长度16的Entry类型数组，threshold值为12，load factor为0.75
+
+如果不是空数组，先判断key是否为null。 如果key不为空，调用函数 `int hash = hash(key)` 计算key的hash值。接下来要利用hash值来计算index。【因为hash值是要用来计算index的，所以hash值的分布需要够散，冲突才少。】
+
+```java
+
+public V put(K key, V value) {
+    if(table == EMPTY_TABLE){
+        inflateTable(threshold);
+    }
+    if(key == null){
+        return putForNullKey(value);
+    }
+    
+    //根据Key的hashcode用异或，无符号右移等各种运算，得到了一个int hash值。
+    int hash = hash(key);
+    //用key的hash值及table的长度来计算index i的值
+    //因为table.length -1的值一直落在2的n次方范围内，所以按位与之后，i的范围是【0，table.length-1】
+    int i = indexFor(hash, table.length);
+    
+    //链表套娃思路：先将旧的Object存到一个temp的Object里， 然后构造新Object时，将旧的Object作为参数传入，实现套娃储存
+	//那么在访问Object时，就可以通过访问Object的属性来获得当前Object的数据，或旧Object的对象。
+    //查找table【i】下面的链表中是否有映射关系的key是重复的，如果有重复的，就有新的value覆盖旧的value
+    //table【i】中存储了多个（x，y） Object
+    //检查（x，yn）是否有重复的x坐标值，如果有重复就用yn代替原来的y？
+    for(Entry<K,V> e = table [i]; e != null; e = e.next){
+        Object k;
+        if(e.hash == hash && ((k = e.key) == key || key.euqals(k))){
+            V oldValue = e.value;
+            e.value = value;
+            e.recordAccess(this);
+            return oldValue;
+        }
+    }
+    modCount++;
+    addEntry(hash,key,value,i);
+    return null;
+}
+
+//添加部分的核心代码
+void addEntry(int hash, K key, V value, int bucketIndex){
+    if((siee >= thershold) && (null != table[bucketIndex])){
+        resize(2 * table.length);
+        hash = (null != key) ? hash(key) : 0; // 重新计算hash
+        bucketIndex = indexFor(hash, table.length); // 重新计算index
+    }
+    createEntry(hash, key, value, bucketIndex);
+}
+
+//链表套娃思路：先将旧的Object存到一个temp的Object里， 然后构造新Object时，将旧的Object作为参数传入。
+//那么在访问Object对象时，可以访问当前Object对象的数据，也可以访问next属性获取旧Object对象实现访问。
+//e 的值是 table[bucketIndex]， 类型是 Entry<K,V>
+//然后table数组的index位置又存入了Entry<对象>
+//table[bucketIndex] = new Entry<>(hash, key, value, e);
+//其中e是用来存上面的table[bucketIndex]的
+void createEntry(int hash, K key, V value, int bucketIndex){
+    Entry<K,V> e = table[bucketIndex];
+    table[bucketIndex] = new Entry<>(hash, key, value, e);
+    size ++;
+}
+
+Entry(int h, K k, V v, Entry<K,V> n){
+    value = v; // V value
+    next = n;  // Entry<K,V> next
+    key = k; // final K key
+    hash = h; // int hash
+}
+```
+
+如果Key为null时，hash为0，index也为0.
+
+
+
+### 3.16.19 JDK1.8 Map的底层实现
+
+几个变量和常量：
+
+（1） DEFAULT_INITIAL_CAPACITY： 默认的初始容量为16
+
+（2） MAXIMUM_CAPACITY: 最大容量 1<< 30
+
+（3） DEFAULT_LOAD_FACTOR: 默认加载因子：0.75
+
+（4） TREEIFY_THRESHOLD: 默认树化阈值8，当链表的长度达到这个值后，要考虑变为链表
+
+（5） UNTREEIFY_THRESHOLD: 默认反树化阈值6，当树中的结点的个数达到这个阈值后，要考虑变为链表
+
+（6）MIN_TREEIFY_CAPACITY：最小树化容量64
+
+​		当单个的链表的结点个数达到8，并table的长度达到64，才会树化，
+
+​		当单个的链表的结点个数达到8，单table的长度未达到64，会先扩容。
+
+（7） Node<K, V>[] table： 数组。
+
+（8） size：记录有效映射关系的对数，也是Entry对象的个数。
+
+（9） threshold： 阈值，当size达到阈值时，考虑扩容。
 
 
 
