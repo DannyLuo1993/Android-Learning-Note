@@ -5136,6 +5136,12 @@ public class TestCollection{
 
 
 
+* modcount ： 记录当前集合被添加或删除元素的次数。
+
+防止多线程同时操作集合，所以modCount 与 校验值expectedModCount不一致时，就会报错。
+
+
+
 ### 3.16.6 Iterator 迭代器接口
 
 java.util.Iterator接口： 这个接口的实现类在每一种集合类中，例如：ArrayList内部有一个内部类实现了Iterator接口。这里声明为内部类有两个原因：
@@ -5614,7 +5620,7 @@ TreeMap特性：按照Key排大小顺序；
 
 ### 3.16.18 JDK1.7 Map的底层实现
 
-概述： 不同Key计算出来的数组index值，Array【i】可能相同，当往Array【i】中存数据时，Array中的表只能存不同Key对应的Value值。
+概述： 不同Key计算出来的数组index值i，Array【i】可能相同，当往Array【i】中存数据时，Array中的表只能存不同Key对应的Value值。
 
 相同Key的对应的value值，新的值会将旧的值覆盖。
 
@@ -5752,6 +5758,10 @@ Entry(int h, K k, V v, Entry<K,V> n){
 （8） size：记录有效映射关系的对数，也是Entry对象的个数。
 
 （9） threshold： 阈值，当size达到阈值时，考虑扩容。
+
+
+
+
 
 
 
