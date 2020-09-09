@@ -5852,6 +5852,61 @@ class YourClass{
 
 
 
+### 4.2 泛型
+
+Since JDK 1.5
+
+Java 中的例子： 在设计集合这个容器的数据结构时，不确定程序员会用来装什么对象。即方法在设计时，形参的类型 & 形参的值都无法确定，所以设计出泛型，让调用者在合理范围内传入类型完成功能。
+
+```java
+public void test(){
+    ArrayList list = new ArrayList();
+    list.add("chang");
+    list.add("li");
+    list.add("wang");
+    list.add(1);
+    
+    for (Object object : list){
+        
+    }
+}
+```
+
+类似的设计 - 求两个形参的和的方法，在完成这个功能时，不确定参数的值，但限定了参数的类型， 所以函数设计者设计了形参，让调用者传入具体的值。
+
+```java
+public int sum(int a, int b){
+    return a + b;
+}
+```
+
+
+
+语法格式： <类型>
+
+泛型的好处： 安全、避免类型的转换
+
+应用场景：
+
+（1）泛型类、泛型接口；
+
+（2）泛型方法
+
+
+
+### 4.2.1 泛型类、接口
+
+* 语法格式：【修饰符】 class  类名《泛型形参列表》{}；
+* 泛型实参必须是一个引用数据类型，不能是基本数据类型；
+
+`public interface Collection<E>; public class ArrayList<E>; public class HashMap<K,V>`
+
+`ArrayList<String> list = new ArrayList<String> ();`
+
+此时： <String>是泛型的实参类型
+
+
+
 
 
 ## 第四阶段： 应用程序开发
