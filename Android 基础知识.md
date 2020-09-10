@@ -5915,6 +5915,169 @@ public int sum(int a, int b){
 
 
 
+* 泛型类或泛型接口的使用范围
+
+（1）类中的泛型，不能用于静态方法。
+
+* 泛型形参的上限限定，如下例，泛型被限定为Number类型
+
+```java
+class Test<T extends Number>{
+    private String name;
+    private T score;
+    public Test(String name, T score){
+        super();
+        this.name = name;
+        this.score = score;
+    }
+        
+}
+```
+
+
+
+* 如果在使用泛型类或泛型接口时，没有指定泛型实参，会怎么样？
+
+泛型被擦除，泛型被擦除后，泛型形参被解析为泛型形参的第一个上限类型。
+
+（1）如果没有指定泛型形参的上限，就按Object处理；
+
+（2） 如果指定了泛型的上限，就按泛型的第一个上限处理；
+
+
+
+### 4.2.2 泛型方法
+
+*  什么情况需要声明泛型方法？
+
+（1） 如果某个静态方法想要使用泛型，需要单独设计
+
+`public static<T> List<T> asLits(T... a)`
+
+（2） 如果泛型类或泛型接口上的泛型形参不适用于某一个方法（可以是静态，也可以是非静态），那么这个方法，可以单独设计泛型。
+
+`public abstract<T> T[] toArray(T[] a)`
+
+
+
+* 泛型方法的语法格式
+
+【修饰符】 《泛型形参列表》 返回值类型 方法名（【数据形参列表】）
+
+
+
+* 泛型方法的《泛型形参列表》这个类型就用于当前方法的形参类型、返回值类型、局部变量，和其他方法无关。
+* 泛型方法也可以指定上限。
+
+
+
+### 4.2.3 通配符 （wildcard）
+
+通配符： ？
+
+* 通配符的几种形式
+
+<?> 代表可以是任意类型
+
+<? extends 上限>： ？代表是上限或上限的子类
+
+```java
+public void printGraphic (Collection<? extends Graphic> c){
+    for (Graphic graphic : c){
+        print(graphic);
+    }
+}
+```
+
+
+
+<? super 下限>： ？代表是下限或下限的父类
+
+```java
+//想要声明一个方法，可以吧一个Collection集合src中的所有元素，添加到另一个Collection集合dest中。
+public <T> void copy(Collection<T> src, Collection<? super T> dest){
+    for (T object: src){
+        dest.add(object);
+    }
+}
+```
+
+
+
+### 4.2.4 Collections
+
+`(1) public static <T> boolean addAll(Collection<? super T> c, T... elements)`
+
+功能： 把elements这些元素添加到C这个集合中
+
+```java
+public class Test{
+    pbulic void test(){
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        Collections.addAll(list, 1,2,3,4);
+    }
+}
+```
+
+
+
+`(2) public static <T> int binarySearch(List<? extends Comparable<? super T>> list, T key)`
+
+list集合中的元素必须是实现Comparable接口的，？可以是T或T的父类，这个父类实现Comparable接口也可以。
+
+```java
+public class Test{
+    
+    public void test(){
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        list.add(1);
+        list.add(9);
+        list.add(5);
+        int index = Collecitons.binarySearch(list, 4);
+    }
+}
+```
+
+
+
+`(3) public static <T> int binarySearch(List<? extends T> list, T key, Comparator<? super T> c)`
+
+此时要求list集合是有大小顺序的， 按照定制的comparator顺序进行比较大小
+
+<? extends T>： 是T或T的子类，说明list中存的元素是T类型的对象或T类型的子类对象
+
+<? super T>： 这个比较器是为T或T的父类设计的比较器。
+
+
+
+`(4) public static <T extends Object & Comaprable<? super T>> T max(Collection<? extends T> coll)`
+
+<T extends Object & Comaprable<? super T>> 是max方法的泛型形参列表，泛型形参T，设定了上限，说明T必须继承Object并且要实现Comparable接口。
+
+max方法用于在coll集合中找出最大的元素，要求这个元素可比较大小，所以要求T元素实现Comparable接口。
+
+<? extends T>： coll集合中存的是T或T的子类的对象。
+
+`(5) public static void reverse(List<?> list): 可以反转任意的List集合元素`
+
+`(6) public static void shuffle(List<?> list)`： 集合元素洗牌
+
+`(7) public static <T> Set<T> singleton(T o)`
+
+`(8) public static <T extends Comparable<? super T>> void sort(List<T> list): 用于给List集合排序`
+
+<T extends Comparable<? super T>> 要求集合中的元素实现Comparable接口
+
+`(9) public static <T> void sort(List<T> list, Comparator<? super T> c)`：可以按照定制比较器排序
+
+`(10) public static void swap (List<?> list, int i, int j)`： 交换list中i与j位置的元素
+
+`(11) public static <T> List<T> synchronizedList(List<T> list)`： 可以把一个线程不安全的list集合变成一个线程安全的list集合
+
+`(12) public static <T> List<T> unmodifiableList(Listt<? extends T> list)`： 把list集合变成一个不可修改的集合。【只读】
+
+
+
 
 
 ## 第四阶段： 应用程序开发
