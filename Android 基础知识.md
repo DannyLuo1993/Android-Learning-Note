@@ -5897,13 +5897,21 @@ public int sum(int a, int b){
 ### 4.2.1 泛型类、接口
 
 * 语法格式：【修饰符】 class  类名《泛型形参列表》{}；
-* 泛型实参必须是一个引用数据类型，不能是基本数据类型；
+* 泛型实参必须是一个引用数据类型，不能是基本数据类型
 
 `public interface Collection<E>; public class ArrayList<E>; public class HashMap<K,V>`
+
+* 如何为泛型类和泛型接口指定泛型实参？
+
+（1）创建泛型类的对象时：
 
 `ArrayList<String> list = new ArrayList<String> ();`
 
 此时： <String>是泛型的实参类型
+
+（2）继承泛型类、泛型接口时可以指定实参：
+
+（3）实现泛型接口时，可以指定泛型实参；
 
 
 
