@@ -6242,6 +6242,58 @@ public void test(){
 
 ### 4.2.9 FileReader
 
+* 文件的IO操作：
+
+（1）int read（）：读取一个字符，返回该字符的Unicode的编码值
+
+（2）int read（char【】 cubf）： 读取多个字符，读取的字符放到cbuf数组中，从cbuf的【0】开始存储，最多读取cubf.length个。返回实际读取到的字符个数。
+
+（3）int read （char【】 cbuf， int off， int len）：读取多个字符，读取的字符放到cbuf数组中，从cbuf的【off】开始存储，最多读取len个。
+
+如果流中没有数据可读，返回-1.
+
+
+
+一、读取纯文本文件
+
+```Java
+public void test() throws FileNotFoundException{
+    
+    //（1）选择IO流
+    FileReader loadFile = new FileReader("1.txt");//相对路径，相对于当前的项目
+    //（2）读写操作： 读取文件内容
+    // 数据流向： 1.txt --> fr流中 --> 从流中开始读取
+    char[] arr = new char[10];
+    while(true){
+        int len = loadFile.read(arr);
+        if(len == -1){
+            break;
+        }
+        print(new String(arr, 0, len));
+    }
+    loadFile.close();
+    
+}
+```
+
+二、写入纯文本文件
+
+```java
+public void test(){
+    
+    Scanner input = new Scanner(System.in);
+    System.out.print("Please input a word");
+    String str = input.nextLine();
+    
+    //选择IO流，并创建对象
+    
+}
+```
+
+
+
+
+
 
 
 
