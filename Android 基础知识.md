@@ -6204,17 +6204,13 @@ b 纯文本文件：.txt .html .xml .properties
 
 处理流：在节点流的基础上，加其他处理功能的，例如：缓冲流、序列化与反序列化等
 
-【Buffered缓冲流】
-
-【】
-
 
 
 * IO流有四大抽象的基类、超类、父类
 
-（1）InputStream：字节输入流
+（1）InputStream：该抽象类是表示 字节输入流的所有类 的超类。
 
-（2）OutputStream：字节输出流
+（2）OutputStream：此抽象类是表示字节输出流的所有类的超类。
 
 （3）Reader：字符输入流
 
@@ -6331,7 +6327,115 @@ public void test(){
 
 解码 ： 将字符转换成字节。
 
-（2） 
+* FileInputStream
+
+功能：从文件系统中的文件获取输入字节。
+
+* InputStreamReader
+
+功能：是从字节流到字符流的桥梁。它读取字节，并使用指定的字符集将其解码为字符。
+
+```java
+public void test() throws IOException{
+    
+    FileInputStream fis = new FileInputStream("d:/path/file");
+    InputStreamReader isr = new InputStreamReader(fis, "GBK");
+    
+    //数据：由file中 到 fis（纯字节） 到 isr（GBK）解成字符流 到 按字符读取
+    char[] arr = new char[3];
+    //Reads characters into a portion of an array.
+    //将isr中的字符放入arr数组中
+    int len = isr.read(arr);
+    System.out.println(new String(arr, 0, len));
+    
+    isr.close();
+    fis.close();
+}
+```
+
+
+
+* FileOutputStream
+
+功能：用于将数据写入文件或FileDescriptor的输出流。
+
+* OutputStreamWriter
+
+功能：是从字符流到字节流的桥梁，使用指定的字符集将写入其中的字符编码为字节。
+
+```java
+public void test() throws IOException{
+    
+    String str = "I am pain";
+    FileOutputStream fos = new FileOutputStream("d:/path/file");
+    OutputStreamWriter osw = new OutputStreamWriter(fos, "GBK");
+    //Writes a portion of a string.
+    osw.wirte(str);
+    
+    osw.close();
+    fos.close();
+}
+```
+
+
+
+（2） 数据IO流 【处理流】
+
+* DataOutputStream
+
+功能：数据输出流允许应用程序以可移植的方式将原始Java数据类型写入输出流。
+
+在OutputStream的基础上增加了writeXxx（）方法，Xxx是数据类型，用于写入数据
+
+* DataInputStream
+
+功能：允许应用程序以与机器无关的方式从基础输入流中读取原始Java数据类型。
+
+
+
+（3）对象的序列化和反序列化
+
+定义：把对象转为字节序列，就是序列化的过程。要求实现这个过程的对象实现序列化的接口
+
+* ObjectOutputStream
+
+新增了writeObject（）方法
+
+功能：将Java对象的原始数据类型和图形写入OutputStream。
+
+* ObjectInputStream
+
+新增了readObject（）方法
+
+
+
+### 4.2.12  序列化版本ID
+
+当对象已经输出到文件中后，此时如果类再次被修改，ois再次读取这个文件时会报InvalidClassException。
+
+报这个错的原因是：流中关于类的serialVersionUID与本地类的serialVersionUID对不上。
+
+解决方案：a. 修改本地的serialVersionUID为流中的serialVersionUID
+
+b 在实现Serializable接口时，就固定serialVeriosnUID
+
+
+
+另：实现了序列化接口的类，都应考虑是否需要固定serialVersionUID；
+
+例如：自定义异常时：（1）继承Throwable或它的子类； （2） 建议保留两个构造器，一个无参，一个有参（给message赋值）
+
+（3） 增加serialVerisonUID
+
+
+
+### 4.2.13 不序列的字段 - transient
+
+取消序列化对象中不需要序列化的属性；
+
+关键字： transient
+
+static属性的参数也不会序列化，因为静态的变量不属于某个对象，而是整个类的，所以不需要随着对象的序列化而序列化。
 
 
 
