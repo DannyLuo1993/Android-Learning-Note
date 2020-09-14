@@ -6186,25 +6186,27 @@ public void test(){
 
 * IOde分类
 
-（1）方向
+（1）方向 【InputStream & OutputStream】
 
-输入流和输出流
+输入流和输出流 
 
 
 
-* 按操作数据的单位分
+（2）按操作数据的单位分 【FileStream & FileReader】
 
-（1）字节流：以字节为单位 byte。 字节流可以用于操作任何类型的文件
+a 字节流：以字节为单位 byte。 字节流可以用于操作任何类型的文件
 
-（2）字符流：以字符为单位 char。 字符流只能用于读、写存文件数据
-
-纯文本文件：.txt .html .xml .properties
+b 纯文本文件：.txt .html .xml .properties
 
 * 功能角色不同
 
 节点流：和某个节点关联，例如：文件流
 
 处理流：在节点流的基础上，加其他处理功能的，例如：缓冲流、序列化与反序列化等
+
+【Buffered缓冲流】
+
+【】
 
 
 
@@ -6227,16 +6229,6 @@ public void test(){
 （3）FileReader：文件字符输入流
 
 （4）FileWriter：文件字符输出流
-
-例如：
-
-（1）BufferInputStream：字节缓冲输入流
-
-（2）BufferOutputStream：字节缓冲输出流
-
-（3）BufferReader：字符缓冲输入流
-
-（4）BufferWriter：字符缓冲输出流
 
 
 
@@ -6292,7 +6284,54 @@ public void test(){
 
 
 
+### 4.2.10 Buffered
 
+* 基于IO流四大抽象的基类、超类、父类的API
+
+（1）BufferInputStream：字节缓冲输入流
+
+（2）BufferOutputStream：字节缓冲输出流
+
+（3）BufferReader：字符缓冲输入流
+
+（4）BufferWriter：字符缓冲输出流
+
+其中BufferedReader除了继承了Reader的读取方法，还额外增加了一个：String readLine（） 用于读取一行数据，当数据被读取完后，返回值是Null。
+
+其中BufferedWriter除了继承了Writer的写入方法，还额外增加了一个：
+
+```java
+    public void copy(String srcFileName, String destFileName) throws IOException {
+
+        FileReader fileReader = new FileReader("src.txt");
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+        FileWriter fileWriter = new FileWriter("dest.txt");
+        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+
+        String str ;
+		//data flows from src.txt to fileReader to bufferedReader to str
+        //to bufferedWriter to fileWriter
+        while( (str = bufferedReader.readLine()) != null ){
+            bufferedWriter.write(str);
+        }
+        bufferedReader.close();
+        fileReader.close();
+        bufferedWriter.close();
+        fileWriter.close();
+
+    }
+```
+
+
+
+### 4.2.11 InputStream & OutputStream
+
+（1） 字符流的解码 & 编码
+
+解码 ： 将字符转换成字节。
+
+（2） 
 
 
 

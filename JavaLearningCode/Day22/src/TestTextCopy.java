@@ -10,7 +10,15 @@ public class TestTextCopy {
         FileWriter fileWriter = new FileWriter("dest.txt");
         BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
-        String[] str = new String[10];
+        String str ;
+
+        while( (str = bufferedReader.readLine()) != null ){
+            bufferedWriter.write(str);
+        }
+        bufferedReader.close();
+        fileReader.close();
+        bufferedWriter.close();
+        fileWriter.close();
 
     }
 }
