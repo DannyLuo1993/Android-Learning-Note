@@ -6435,7 +6435,154 @@ b 在实现Serializable接口时，就固定serialVeriosnUID
 
 关键字： transient
 
-static属性的参数也不会序列化，因为静态的变量不属于某个对象，而是整个类的，所以不需要随着对象的序列化而序列化。
+* static属性的参数也不会序列化，因为静态的变量不属于某个对象，而是整个类的，所以不需要随着对象的序列化而序列化。 
+
+* 序列化对象时，要求对象的引用数据类型属性都要实现序列化
+* 序列化数组时，要求元素类型实现序列化接口
+
+
+
+### 4.3.1 Serializable & Externalizable
+
+类通过实现Serializable接口启用序列化功能。
+
+如果实现Serializable接口，对象如何序列化、各个属性的序列化的顺序是什么都是默认的。程序员无法指定
+
+Externalizable的唯一特性是：实现定制对象序列化的属性和顺序
+
+```java
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+
+public class Goods implements Externalizable {
+
+    private static String brand = "";
+    private String name;
+    private double price;
+    private transient int sale;
+
+    public Goods(String name, double price, int sale) {
+        this.name = name;
+        this.price = price;
+        this.sale = sale;
+    }
+
+    public Goods() {
+    }
+
+    public static String getBrand() {
+        return brand;
+    }
+
+    public static void setBrand(String brand) {
+        Goods.brand = brand;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public int getSale() {
+        return sale;
+    }
+
+    public void setSale(int sale) {
+        this.sale = sale;
+    }
+
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException {
+        //To define the serializable properties and its order
+        out.writeUTF(brand);
+        out.writeUTF(name);
+        out.writeDouble(price);
+        out.writeInt(sale);
+    }
+
+    @Override
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        //To define the de-serializable properties and its order
+        in.readUTF();
+        in.readUTF();
+        in.readDouble();
+        in.readInt();
+    }
+}
+
+```
+
+
+
+### 4.3.2 PrintStream & PrintWriter
+
+（1） PrintStream
+
+是FilterOutputStream的子类、属于处理流
+
+* System.out
+* System.err
+
+（2）PrintWriter
+
+Web阶段学习时，从服务器端往客户端返回消息时用response， response.getWriter（）可以返回PrintWriter对象。
+
+
+
+### 4.3.3 Scanner
+
+从指定的文件、流中读取文本数据
+
+System.in: 在java层面是常量对象，但是可以通过C等底层语言进行修改
+
+System.out
+
+System.err
+
+
+
+### 4.3.4 try...catch
+
+JDK1.7中新增了一种try...catch处理的方式，
+
+称为try...with...resource，它是为资源关闭专门设计的语法
+
+语法：try（需要关闭的资源对象）{
+
+​		可能发生异常的代码
+
+}catch（Exception e）{
+
+}...
+
+凡是在try（）中声明的资源，不管是否发生异常都会被自动关闭
+
+
+
+### 4.4.1 NIO
+
+io：阻塞式IO
+
+nio：非阻塞式IO
+
+
+
+API：
+
+java.nio.file 中的 path 接口 & Paths类
 
 
 
