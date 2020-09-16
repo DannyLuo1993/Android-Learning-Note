@@ -25,7 +25,7 @@ public class TestServer {
         BufferedReader br = new BufferedReader(isr);
 
         /**
-         * 选择换行符作为词语的分割
+         * Creates a new print stream.
          */
         PrintStream printStream = new PrintStream(out);
 
@@ -38,7 +38,9 @@ public class TestServer {
             //如果不是bye，要反转并且返回
             StringBuilder stringBuilder = new StringBuilder(word);
             stringBuilder.reverse();
+
             //返回给客户端
+            //
             printStream.println(stringBuilder.toString());
 
         }

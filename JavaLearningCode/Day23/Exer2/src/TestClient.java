@@ -15,21 +15,23 @@ public class TestClient {
 
     public static void main(String[] args) throws IOException {
 
-        Socket socket = new Socket("192.168.11.126", 8989);
+        //Creates a stream socket and connects it to the specified port number at the specified IP address.
+        Socket socket = new Socket("192.168.123.123", 8989);
 
         Scanner input = new Scanner(System.in);
         PrintStream printStream = new PrintStream(socket.getOutputStream());
         BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
         while(true){
+
             System.out.println("Please input a word: ");
-            String word = input.next();
+            String word = input.nextLine();
 
             printStream.println(word);
+
             if("bye".equals(word)){
                 break;
             }
-
             String result = br.readLine();
             System.out.println("Reserve Word returned by server: " + result);
         }
