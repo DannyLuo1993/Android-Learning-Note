@@ -6533,6 +6533,8 @@ public class Goods implements Externalizable {
 
 是FilterOutputStream的子类、属于处理流
 
+A `PrintStream` adds functionality to another output stream, namely the ability to print representations of various data values conveniently.
+
 * System.out
 * System.err
 
