@@ -6359,9 +6359,13 @@ public void test() throws IOException{
 
 功能：用于将数据写入文件或FileDescriptor的输出流。
 
+语法： 
+
 * OutputStreamWriter
 
 功能：是从字符流到字节流的桥梁，使用指定的字符集将写入其中的字符编码为字节。
+
+语法：
 
 ```java
 public void test() throws IOException{
@@ -6439,6 +6443,22 @@ b 在实现Serializable接口时，就固定serialVeriosnUID
 
 * 序列化对象时，要求对象的引用数据类型属性都要实现序列化
 * 序列化数组时，要求元素类型实现序列化接口
+
+
+
+### 4.2.14 File类
+
+功能：操作文件用。
+
+类方法简介：
+
+boolean canXXXX（） ： 验证应用程序是否能操作文件；
+
+创建&删除文件
+
+获取文件的路径名
+
+获取文件的大小
 
 
 
@@ -6691,6 +6711,30 @@ The actual work of the socket is performed by an instance of the `SocketImpl` cl
 * UDP（User Datagram Protocol）
 
 非面向连接的，不可靠的，基于用户数据报（报文），只能支持最多64K以内的数据的发送
+
+
+
+### 4.5.4 客户端文件上传
+
+步骤
+
+（1）接收客户端的连接；
+
+（2）接收文件名。后缀名
+
+（3）开辟上传文件的储存空间
+
+a. 如果解决文件重名问题 - 文件名引入时间戳或其他的唯一编码（UUID）
+
+（4）接收文件内容
+
+a. 区分文件名，后缀名&文件内容
+
+b. 哪种字节输入流可以同时处理字符串和字节类型的数据 {	readUTF（） 和 read（byte【】）}
+
+FIleInputStream 、 BufferedInputStream 、 DataInputSteam 、 ObjectInputStream
+
+
 
 
 
