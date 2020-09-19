@@ -6736,6 +6736,16 @@ FIleInputStream 、 BufferedInputStream 、 DataInputSteam 、 ObjectInputStream
 
 
 
+### 4.5.6 UDP协议
+
+基于数据报的传输协议
+
+相关类： DatagramSocket & DatagramPacket
+
+实际开发中， 一般是服务器给客户端推送消息。
+
+
+
 
 
 ## 第四阶段： 应用程序开发
