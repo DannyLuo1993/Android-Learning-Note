@@ -28,7 +28,7 @@ public class CrawlerTest {
         if(response.getStatusLine().getStatusCode() == 200){
             HttpEntity httpEntity = response.getEntity();
             String content = EntityUtils.toString(httpEntity, "utf8");
-            System.out.println(content);
+            //System.out.println(content);
         }
 
     }

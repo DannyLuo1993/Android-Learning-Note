@@ -6752,6 +6752,128 @@ FIleInputStream 、 BufferedInputStream 、 DataInputSteam 、 ObjectInputStream
 
 
 
+## 5. 类的加载、连接和初始化
+
+当程序主动使用某个类时，如果该类还未被加载到内存中，系统（JVM）会通过加载、连接、初始化三个步骤来对该类进行初始化。
+
+### 5.1.1 类的加载
+
+定义： 把字节码读取到内存的过程
+
+
+
+### 5.1.2 类的连接
+
+（1）验证
+
+例如：以cafe开头（魔数）、检验编译的JDK版本等
+
+```java
+ClassFile{
+    u4 magic;
+    u2 minor_version;
+    u2 major_version;
+    u2 constant_pool_count;
+    cp_info constant_pool[constant_pool_count-1];
+    u2 access_flags;
+    us this_class;
+    u2 super_class;
+    u2 interfaces_count;
+    u2 interfaces[interfaces_count];
+    u2 fields_count;
+    field_info fields[fields_count];
+    u2 methods_count;
+    method_info methods[methods_count];
+    u2 attributes_count;
+    attribute_info attributes[attributes_count];
+}
+```
+
+（2）准备
+
+例如：给类变量（静态变量）在方法去分配内存，并赋默认值。
+
+（3）解析
+
+将虚拟机常量池内的符号引用（常量名）替换为直接引用（地址）的过程。
+
+
+
+### 5.1.3 初始化
+
+定义：类的初始化只要就是对静态的类变量进行初始化；
+
+类的初始化<clinit>()是由编译器自动收集 （1）静态变量的显式赋值 （2）静态代码块的内容组成
+
+ 
+
+* 触发类初始化的情况
+
+当虚拟机启动时，先初始化main方法所在的类
+
+当初始化一个类，如果其父类没有被初始化，则会先初始化他的父类
+
+new一个类的对象
+
+使用类的非final静态成员
+
+使用java.lang.reflect包的方法对类进行反射调用
+
+
+
+* 非触发类初始化的情况
+
+引用静态常量不会触发此类的初始化
+
+
+
+## 6. java爬虫
+
+* 可以实现搜索引擎
+* 大数据时代，有助于我们获取数据源
+* 快速填充测试和运营数据
+* 为人工智能培训提供训练数据集
+
+
+
+### 6.1.1 底层实现 HttpClient 
+
+
+
+
+
+### 6.1.2 底层实现 jsoup
+
+是一款java的HTML解析器，可直接解析某个URL地址、HTML文本内容。可通过DOM、CSS以及雷士jQuery的操作方法来取出和操作数据
+
+
+
+### 6.1.3 开源框架 Webmagic
+
+开源的爬虫框架，目标是简化爬虫的开发流程。使开发者专注于逻辑功能的开发。
+
+结构： Downloader、PageProcessor、Scheduler、Pipeline
+
+
+
+* Downloader
+
+负责从互联网上下载页面。默认使用HttpClient作为下载工具
+
+* PageProcessor
+
+负责解析页面，抽取有用信息以及发现新的链接。默认使用jsoup作为HTML解析工具，并基于其开发了解析XPath的工具Xsoup
+
+* Scheduler
+
+Scheduler负责管理待抓取的URL，以及一些去重的工作。默认提供JDK的内存队列来管理URL，并用集合来进行去重。也支持使用Redis进行分布式管理
+
+* Pipeline
+
+Pipeline负责抽取结果的处理。
+
+
+
 
 
 ## 第四阶段： 应用程序开发
