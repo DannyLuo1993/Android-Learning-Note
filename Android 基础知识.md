@@ -3666,6 +3666,31 @@ d.冲突问题
 
 ### 3.5.1 成员内部类
 
+语法结构：
+
+* 访问修饰符 class外部类的类名{
+
+  ​	访问修饰符 class内部类的类名{
+
+  ​		内部类的类体；
+
+  ​	}	
+
+  }
+
+调用语法：
+
+```java
+public static void main(String[] args){
+    
+    NormalOuter no = new NormalOuter();
+    NormalOuter.NormalInner ni = no.new NormalInner();
+    
+}
+```
+
+
+
 （1）有static修饰的为静态成员内部类
 
 （2）没有static修饰的为非静态成员内部类
