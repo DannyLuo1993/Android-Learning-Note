@@ -1,4 +1,4 @@
-## Android 基础知识
+Android 基础知识
 
 https://www.runoob.com/android/android-content-providers.html
 
@@ -3834,6 +3834,8 @@ public class TestAnonymousInner{
 
 ```java
 enum Season{
+    //枚举类（枚举值）的对象要放到类的最前面，本类中四个对象属于Season类型；
+    //默认使用public static final修饰，即属于类层级，可以直接访问
     SPRINT("Spring"), SUMMER("Summer"), FALL("Fall"), WINTER("Winter");
     private String description;
 }
@@ -3847,9 +3849,17 @@ Enum类中有一个唯一的构造器，且这个构造器不能手动调用。�
 
 
 
-* API中没有的方法，是编译器生成的方法
+* 所有的枚举类都继承自java.lang.Enum类，常用方法如下：
 
-（1）. enum.values（）； 返回enum的常量对象的枚举类型数组
+(1). static T[] values()； 返回enum的所有常量对象的枚举类型数组 【类层级，直接访问】
+
+(2). String toString(); 返回当前枚举类对象的名称
+
+(3). int ordinal(); 获取枚举对象在枚举类中的索引位置
+
+(4). static T valueOf(String str) 将参数指定的字符串名转为当前枚举类的对象 【类层级， 直接访问】
+
+(5). int compareTo(E o) 比较两个枚举对象在定义时的顺序
 
 
 
@@ -3857,11 +3867,78 @@ Enum类中有一个唯一的构造器，且这个构造器不能手动调用。�
 
 枚举类实现接口后，每个常量对象都可以直接调用抽象方法。
 
+重写抽象方法的方式有两种： 重写一个，每个枚举常量对象的抽象方法都重写
+
+```java
+ public enum DirectionEnum implements DirectionInterface{
+     UP("向上"){
+         @Override
+         public void show(){
+             
+         }
+     },
+     DOWN("向下"){
+         @Override
+         public void show(){
+             
+         }
+     }
+     
+     private final String desc;//用于描述方向字符串的成员变量
+ }
+```
+
+
+
+
+
+* 枚举类无法继承其他类
+
+
+
 
 
 ## 3.7 注解
 
-一个完整的注解，由三部分组成： （1）声明； （2）使用； （3）读取；
+注解是一种特殊的接口。
+
+
+
+自定义注解类语法格式：
+
+访问修饰符 @interface 注解名称 {
+
+​	注解成员；
+
+}
+
+```java
+@Retention(RetationPolicy.RUNTIME)
+public @interface MyAnnotation{
+    public String value(); //声明一个String类型的成员变量，名字为value 
+    public String value2();
+    public String valuedefault() default "默认值";
+}
+
+@MyAnnotation(value = "hello", value2 = "world") //  将标签贴在Person类上
+public class Person{
+    
+}
+```
+
+
+
+注解的使用方式：
+
+注解体中只有成员变量没有成员方法。
+
+注解的成员变量以“无形参的方法”形式来声明，其方法名定义了该成员变量的名字，其返回值定义了该成员变量的类型。
+
+如果注解只有一个参数成员，建议使用参数名value。
+
+注解的参数类型只能是八种基本数据类型、String、Class、enum及Annotation类型
+
+
 
 系统中预定义的三个最基本的注解： （1）@Override； （2）@SuppressWarnings ； （3）@Deprecated ；
 
@@ -3948,6 +4025,70 @@ public class TestUnit{
 语法格式： import static package.class.xxx
 
 作用： 允许直接用常量名调用其他类的静态成员
+
+
+
+### 3.7.4 元注解
+
+元注解是可以注解到注解上的注解，或者说元注解是一种基本注解，但是它能够应用到其他的注解类上面。
+
+元注解主要有 @Retention、@Documented、@Target、@Inherited、@Repeatable
+
+
+
+* @Retention
+
+作用： 用于说明该注解类的生命周期；
+
+取值： RetentionPolicy.SOURCE RetentionPolicy.CLASS RetentionPolicy.RUNTIME
+
+
+
+* @Documented
+
+使用javadoc工具可以从程序源代码中抽取类、方法、成员等注释形成一个和源代码配套的API帮助文档，该工具抽取时默认不包括注解内容。
+
+作用： 用于指定注解类将被javadoc工具提取成文档内容；
+
+定义为@Documented的注解必须设置Retention为RUNTIME
+
+javadoc： Tool  -- Generate java doc -- 选择输入源 -- 选择输出目的地 -- 在Other command line argument中填入 -encoding utf-8 
+
+
+
+* @Target
+
+作用： 限定注解类的使用范围；
+
+取值：ElementType.ANNOTATION_TYPE ElementType.CONSTRUCTOR ElementType.FIELD ElementType.LOCAL_VARIABLE ElementType.METHOD ElementType.PACKAGE ElementType.PARAMETER
+
+ElementType.TYPE
+
+
+
+* @Inherited
+
+作用：表示修饰的注解类可以被子类继承
+
+
+
+* @Repeatable
+
+作用： 被修饰的注解类可重复使用。 从java8开始增加的新特性
+
+```java
+public @interface Mantypes{
+	ManType[] value();
+}
+
+// 这样修饰后，mantype注解就可以被重复使用
+@Repeatable(value = Mantypes.class)
+public @interface Mantype{
+    
+}
+```
+
+
 
 
 
@@ -6199,13 +6340,13 @@ public void test(){
 
 （2） IO操作不仅仅是针对文件，他可以在网络中进行输入和输出操作
 
-（3）输入： 从文件中读取数据是输入操作
+（3）输出： 从调用对象中读取数据是输出操作
 
-（4）输出： 把数据写到文件中属于输出操作 （把数据从程序中输出到文件）
+（4）输入： 把数据写到调用对象中是输入操作
 
 
 
-* IOde分类
+* IO的分类
 
 （1）方向 【InputStream & OutputStream】
 
@@ -6237,15 +6378,136 @@ b 纯文本文件：.txt .html .xml .properties
 
 （4）Writer：字符输出流
 
-例如：
 
-（1）FileInputStream：文件字节输入流
 
-（2）FileOutputStream：文件字节输出流
 
-（3）FileReader：文件字符输入流
 
-（4）FileWriter：文件字符输出流
+* IO流的体系结构
+
+| 分类       | 字节输入流            | 字节输出流             | 字符输入流          | 字符输出流           |
+| ---------- | --------------------- | ---------------------- | ------------------- | -------------------- |
+| 抽象基类   | InputStream           | OutputStream           | Reader              | Writer               |
+| 访问文件   | * FileInputStream     | * FileOutputStream     | * FileReader        | * FileWriter         |
+| 访问数组   | ByteArrayInputStream  | ByteArrayOutputStream  | CharArrayReader     | CharArrayWritter     |
+| 访问管道   | PipedInputStream      | PipedOutputStream      | PipedReader         | PipedWriter          |
+| 访问字符串 | --                    | --                     | StringReader        | StringWriter         |
+| 缓冲流     | * BufferedInputStream | * BufferedOutputStream | * BufferedReader    | * BufferedWriter     |
+| 转换流     | --                    | --                     | * InputStreamReader | * OutputStreamWriter |
+| 对象流     | * ObjectInputStream   | * ObjectOutputStream   | --                  | --                   |
+|            | FilterInputStream     | FilterOutputStream     | FilterReader        | FilterWriter         |
+| 打印流     | --                    | * PrintStream          | --                  | * PrintWriter        |
+| 推回输入流 | PushbackInputStream   | --                     | PushbackReader      | --                   |
+| 特殊流     | * DataInputStream     | * DataOutputStream     | --                  | --                   |
+
+
+
+### IO的功能
+
+**节点输出流：**
+
+* FileOutputStream & FileWriter
+
+将数据由调用者中 以byte或String的的形式输出到 File或FileDescriptor中。
+
+
+
+​	ByteArrayOutputStream & CharArrayWritter
+
+​	将数据由调用者中 以byte或char的形式输出到byte数组或char数组中
+
+​	PipedOutputStream & PipedWriter
+
+​	连接到PipedInputStream以创建通信管道。 管道输出流是管道的发送端。
+
+​	通常，数据由一个线程写入`PipedOutputStream`对象，并且由其他线程从连接的`PipedInputStream`读取数据。建议不要尝试使用单个线程中的两个对象，因为它可能使线程死锁。 
+
+​	如果从连接的管道输入流读取数据字节的线程不再存在， 则称该管道为*broken* 。 
+
+​	StringWriter
+
+​	功能：调用对象创建character stream 输出到 string buffer中，科用于组成string。
+
+
+
+* ObjectOutputStream
+
+功能： 将调用对象输出的Java对象的原始数据类型和图形写入OutputStream。  
+
+可以使用ObjectInputStream读取（重构）对象。 
+
+可以通过使用流的文件来完成对象的持久存储。  
+
+如果流是网络套接字流，则可以在另一个主机或另一个进程中重新构建对象。 
+
+* OutputStreamWriter
+
+功能：将字符流转换为字节流
+
+
+
+**节点输入流：**
+
+* FileInputStream & FileReader
+
+功能：调用对象将从file或file system中获取byte或character数据
+
+
+
+​	ByteArrayInputStream & CharArrayReader
+
+​	功能： 包含一个内部buffer，储存了从其他流中读取的byte 或 char。使用read方法从中读取byte 或 char
+
+​	PipedInputStream & PipedReader
+
+​	功能： 管道输入流应连接到管道输出流; 然后，管道输入流提供写入管道输出流的任何数据字节。
+
+​	StringReader
+
+​	A character stream whose source is a string.
+
+
+
+* ObjectInputStream
+
+ObjectInputStream对先前使用ObjectOutputStream编写的原始数据和对象进行反序列化。
+
+**警告：不受信任数据的反序列化本质上是危险的，应该避免。** 
+
+**应根据Secure  Coding Guidelines for Java SE的“序列化和反序列化”部分仔细验证不受信任的数据。**  **Serialization  Filtering描述了防御性使用串行过滤器的最佳实践。** 
+
+
+
+处理流的特点： 处理流是用于加工节点流的流。
+
+**处理输出流（FilterOutputStream）**
+
+* BufferedOutputStream & BufferedWriter
+
+功能：通过设置这样的输出流，应用程序可以将字节写入基础输出流。带缓冲区的流可以提高工作效率
+
+* PrintStream & PrintWriter
+
+功能：Adds functionality to another output stream. 例如类中封装的print方法可以输出到文件、网络之类地方，且自动加上时间等。 一般log系统用得比较多
+
+* DataOutputStream 
+
+功能：写入带数据类型的Java变量
+
+
+
+**处理输入流（FileterInputStream）**
+
+* BufferedReader & BufferedInputStream
+
+功能：BufferedInputStream向另一个输入流添加功能 - 即缓冲输入并支持mark和reset方法的功能。Mark操作会记住输入流中的一个点，并且reset操作会导致在从包含的输入流中获取新字节之前重新读取自最近的mark操作以来读取的所有字节。 
+
+* DataInputStream
+
+功能：
+
+PushbackInputStream
+
+功能：
 
 
 
@@ -6421,6 +6683,8 @@ public void test() throws IOException{
 （3）对象的序列化和反序列化
 
 定义：把对象转为字节序列，就是序列化的过程。要求实现这个过程的对象实现序列化的接口
+
+序列化的定义：把对象需要存储的所有相关信息有效地组织成字节序列的过程，叫序列化
 
 * ObjectOutputStream
 
