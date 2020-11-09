@@ -100,13 +100,13 @@ DCL (Data Control Language) 用于定义数据库的访问权限
 
 对数据库的操作分类包含： CRUD
 
-C create 创建；
+**C -- CREATE 创建数据库&数据表；**
 
-R retrieve 查询；
+**R -- RETRIEVE 查询；**
 
-U update 修改；
+**U -- UPDATE 修改；**
 
-D delete 删除；
+**D -- DROP 删除；**
 
 
 
@@ -114,13 +114,9 @@ D delete 删除；
 
 通过制定数据库名和编码字符集名创建一个数据库
 
-
-
 `B. USE database-name`
 
 切换数据库到指定的数据库名
-
-
 
 `C. SELECT DATABASE();`
 
@@ -153,8 +149,6 @@ MySQL核心数据库，保存的是用户和权限
 `ALTER DATABASE database-name CHARACTER SET charset-name`
 
 修改指定数据库的字符集为指定字符集名。
-
-
 
 `DROP DATABASE database-name`
 
@@ -268,9 +262,7 @@ SHOW CREATE TABLE category;
 
 记录了DBA
 
-
-
-### 1.3 DML - 数据操作语言
+## 1.3 DML - INSERT INTO
 
 `INSERT INTO 表名（字段名1，字段名2...） values（字段名1， 字段名2...）`
 
@@ -323,7 +315,13 @@ DELETE FROM student WHERE sid = 6;
 
 
 
-### 1.3.4 DQL - 查询表中数据
+## 1.4 DQL - SELECT...FROM
+
+**查询操作不会对数据库的数据进行修改**
+
+
+
+### 1.4.1  查询表中数据
 
 SELECT column-name FROM sheet-name
 
@@ -347,9 +345,50 @@ SELECT salary+1000 AS column-name FROM emp；
 
 ```
 
-**查询操作不会对数据库的数据进行修改**
+
+
+### 1.4.2 排序查询  - ORDER BY
+
+语法结构： SELECT 字段名 FROM 表名 【WHERE 字段名 = 值】 ORDER BY 字段名称 [ASC/DESC]
+
+默认 ASC （升序排序）
+
+* 组合排序
+
+如果第一个字段的值相同，就按第二个字段的值进行排序
 
 
 
+### 1.4.3 聚合函数
 
+作用：将一列数据作为一个整体，进行纵向的计算。
+
+* COUNT
+
+统计记录数, 忽略空值的列数据。
+
+* SUM
+
+
+
+* MAX
+
+
+
+* MIN
+
+
+
+* AVG
+
+语法格式： SELECT 聚合函数（字段名） FROM 表名 【WHERE 条件】
+
+```mysql
+SELECT
+	SUM(salary) AS '总薪水',
+	MAX(salary) '',
+	MIN(salary) '',
+	AVG(salary) '',
+FROM emp
+```
 
